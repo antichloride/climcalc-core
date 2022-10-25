@@ -1,17 +1,16 @@
-
 use crate::sectors::SectorsInputs;
 use crate::sectors::SectorsResult;
+use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 use crate::input::Input;
 use crate::input::InputFields;
 use crate::constants::buildings as constants;
-use wasm_bindgen::prelude::*;
-use std::ptr;
-use std::ops;
 
 pub struct Buildings {
     inputs: InputsBuildings,
     results: ResultsBuildings,
+    start_year: u32,
+    end_year: u32,
 }
 
 impl Buildings{
@@ -20,6 +19,8 @@ impl Buildings{
         return Buildings{
             inputs: InputsBuildings::new("buildings/inputs", start_year, end_year),
             results: ResultsBuildings::new("buildings/results", start_year, end_year),
+            start_year: start_year,
+            end_year: end_year,
         }
     }
 
@@ -43,6 +44,9 @@ impl Buildings{
 }
 
 
+
+
+
 impl Buildings{
 
     pub fn calculate(&mut self, year: u32){
@@ -59,8 +63,8 @@ impl Buildings{
         let floor_area = &floor_area_per_building * &n_buildings * 1e-3; // in kqm
         results.floor_area.set_year_values(year, &floor_area);
 
-        let thermal_energy_demand = ((&n_inhabitants * &hot_water_demand_per_capita)
-            + (&heat_demand_per_area * &floor_area) * 1e-3);
+        let thermal_energy_demand = (&n_inhabitants * &hot_water_demand_per_capita
+            + &heat_demand_per_area * &floor_area) * 1e-3;
         results.thermal_energy_demand.set_year_values(year, &thermal_energy_demand);
 
         let electric_power_demand = &electric_power_demand_per_capita
@@ -69,7 +73,7 @@ impl Buildings{
 
 
         // Energy Consumption of different heating types
-        let thermal_energy_per_floor_area = thermal_energy_demand * floor_area;
+        let thermal_energy_per_floor_area = &thermal_energy_demand * &floor_area;
 
         let area_heating_oil_no_condensing = self.inputs.area_heating_oil_no_condensing.get_year(year);
         let area_heating_oil_with_condensing = self.inputs.area_heating_oil_with_condensing.get_year(year);
@@ -97,6 +101,92 @@ impl Buildings{
         let energy_heating_other = &area_heating_other * &thermal_energy_per_floor_area;
         results.energy_heating_other.set_year_values(year, &energy_heating_other);
 
+        let consumption_heating_oil =
+            (&energy_heating_oil_no_condendsing + &energy_heating_oil_with_condendsing)
+            / constants::EnergySource::oil.calories;
+        results.consumption_heating_oil.set_year_values(year, &consumption_heating_oil);
+
+        let consumption_heating_gas = &energy_heating_gas / constants::EnergySource::gas.calories;
+        results.consumption_heating_gas.set_year_values(year, &consumption_heating_gas);
+
+
+        // Costs
+        let costs_heating_oil =  &consumption_heating_oil * constants::EnergySource::oil.price;
+        results.costs_heating_oil.set_year_values(year, &costs_heating_oil);
+
+        let costs_heating_gas =  &consumption_heating_gas * constants::EnergySource::gas.price;
+        results.costs_heating_gas.set_year_values(year, &costs_heating_gas);
+
+
+        // Invests and Grants
+        if year!=self.end_year{
+
+            // invest/grant heating
+            macro_rules! implement_invest_calculation_heating{
+                ($(($heat_type: ident, $heat_type_area: ident)),*) => {
+
+                    let mut area_this_year: SectorsRawValues;
+                    let mut area_prev_year: SectorsRawValues;
+
+
+                    let mut invest_heat = SectorsRawValues::new();
+                    let mut invest_grant_heat = SectorsRawValues::new();
+
+                    $(
+                        // invest heatings
+                        area_this_year = self.inputs.$heat_type_area.get_year(year);
+                        area_prev_year = self.inputs.$heat_type_area.get_year(year-1);
+
+                        invest_heat = invest_heat
+                            + (&area_this_year - &area_prev_year)
+                            * constants::$heat_type.invest
+                            * area_this_year.is_greater(&area_prev_year);
+
+                        invest_grant_heat = invest_grant_heat
+                            + (&area_this_year - &area_prev_year)
+                            * constants::$heat_type.invest
+                            * constants::$heat_type.grant
+                            * area_this_year.is_greater(&area_prev_year);
+                     )*
+
+                    results.invest_heat.set_year_values(year, &invest_heat);
+                    results.invest_grant_heat.set_year_values(year, &invest_grant_heat);
+                }
+            }
+
+
+            implement_invest_calculation_heating!{
+                (oil_no_condensing, area_heating_oil_no_condensing),
+                (oil_with_condensing, area_heating_oil_with_condensing),
+                (gas, area_heating_gas),
+                (heat_pump, area_heating_heat_pump),
+                (other, area_heating_other)
+            }
+
+
+            // invest/grant thermal heat
+            let thermal_demand_this_year = inputs.heat_demand_per_area.get_year(year);
+            let thermal_demand_prev_year = inputs.heat_demand_per_area.get_year(year - 1);
+
+            let invest_thermal_energy_demand =
+                (&thermal_demand_this_year - &thermal_demand_prev_year)
+                * constants::energetic_restoration::invest
+                * thermal_demand_this_year.is_greater(&thermal_demand_prev_year)
+                * &floor_area;
+            results.invest_thermal_energy_demand
+                .set_year_values(year, &invest_thermal_energy_demand);
+
+            let invest_grant_thermal_enery_demand =
+                (&thermal_demand_this_year - &thermal_demand_prev_year)
+                * constants::energetic_restoration::invest
+                * constants::energetic_restoration::grant
+                * thermal_demand_this_year.is_greater(&thermal_demand_prev_year)
+                * &floor_area;
+
+            results.invest_grant_thermal_enery_demand
+                .set_year_values(year, &invest_grant_thermal_enery_demand);
+
+        }
     }
 }
 
@@ -187,7 +277,9 @@ macro_rules! implement_results_builidngs{
 
             pub fn get_results(& self) -> Vec<&Results>{
                 let mut results: Vec<&Results> = Vec::from([]);
-                results.extend(self.floor_area.get_results());
+                $(
+                    results.extend(self.$field.get_results());
+                 )*
                 return results
             }
 
@@ -222,7 +314,7 @@ implement_results_builidngs!{
     energy_heating_heat_pump,
     energy_heating_other,
     consumption_heating_oil,
-    consupmtion_heating_gas,
+    consumption_heating_gas,
     costs_heating_oil,
     costs_heating_gas,
     invest_heat,

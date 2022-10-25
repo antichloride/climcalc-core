@@ -54,6 +54,26 @@ pub struct SectorsRawValues {
     public: f32,
 }
 
+impl SectorsRawValues{
+    pub fn new() -> SectorsRawValues{
+        return SectorsRawValues{
+            private: 0.0,
+            industry: 0.0,
+            schools: 0.0,
+            public: 0.0,
+        };
+    }
+
+    pub fn is_greater(&self, other: &SectorsRawValues) -> SectorsRawValues{
+        return SectorsRawValues{
+            private: (self.private > other.private) as usize as f32,
+            industry: (self.industry > other.industry) as usize as f32,
+            schools: (self.schools > other.schools) as usize as f32,
+            public: (self.public > other.public) as usize as f32,
+        };
+    }
+}
+
 impl ops::Mul<SectorsRawValues> for SectorsRawValues{
     type Output = SectorsRawValues;
     fn mul(self, _rhs: SectorsRawValues) -> SectorsRawValues {
@@ -88,6 +108,7 @@ impl ops::Mul<&SectorsRawValues> for &SectorsRawValues{
         }
     }
 }
+
 impl ops::Add<&SectorsRawValues> for &SectorsRawValues{
     type Output = SectorsRawValues;
     fn add(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
@@ -96,6 +117,31 @@ impl ops::Add<&SectorsRawValues> for &SectorsRawValues{
             industry: self.industry + _rhs.industry,
             schools: self.schools + _rhs.schools,
             public: self.schools + _rhs.schools,
+        }
+    }
+}
+
+impl ops::Sub<&SectorsRawValues> for &SectorsRawValues{
+    type Output = SectorsRawValues;
+    fn sub(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
+        SectorsRawValues {
+            private: self.private - _rhs.private,
+            industry: self.industry - _rhs.industry,
+            schools: self.schools - _rhs.schools,
+            public: self.schools - _rhs.schools,
+        }
+    }
+}
+
+
+impl ops::Mul<&SectorsRawValues> for SectorsRawValues{
+    type Output = SectorsRawValues;
+    fn mul(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
+        SectorsRawValues {
+            private: self.private * _rhs.private,
+            industry: self.industry * _rhs.industry,
+            schools: self.schools * _rhs.schools,
+            public: self.schools * _rhs.schools,
         }
     }
 }

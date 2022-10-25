@@ -4,21 +4,22 @@ use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 use crate::input::Input;
 use crate::input::InputFields;
-//use crate::constants::energy as constants;
+use crate::constants::mobility as constants;
+use crate::constants::buildings::EnergySource::oil;
 
-pub struct Energy {
-    inputs: InputsEnergy,
-    results: ResultsEnergy,
+pub struct Mobility {
+    inputs: InputsMobility,
+    results: ResultsMobility,
     start_year: u32,
     end_year: u32,
 }
 
-impl Energy{
+impl Mobility{
 
-    pub fn new(start_year: u32, end_year: u32) -> Energy{
-        return Energy{
-            inputs: InputsEnergy::new("energy/inputs", start_year, end_year),
-            results: ResultsEnergy::new("energy/results", start_year, end_year),
+    pub fn new(start_year: u32, end_year: u32) -> Mobility{
+        return Mobility{
+            inputs: InputsMobility::new("mobility/inputs", start_year, end_year),
+            results: ResultsMobility::new("mobility/results", start_year, end_year),
             start_year: start_year,
             end_year: end_year,
         }
@@ -44,26 +45,53 @@ impl Energy{
 }
 
 
-impl Energy{
+impl Mobility{
     pub fn calculate(&mut self, year: u32){
+
+        let n_bev = self.inputs.n_bev.get_year(year);
+        let n_cars = self.inputs.n_cars.get_year(year);
+        let car_mean_traveld_distance = self.inputs.car_mean_traveld_distance
+            .get_year(year);
+
+        if year != self.start_year{
+            let n_bev_this_year = self.inputs.n_bev.get_year(year);
+            let n_bev_prev_year = self.inputs.n_bev.get_year(year - 1);
+
+            let cars_grant = (&n_bev_this_year - &n_bev_prev_year)
+                * constants::bev.grant
+                * n_bev_this_year.is_greater(&n_bev_prev_year);
+            self.results.cars_grant.set_year_values(year, &cars_grant);
+        }
+
+        let bev_electric_power_demand = &n_bev * &car_mean_traveld_distance
+            * constants::bev.consumption * 1e-2;
+        self.results.bev_electric_power_demand
+            .set_year_values(year, &bev_electric_power_demand);
+
+        let car_fuel_demand = (&n_cars - &n_bev) * &car_mean_traveld_distance
+            * constants::combustor.consumption * oil.calories * 1e-2;
+        self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
+
+        let car_fuel_demand = &car_fuel_demand * constants::price_fuel;
+        self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
 
     }
 }
 
 
 
-macro_rules! implement_inputs_energy{
+macro_rules! implement_inputs_mobility{
     ($($field:ident),*) => {
 
-        struct InputsEnergy{
+        struct InputsMobility{
             $(
                 $field: SectorsInputs,
              )*
         }
 
-        impl InputsEnergy{
-            fn new(id: &str, start_year: u32, end_year: u32) -> InputsEnergy {
-                return InputsEnergy{
+        impl InputsMobility{
+            fn new(id: &str, start_year: u32, end_year: u32) -> InputsMobility {
+                return InputsMobility{
                     $(
                         $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
@@ -71,7 +99,7 @@ macro_rules! implement_inputs_energy{
             }
         }
 
-        impl InputFields for InputsEnergy{
+        impl InputFields for InputsMobility{
 
             fn get_inputs(& self) -> Vec<&Input>{
                 let mut inputs: Vec<&Input> = Vec::from([]);
@@ -101,23 +129,25 @@ macro_rules! implement_inputs_energy{
 }
 
 
-implement_inputs_energy!{
-    roof_area
+implement_inputs_mobility!{
+    n_cars,
+    n_bev,
+    car_mean_traveld_distance
 }
 
 
-macro_rules! implement_results_energy{
+macro_rules! implement_results_mobility{
     ($($field:ident),*) => {
 
-        struct ResultsEnergy{
+        struct ResultsMobility{
             $(
                 $field: SectorsResult,
              )*
         }
 
-        impl ResultsEnergy{
-            fn new(id: &str, start_year: u32, end_year: u32) -> ResultsEnergy{
-                return ResultsEnergy{
+        impl ResultsMobility{
+            fn new(id: &str, start_year: u32, end_year: u32) -> ResultsMobility{
+                return ResultsMobility{
                     $(
                         $field: SectorsResult::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
@@ -153,6 +183,9 @@ macro_rules! implement_results_energy{
     }
 }
 
-implement_results_energy!{
-    power_peak_potential
+implement_results_mobility!{
+    cars_grant,
+    bev_electric_power_demand,
+    car_fuel_demand,
+    car_fuel_costs
 }

@@ -1,19 +1,22 @@
 use wasm_bindgen::prelude::*;
-use std::ops;
 
 mod buildings;
 use buildings::Buildings;
+mod energy;
+use energy::Energy;
+mod mobility;
+use mobility::Mobility;
 mod input;
 mod result;
 use result::Results;
 use input::Input;
 mod sectors;
-use sectors::SectorsInputs;
 mod constants;
 
 #[wasm_bindgen]
 pub struct Calculator {
     buildings: Buildings,
+    energy: Energy,
     pub start_year: u32,
     pub end_year: u32,
 }
@@ -24,6 +27,7 @@ impl Calculator{
     pub fn new(start_year: u32, end_year: u32) -> Calculator {
         let calculator = Calculator {
             buildings: Buildings::new(start_year, end_year),
+            energy: Energy::new(start_year, end_year),
             start_year: start_year,
             end_year: end_year,
         };
