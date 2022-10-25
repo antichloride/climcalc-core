@@ -16,6 +16,7 @@ mod constants;
 #[wasm_bindgen]
 pub struct Calculator {
     buildings: Buildings,
+    mobility: Mobility,
     energy: Energy,
     pub start_year: u32,
     pub end_year: u32,
@@ -27,6 +28,7 @@ impl Calculator{
     pub fn new(start_year: u32, end_year: u32) -> Calculator {
         let calculator = Calculator {
             buildings: Buildings::new(start_year, end_year),
+            mobility: Mobility::new(start_year, end_year),
             energy: Energy::new(start_year, end_year),
             start_year: start_year,
             end_year: end_year,
@@ -37,11 +39,19 @@ impl Calculator{
     pub fn calculate_over_years(&mut self){
         for year in self.start_year..self.end_year + 1{
             self.buildings.calculate(year);
+            self.mobility.calculate(year);
+            self.energy.calculate(year);
+            self.buildings.calculate_second_stage(year,
+                &self.energy.results.aquisition_power_mix_price)
         }
     }
 
     fn get_inputs(&self) -> Vec<&Input> {
-        return self.buildings.get_inputs();
+        let mut list: Vec<&Input> = Vec::from([]);
+        list.extend(self.buildings.get_inputs());
+        list.extend(self.mobility.get_inputs());
+        list.extend(self.energy.get_inputs());
+        return list;
     }
 
     pub fn list_input_ids(&self) -> JsValue{
@@ -57,6 +67,8 @@ impl Calculator{
 
         match splitted_id[0]{
             "buildings" => self.buildings.get_input_by_id(&remaining_id),
+            "mobility" => self.mobility.get_input_by_id(&remaining_id),
+            "energy" => self.energy.get_input_by_id(&remaining_id),
             _ => None,
         }
     }
@@ -84,7 +96,11 @@ impl Calculator{
     }
 
     fn get_results_list(&self) -> Vec<&Results> {
-        return self.buildings.get_results();
+        let mut list: Vec<&Results> = Vec::from([]);
+        list.extend(self.buildings.get_results());
+        list.extend(self.mobility.get_results());
+        list.extend(self.energy.get_results());
+        return list;
     }
 
     pub fn list_result_ids(&self) -> JsValue{
@@ -100,6 +116,8 @@ impl Calculator{
 
         match splitted_id[0]{
             "buildings" => self.buildings.get_results_by_id(&remaining_id),
+            "mobility" => self.mobility.get_results_by_id(&remaining_id),
+            "energy" => self.energy.get_results_by_id(&remaining_id),
             _ => None,
         }
     }

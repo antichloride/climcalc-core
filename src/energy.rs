@@ -4,11 +4,11 @@ use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 use crate::input::Input;
 use crate::input::InputFields;
-//use crate::constants::energy as constants;
+use crate::constants::energy as constants;
 
 pub struct Energy {
-    inputs: InputsEnergy,
-    results: ResultsEnergy,
+    pub inputs: InputsEnergy,
+    pub results: ResultsEnergy,
     start_year: u32,
     end_year: u32,
 }
@@ -47,6 +47,74 @@ impl Energy{
 impl Energy{
     pub fn calculate(&mut self, year: u32){
 
+        let roof_area = self.inputs.roof_area.get_year(year);
+        let roof_solar_sutable_area = self.inputs.roof_solar_sutable_area
+            .get_year(year);
+        let solar_roof_installed_power_peak = self.inputs
+            .solar_roof_installed_power_peak.get_year(year);
+        let solar_roof_portion_self_consumption = self.inputs
+            .solar_roof_portion_self_consumption.get_year(year);
+
+        let solar_roof_power_peak_potential = &roof_area
+            * &roof_solar_sutable_area * constants::solar_roof.power_per_area;
+        self.results.solar_roof_power_peak_potential
+            .set_year_values(year, &solar_roof_power_peak_potential);
+
+        let solar_roof_installed_power = &solar_roof_installed_power_peak
+            * constants::solar_roof.peak_power_to_mean_power * 1e-3;
+        self.results.solar_roof_installed_power
+            .set_year_values(year, &solar_roof_installed_power);
+
+        let solar_roof_self_consumption = &solar_roof_installed_power
+            * &solar_roof_portion_self_consumption;
+        self.results.solar_roof_self_consumption
+            .set_year_values(year, &solar_roof_self_consumption);
+
+        if year != self.start_year{
+
+            let solar_roof_installed_power_peak_this_year = self.inputs
+                .solar_roof_installed_power_peak.get_year(year);
+            let solar_roof_installed_power_peak_prev_year = self.inputs
+                .solar_roof_installed_power_peak.get_year(year - 1);
+
+            let solar_roof_invest =
+                (&solar_roof_installed_power_peak_this_year
+                 - &solar_roof_installed_power_peak_prev_year)
+                * constants::solar_roof.invest * 1e-3
+                * solar_roof_installed_power_peak_this_year
+                    .is_greater(&solar_roof_installed_power_peak_prev_year);
+            self.results.solar_roof_invest
+                .set_year_values(year, &solar_roof_invest);
+
+            let solar_roof_grant =
+                (&solar_roof_installed_power_peak_this_year
+                 - &solar_roof_installed_power_peak_prev_year)
+                * constants::solar_roof.grant * 1e-3
+                * solar_roof_installed_power_peak_this_year
+                    .is_greater(&solar_roof_installed_power_peak_prev_year);
+            self.results.solar_roof_grant
+                .set_year_values(year, &solar_roof_grant);
+
+            let mut solar_roof_operation_costs = SectorsRawValues::new();
+
+            for year_i in self.start_year..year{
+                solar_roof_operation_costs = solar_roof_operation_costs
+                    + self.results.solar_roof_operation_costs.get_year(year_i);
+            }
+
+            solar_roof_operation_costs = solar_roof_operation_costs
+                + &solar_roof_invest * constants::solar_roof.operation_costs;
+            self.results.solar_roof_operation_costs
+                .set_year_values(year, &solar_roof_operation_costs)
+
+        }
+
+        let solar_roof_buyback = (&solar_roof_installed_power
+            - &solar_roof_self_consumption)
+            * constants::solar_roof.buyback_price;
+        self.results.solar_roof_buyback
+            .set_year_values(year, &solar_roof_buyback);
+
     }
 }
 
@@ -55,7 +123,7 @@ impl Energy{
 macro_rules! implement_inputs_energy{
     ($($field:ident),*) => {
 
-        struct InputsEnergy{
+        pub struct InputsEnergy{
             $(
                 $field: SectorsInputs,
              )*
@@ -102,17 +170,21 @@ macro_rules! implement_inputs_energy{
 
 
 implement_inputs_energy!{
-    roof_area
+    roof_area,
+    roof_solar_sutable_area,
+    solar_roof_installed_power_peak,
+    solar_roof_portion_self_consumption
 }
 
 
 macro_rules! implement_results_energy{
     ($($field:ident),*) => {
 
-        struct ResultsEnergy{
+        pub struct ResultsEnergy{
             $(
                 $field: SectorsResult,
              )*
+            pub aquisition_power_mix_price: Results,
         }
 
         impl ResultsEnergy{
@@ -121,6 +193,7 @@ macro_rules! implement_results_energy{
                     $(
                         $field: SectorsResult::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
+                    aquisition_power_mix_price: Results::new(id.to_owned()+"/aquisition_power_mix_price", start_year, end_year),
                 }
             }
 
@@ -129,6 +202,7 @@ macro_rules! implement_results_energy{
                 $(
                     results.extend(self.$field.get_results());
                  )*
+                results.push(&self.aquisition_power_mix_price);
                 return results
             }
 
@@ -142,6 +216,7 @@ macro_rules! implement_results_energy{
                     $(
                         stringify!($field)=> self.$field.get_results_by_id(remaining_id),
                      )*
+                    "aquisition_power_mix_price"=> Some(&mut self.aquisition_power_mix_price),
                     _ => None,
 
                 }
@@ -154,5 +229,21 @@ macro_rules! implement_results_energy{
 }
 
 implement_results_energy!{
-    power_peak_potential
+    solar_roof_power_peak_potential,
+    solar_roof_installed_power,
+    solar_roof_self_consumption,
+    solar_roof_invest,
+    solar_roof_grant,
+    solar_roof_operation_costs,
+    solar_roof_buyback,
+    solar_roof_costs,
+    solar_roof_costs_per_kwh,
+    solar_landscape_installed_power_peak,
+    solar_landscape_area,
+    solar_landscape_installed_power,
+    solar_landscape_invest,
+    solar_landscape_grant,
+    solar_landscape_operation_costs,
+    solar_landscape_production_costs,
+    direct_aquisition_renable_energies_costs
 }

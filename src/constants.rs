@@ -104,3 +104,67 @@ pub mod mobility{
             lifecycle: 10.0,
         };
 }
+
+pub mod energy{
+
+    pub struct RenewableEnergy{
+        pub invest: f32,
+        pub grant: f32,
+        pub operation_costs: f32,
+        pub lifecycle: f32,
+        pub peak_power_to_mean_power: f32,
+        pub buyback_price: f32,
+        pub power_per_area: f32,
+        pub costs: f32,
+    }
+
+    pub const solar_roof: RenewableEnergy = RenewableEnergy{
+        invest: 1500.0,
+        grant: 500.0,
+        operation_costs: 0.02,
+        lifecycle: 30.0,
+        peak_power_to_mean_power: 900.0,
+        buyback_price: 0.07,
+        power_per_area: 0.17,
+        costs: 0.07,
+    };
+
+    pub const solar_landscape: RenewableEnergy = RenewableEnergy{
+        invest: 1200.0,
+        grant: 500.0,
+        operation_costs: 0.02,
+        lifecycle: 30.0,
+        peak_power_to_mean_power: 900.0,
+        buyback_price: 0.07,
+        power_per_area: 0.17,
+        costs: 0.05,
+    };
+
+    pub const wind_onshore: RenewableEnergy = RenewableEnergy{
+        invest: 2000.0,
+        grant: 750.0,
+        operation_costs: 0.02,
+        lifecycle: 20.0,
+        peak_power_to_mean_power: 1300.0,
+        buyback_price: 0.0,
+        power_per_area: 0.0,
+        costs: 0.08,
+    };
+
+    pub mod evu_power_mix{
+        pub const coal: f32 = 0.297;
+        pub const gas: f32 = 0.105;
+        pub const atom: f32 = 0.133;
+        pub const pv: f32 = 0.099;
+        pub const wind: f32 = 0.230;
+        pub const other: f32 = 13.6;
+    }
+
+    pub mod evu_emissions{
+        pub const coal: f32 = 1000.0;
+        pub const gas: f32 = 600.0;
+    }
+
+    pub const evu_discount_heat_pump: f32 = 0.2;
+
+}

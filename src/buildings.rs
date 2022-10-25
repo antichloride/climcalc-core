@@ -5,6 +5,7 @@ use crate::result::Results;
 use crate::input::Input;
 use crate::input::InputFields;
 use crate::constants::buildings as constants;
+use crate::constants::energy::evu_discount_heat_pump;
 
 pub struct Buildings {
     inputs: InputsBuildings,
@@ -188,6 +189,22 @@ impl Buildings{
 
         }
     }
+
+    pub fn calculate_second_stage(
+        &mut self,
+        year: u32,
+        aquisition_power_mix_price: &Results,
+        ){
+
+        let energy_heating_heat_pump = self.results.energy_heating_heat_pump
+            .get_year(year);
+        let aquisition_power_mix_price = aquisition_power_mix_price
+            .get_year(year);
+
+        let costs_heat_pump = &energy_heating_heat_pump
+            * aquisition_power_mix_price * (1.0 - evu_discount_heat_pump);
+        self.results.costs_heat_pump.set_year_values(year, &costs_heat_pump);
+    }
 }
 
 
@@ -320,7 +337,8 @@ implement_results_builidngs!{
     invest_heat,
     invest_thermal_energy_demand,
     invest_grant_heat,
-    invest_grant_thermal_enery_demand
+    invest_grant_thermal_enery_demand,
+    costs_heat_pump
 }
 
 
