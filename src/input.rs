@@ -25,7 +25,9 @@ impl Input{
     }
 
     pub fn apply_measures(&mut self) {
-        for year_index in 0..self.start_year-self.end_year {
+        for year_index in 1..self.start_year-self.end_year {
+            self.values[year_index as usize] =
+                self.values[(year_index - 1) as usize];
             for measure in &self.measures {
                 self.values[year_index as usize] +=
                    measure.delta_per_year(year_index + self.start_year);

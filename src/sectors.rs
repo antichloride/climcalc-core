@@ -4,10 +4,10 @@ use std::ops;
 
 
 pub struct SectorsInputs {
-    private: Input,
-    industry: Input,
-    schools: Input,
-    public: Input,
+    pub private: Input,
+    pub industry: Input,
+    pub schools: Input,
+    pub public: Input,
 }
 
 impl SectorsInputs{
@@ -81,7 +81,7 @@ impl ops::Mul<SectorsRawValues> for SectorsRawValues{
             private: self.private * _rhs.private,
             industry: self.industry * _rhs.industry,
             schools: self.schools * _rhs.schools,
-            public: self.schools * _rhs.schools,
+            public: self.public * _rhs.public,
         }
     }
 }
@@ -92,7 +92,7 @@ impl ops::Add<SectorsRawValues> for SectorsRawValues{
             private: self.private + _rhs.private,
             industry: self.industry + _rhs.industry,
             schools: self.schools + _rhs.schools,
-            public: self.schools + _rhs.schools,
+            public: self.public + _rhs.public,
         }
     }
 }
@@ -104,7 +104,7 @@ impl ops::Mul<&SectorsRawValues> for &SectorsRawValues{
             private: self.private * _rhs.private,
             industry: self.industry * _rhs.industry,
             schools: self.schools * _rhs.schools,
-            public: self.schools * _rhs.schools,
+            public: self.public * _rhs.public,
         }
     }
 }
@@ -116,7 +116,7 @@ impl ops::Add<&SectorsRawValues> for &SectorsRawValues{
             private: self.private + _rhs.private,
             industry: self.industry + _rhs.industry,
             schools: self.schools + _rhs.schools,
-            public: self.schools + _rhs.schools,
+            public: self.public + _rhs.public,
         }
     }
 }
@@ -128,7 +128,7 @@ impl ops::Sub<&SectorsRawValues> for &SectorsRawValues{
             private: self.private - _rhs.private,
             industry: self.industry - _rhs.industry,
             schools: self.schools - _rhs.schools,
-            public: self.schools - _rhs.schools,
+            public: self.public - _rhs.public,
         }
     }
 }
@@ -141,7 +141,7 @@ impl ops::Mul<&SectorsRawValues> for SectorsRawValues{
             private: self.private * _rhs.private,
             industry: self.industry * _rhs.industry,
             schools: self.schools * _rhs.schools,
-            public: self.schools * _rhs.schools,
+            public: self.public * _rhs.public,
         }
     }
 }
@@ -156,7 +156,7 @@ macro_rules! impl_math_ops_for_sector {
                         private: self * _rhs.private as f32,
                         industry: self * _rhs.industry as f32,
                         schools: self * _rhs.schools as f32,
-                        public: self * _rhs.schools as f32,
+                        public: self * _rhs.public as f32,
                     }
                 }
             }
@@ -167,7 +167,7 @@ macro_rules! impl_math_ops_for_sector {
                         private: self.private * _rhs as f32,
                         industry: self.industry * _rhs as f32,
                         schools: self.schools * _rhs as f32,
-                        public: self.schools * _rhs as f32,
+                        public: self.public * _rhs as f32,
                     }
                 }
             }
@@ -178,7 +178,7 @@ macro_rules! impl_math_ops_for_sector {
                         private: self.private / _rhs as f32,
                         industry: self.industry / _rhs as f32,
                         schools: self.schools / _rhs as f32,
-                        public: self.schools / _rhs as f32,
+                        public: self.public / _rhs as f32,
                     }
                 }
             }
@@ -189,7 +189,7 @@ macro_rules! impl_math_ops_for_sector {
                         private: self * _rhs.private as f32,
                         industry: self * _rhs.industry as f32,
                         schools: self * _rhs.schools as f32,
-                        public: self * _rhs.schools as f32,
+                        public: self * _rhs.public as f32,
                     }
                 }
             }
@@ -200,7 +200,7 @@ macro_rules! impl_math_ops_for_sector {
                         private: self.private * _rhs as f32,
                         industry: self.industry * _rhs as f32,
                         schools: self.schools * _rhs as f32,
-                        public: self.schools * _rhs as f32,
+                        public: self.public * _rhs as f32,
                     }
                 }
             }
@@ -211,7 +211,7 @@ macro_rules! impl_math_ops_for_sector {
                         private: self.private / _rhs as f32,
                         industry: self.industry / _rhs as f32,
                         schools: self.schools / _rhs as f32,
-                        public: self.schools / _rhs as f32,
+                        public: self.public / _rhs as f32,
                     }
                 }
             }
@@ -248,6 +248,7 @@ impl SectorsResult{
         };
     }
 
+
     pub fn set_year_values(&mut self, year: u32, values: &SectorsRawValues){
         self.private.set_year_value(year, values.private);
         self.industry.set_year_value(year, values.industry);
@@ -269,5 +270,19 @@ impl SectorsResult{
 
         }
 
+    }
+}
+
+
+#[cfg(test)]
+impl SectorsResult{
+
+    pub fn get_year_values(&self, year: u32) -> [f32; 4]{
+        return [
+            self.private.get_year(year),
+            self.industry.get_year(year),
+            self.schools.get_year(year),
+            self.public.get_year(year),
+        ];
     }
 }

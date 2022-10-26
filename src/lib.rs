@@ -191,3 +191,19 @@ impl Calculator{
 
 
 
+// #[cfg(test)]
+// mod tests{
+//     use super::*;
+//     extern crate wasm_bindgen_test;
+//     use wasm_bindgen_test::*;
+//     wasm_bindgen_test_configure!(run_in_browser);
+
+//     #[wasm_bindgen_test]
+//     fn test_input_and_measure() {
+//         let start_year = 2022 as u32;
+//         let end_year = 2025 as u32;
+//         let input = Input::new(start_year, end_year);
+
+//         assert_eq!(input.values, Vec::from([0.0,0.0,0.0,0.0]));
+//     }
+// }

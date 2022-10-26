@@ -120,7 +120,7 @@ impl Buildings{
 
 
         // Invests and Grants
-        if year!=self.end_year{
+        if year != self.start_year{
 
             // invest/grant heating
             macro_rules! implement_invest_calculation_heating{
@@ -350,15 +350,27 @@ mod tests{
     use super::*;
     extern crate wasm_bindgen_test;
     use wasm_bindgen_test::*;
-    wasm_bindgen_test_configure!(run_in_browser);
 
-    #[wasm_bindgen_test]
-    fn test_input_and_measure() {
+    #[test]
+    fn test_calculation() {
         let start_year = 2022 as u32;
         let end_year = 2025 as u32;
-        let input = Input::new(start_year, end_year);
+        let mut buildings = Buildings::new(start_year, end_year);
 
-        assert_eq!(input.values, Vec::from([0.0,0.0,0.0,0.0]));
+        buildings.inputs.floor_area_per_building.private.set_values(720.0);
+        buildings.inputs.floor_area_per_building.industry.set_values(3000.0);
+        buildings.inputs.floor_area_per_building.schools.set_values(8000.0);
+        buildings.inputs.floor_area_per_building.public.set_values(300.0);
+
+        buildings.inputs.n_buildings.private.set_values(5000.0);
+        buildings.inputs.n_buildings.industry.set_values(200.0);
+        buildings.inputs.n_buildings.schools.set_values(10.0);
+        buildings.inputs.n_buildings.public.set_values(20.0);
+
+        buildings.calculate(start_year);
+
+        assert_eq!(buildings.results.floor_area.get_year_values(start_year),
+                   [3600.0002,600.0,80.0,6.0000005]);
     }
 }
 
