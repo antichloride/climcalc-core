@@ -133,6 +133,30 @@ impl ops::Sub<&SectorsRawValues> for &SectorsRawValues{
     }
 }
 
+impl ops::Div<&SectorsRawValues> for &SectorsRawValues{
+    type Output = SectorsRawValues;
+    fn div(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
+        SectorsRawValues {
+            private: self.private / _rhs.private,
+            industry: self.industry / _rhs.industry,
+            schools: self.schools / _rhs.schools,
+            public: self.public / _rhs.public,
+        }
+    }
+}
+
+impl ops::Sub<&SectorsRawValues> for SectorsRawValues{
+    type Output = SectorsRawValues;
+    fn sub(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
+        SectorsRawValues {
+            private: self.private - _rhs.private,
+            industry: self.industry - _rhs.industry,
+            schools: self.schools - _rhs.schools,
+            public: self.public - _rhs.public,
+        }
+    }
+}
+
 
 impl ops::Mul<&SectorsRawValues> for SectorsRawValues{
     type Output = SectorsRawValues;

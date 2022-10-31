@@ -47,6 +47,7 @@ impl Energy{
 impl Energy{
     pub fn calculate(&mut self, year: u32){
 
+        // Solar Roof
         let roof_area = self.inputs.roof_area.get_year(year);
         let roof_solar_sutable_area = self.inputs.roof_solar_sutable_area
             .get_year(year);
@@ -115,6 +116,59 @@ impl Energy{
         self.results.solar_roof_buyback
             .set_year_values(year, &solar_roof_buyback);
 
+        let solar_roof_costs = &solar_roof_self_consumption
+            * constants::solar_roof.costs - &solar_roof_buyback;
+        self.results.solar_roof_costs.set_year_values(year, &solar_roof_costs);
+
+        let solar_roof_costs_per_kwh = &solar_roof_costs
+            / &solar_roof_installed_power;
+        self.results.solar_roof_costs_per_kwh
+            .set_year_values(year, &solar_roof_costs_per_kwh);
+
+
+        // Solar Landscape
+
+        let solar_landscape_suitable_area = self.inputs
+            .solar_landscape_suitable_area.get_year(year);
+
+        let solar_landscape_installed_power_peak = 1e-1
+            * &solar_landscape_suitable_area
+            * constants::solar_landscape.power_per_area;
+        self.results.solar_landscape_installed_power_peak
+            .set_year_values(year, &solar_landscape_installed_power_peak);
+
+        let solar_landscape_installed_power = 1e-3
+            * &solar_landscape_installed_power_peak
+            * constants::solar_landscape.power_per_area;
+        self.results.solar_landscape_installed_power
+            .set_year_values(year, &solar_landscape_installed_power);
+
+        if year != self.start_year{
+
+            let solar_landscape_installed_power_peak_this_year =
+                self.results.solar_landscape_installed_power_peak.get_year(year);
+            let solar_landscape_installed_power_peak_prev_year =
+                self.results.solar_landscape_installed_power_peak
+                .get_year(year - 1);
+
+            let solar_landscape_invest = 1e-3
+               * (&solar_landscape_installed_power_peak_this_year
+                - &solar_landscape_installed_power_peak_prev_year)
+               * constants::solar_landscape.invest
+               * solar_landscape_installed_power_peak_this_year
+                    .is_greater(&solar_landscape_installed_power_peak_prev_year);
+            self.results.solar_landscape_invest
+                .set_year_values(year, &solar_landscape_invest);
+
+            let solar_landscape_grant = 1e-3
+               * (&solar_landscape_installed_power_peak_this_year
+                - &solar_landscape_installed_power_peak_prev_year)
+               * constants::solar_landscape.grant
+               * solar_landscape_installed_power_peak_this_year
+                    .is_greater(&solar_landscape_installed_power_peak_prev_year);
+            self.results.solar_landscape_grant
+                .set_year_values(year, &solar_landscape_grant);
+        }
     }
 }
 
@@ -173,7 +227,8 @@ implement_inputs_energy!{
     roof_area,
     roof_solar_sutable_area,
     solar_roof_installed_power_peak,
-    solar_roof_portion_self_consumption
+    solar_roof_portion_self_consumption,
+    solar_landscape_suitable_area
 }
 
 
@@ -239,7 +294,6 @@ implement_results_energy!{
     solar_roof_costs,
     solar_roof_costs_per_kwh,
     solar_landscape_installed_power_peak,
-    solar_landscape_area,
     solar_landscape_installed_power,
     solar_landscape_invest,
     solar_landscape_grant,
