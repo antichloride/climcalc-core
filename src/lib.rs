@@ -41,8 +41,19 @@ impl Calculator{
             self.buildings.calculate(year);
             self.mobility.calculate(year);
             self.energy.calculate(year);
+            self.energy.calculate_second_stage(
+                year,
+                self.buildings.results.electric_power_demand.get_year(year),
+                self.buildings.results.energy_heating_heat_pump.get_year(year),
+                self.mobility.results.bev_electric_power_demand.get_year(year),
+            );
+            self.mobility.calculate_second_stage(
+                year,
+                self.energy.results.purchased_energy_mix.get_year(year),
+                self.energy.results.aquisition_power_mix_price.get_year(year),
+            );
             self.buildings.calculate_second_stage(year,
-                &self.energy.results.aquisition_power_mix_price)
+                &self.energy.results.aquisition_power_mix_price);
         }
     }
 

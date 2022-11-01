@@ -9,7 +9,7 @@ use crate::constants::energy::evu_discount_heat_pump;
 
 pub struct Buildings {
     inputs: InputsBuildings,
-    results: ResultsBuildings,
+    pub results: ResultsBuildings,
     start_year: u32,
     end_year: u32,
 }
@@ -277,9 +277,9 @@ implement_inputs_builidngs!{
 macro_rules! implement_results_builidngs{
     ($($field:ident),*) => {
 
-        struct ResultsBuildings{
+        pub struct ResultsBuildings{
             $(
-                $field: SectorsResult,
+                pub $field: SectorsResult,
              )*
         }
 

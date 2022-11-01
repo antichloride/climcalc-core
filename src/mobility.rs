@@ -9,7 +9,7 @@ use crate::constants::buildings::EnergySource::oil;
 
 pub struct Mobility {
     inputs: InputsMobility,
-    results: ResultsMobility,
+    pub results: ResultsMobility,
     start_year: u32,
     end_year: u32,
 }
@@ -76,6 +76,46 @@ impl Mobility{
         self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
 
     }
+
+    pub fn calculate_second_stage(
+        &mut self,
+        year: u32,
+        purchased_energy_mix: SectorsRawValues,
+        aquisition_power_mix_price: f32,
+        ){
+
+        let bev_electric_power_demand = self.results.bev_electric_power_demand
+            .get_year(year);
+
+        let bev_electric_power_demand = &bev_electric_power_demand
+            * &purchased_energy_mix;
+        self.results.bev_electric_power_demand
+            .set_year_values(year, &bev_electric_power_demand);
+
+        // Street lighning
+        let n_laterns = self.inputs.n_laterns.get_year(year);
+        let power_consumption_per_latern = self.inputs
+            .power_consumption_per_latern.get_year(year);
+        let maintanence_costs_per_lantern = self.inputs
+            .maintanence_costs_per_lantern.get_year(year);
+
+        let street_lightning_power_costs = n_laterns
+            * power_consumption_per_latern
+            * aquisition_power_mix_price / 100.0;
+        self.results.street_lightning_power_costs
+            .set_year_value(year, street_lightning_power_costs);
+
+        let street_lighting_maintenance_costs = n_laterns
+            * maintanence_costs_per_lantern;
+        self.results.street_lighting_maintenance_costs
+            .set_year_value(year, street_lighting_maintenance_costs);
+
+        let street_lightning_total_costs =
+            street_lightning_power_costs + street_lighting_maintenance_costs;
+        self.results.street_lightning_total_costs
+            .set_year_value(year, street_lightning_total_costs);
+
+    }
 }
 
 
@@ -87,6 +127,9 @@ macro_rules! implement_inputs_mobility{
             $(
                 $field: SectorsInputs,
              )*
+            n_laterns: Input,
+            power_consumption_per_latern: Input,
+            maintanence_costs_per_lantern: Input,
         }
 
         impl InputsMobility{
@@ -95,6 +138,21 @@ macro_rules! implement_inputs_mobility{
                     $(
                         $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
+                        n_laterns: Input::new(
+                            id.to_owned()+"/n_laterns",
+                            start_year,
+                            end_year,
+                        ),
+                        power_consumption_per_latern: Input::new(
+                            id.to_owned()+"/power_consumption_per_latern",
+                            start_year,
+                            end_year,
+                        ),
+                        maintanence_costs_per_lantern: Input::new(
+                            id.to_owned()+"/maintanence_costs_per_lantern",
+                            start_year,
+                            end_year,
+                        ),
                 }
             }
         }
@@ -106,6 +164,9 @@ macro_rules! implement_inputs_mobility{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
+                inputs.push(&self.n_laterns);
+                inputs.push(&self.power_consumption_per_latern);
+                inputs.push(&self.maintanence_costs_per_lantern);
                 return inputs
             }
 
@@ -119,6 +180,11 @@ macro_rules! implement_inputs_mobility{
                     $(
                         stringify!($field) => self.$field.get_input_by_id(remaining_id),
                      )*
+                    n_laterns=> Some(&mut self.n_laterns),
+                    power_consumption_per_latern=> Some(
+                        &mut self.power_consumption_per_latern),
+                    maintanence_costs_per_lantern=> Some(
+                        &mut self.maintanence_costs_per_lantern),
                     _ => None,
 
                 }
@@ -139,18 +205,40 @@ implement_inputs_mobility!{
 macro_rules! implement_results_mobility{
     ($($field:ident),*) => {
 
-        struct ResultsMobility{
+        pub struct ResultsMobility{
             $(
-                $field: SectorsResult,
+                pub $field: SectorsResult,
              )*
+            street_lightning_power_costs: Results,
+            street_lighting_maintenance_costs: Results,
+            street_lightning_total_costs: Results,
         }
 
         impl ResultsMobility{
             fn new(id: &str, start_year: u32, end_year: u32) -> ResultsMobility{
                 return ResultsMobility{
                     $(
-                        $field: SectorsResult::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
+                        $field: SectorsResult::new(
+                            id.to_owned()+"/"+stringify!($field),
+                            start_year,
+                            end_year
+                        ),
                      )*
+                        street_lightning_power_costs: Results::new(
+                            id.to_owned()+"/street_lightning_power_costs",
+                            start_year,
+                            end_year,
+                        ),
+                        street_lighting_maintenance_costs: Results::new(
+                            id.to_owned()+"/street_lighting_maintenance_costs",
+                            start_year,
+                            end_year,
+                        ),
+                        street_lightning_total_costs: Results::new(
+                            id.to_owned()+"/street_lightning_total_costs",
+                            start_year,
+                            end_year,
+                        ),
                 }
             }
 
@@ -159,6 +247,9 @@ macro_rules! implement_results_mobility{
                 $(
                     results.extend(self.$field.get_results());
                  )*
+                results.push(&self.street_lightning_power_costs);
+                results.push(&self.street_lighting_maintenance_costs);
+                results.push(&self.street_lightning_total_costs);
                 return results
             }
 
@@ -170,8 +261,15 @@ macro_rules! implement_results_mobility{
 
                 match splitted_id[0]{
                     $(
-                        stringify!($field)=> self.$field.get_results_by_id(remaining_id),
+                        stringify!($field)=> self.$field
+                            .get_results_by_id(remaining_id),
                      )*
+                    "street_lightning_power_costs"=> Some(
+                        &mut self.street_lightning_power_costs),
+                    "street_lighting_maintenance_costs"=> Some(
+                        &mut self.street_lighting_maintenance_costs),
+                    "street_lightning_total_costs"=> Some(
+                        &mut self.street_lightning_total_costs),
                     _ => None,
 
                 }
@@ -187,5 +285,6 @@ implement_results_mobility!{
     cars_grant,
     bev_electric_power_demand,
     car_fuel_demand,
-    car_fuel_costs
+    car_fuel_costs,
+    bev_electric_power_costs
 }

@@ -48,10 +48,10 @@ impl SectorsInputs{
 }
 
 pub struct SectorsRawValues {
-    private: f32,
-    industry: f32,
-    schools: f32,
-    public: f32,
+    pub private: f32,
+    pub industry: f32,
+    pub schools: f32,
+    pub public: f32,
 }
 
 impl SectorsRawValues{

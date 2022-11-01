@@ -217,6 +217,62 @@ impl Energy{
             .set_year_values(year, &direct_aquisition_renable_energies_costs);
 
     }
+
+    pub fn calculate_second_stage(
+        &mut self,
+        year: u32,
+        electric_power_demand_buildings: SectorsRawValues,
+        energy_heating_heat_pump: SectorsRawValues,
+        bev_electric_power_demand: SectorsRawValues,
+        ){
+
+
+        let mut electric_energy_demand = &electric_power_demand_buildings
+            + &energy_heating_heat_pump + bev_electric_power_demand;
+        electric_energy_demand.public += electric_energy_demand.private;
+        self.results.electric_energy_demand
+            .set_year_values(year, &electric_energy_demand);
+
+        let solar_roof_self_consumption = self.results
+            .solar_roof_self_consumption.get_year(year);
+        let direct_aquisition_reneable_enrgies = self.inputs
+            .direct_aquisition_reneable_enrgies.get_year(year);
+
+        let purchased_energy_mix = &electric_energy_demand
+            - &solar_roof_self_consumption
+            - &direct_aquisition_reneable_enrgies;
+        self.results.purchased_energy_mix
+            .set_year_values(year, &purchased_energy_mix);
+
+        let aquisition_power_mix = self.inputs.aquisition_power_mix
+            .get_year(year);
+
+        let purchased_energy_mix_costs = &purchased_energy_mix
+            * &aquisition_power_mix
+            * purchased_energy_mix.is_greater(&SectorsRawValues::new());
+        self.results.purchased_energy_mix_costs
+            .set_year_values(year, &purchased_energy_mix_costs);
+
+        let purchased_energy_mix_emissions =
+            constants::evu_power_mix::coal
+            * constants::evu_emissions::coal
+            + constants::evu_power_mix::gas
+            * constants::evu_emissions::gas;
+
+        let solar_roof_costs = self.results.solar_roof_costs.get_year(year);
+        let direct_aquisition_renable_energies_costs = self.results
+            .direct_aquisition_renable_energies_costs.get_year(year);
+        let direct_aquisition_reneable_enrgies = self.inputs
+            .direct_aquisition_reneable_enrgies.get_year(year);
+
+        let aquisition_power_mix_price = (solar_roof_costs.private
+            + direct_aquisition_renable_energies_costs.private
+            + purchased_energy_mix_costs.private)
+            / (solar_roof_self_consumption.private
+            + direct_aquisition_reneable_enrgies.private
+            + purchased_energy_mix.private);
+
+    }
 }
 
 
@@ -277,7 +333,8 @@ implement_inputs_energy!{
     solar_roof_portion_self_consumption,
     solar_landscape_suitable_area,
     direct_aquisition_reneable_enrgies,
-    direct_aquisition_reneable_enrgies_price
+    direct_aquisition_reneable_enrgies_price,
+    aquisition_power_mix
 }
 
 
@@ -286,7 +343,7 @@ macro_rules! implement_results_energy{
 
         pub struct ResultsEnergy{
             $(
-                $field: SectorsResult,
+                pub $field: SectorsResult,
              )*
             pub aquisition_power_mix_price: Results,
         }
@@ -350,5 +407,9 @@ implement_results_energy!{
     solar_landscape_production_costs,
     solar_landscape_buyback,
     solar_landscape_profit,
-    direct_aquisition_renable_energies_costs
+    direct_aquisition_renable_energies_costs,
+    electric_energy_demand,
+    purchased_energy_mix,
+    purchased_energy_mix_costs,
+    purchased_energy_mix_emissions
 }
