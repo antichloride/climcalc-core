@@ -168,7 +168,54 @@ impl Energy{
                     .is_greater(&solar_landscape_installed_power_peak_prev_year);
             self.results.solar_landscape_grant
                 .set_year_values(year, &solar_landscape_grant);
+
+
+            let mut solar_landscape_operation_costs = SectorsRawValues::new();
+
+            for year_i in self.start_year..year{
+                solar_landscape_operation_costs =
+                    solar_landscape_operation_costs
+                    + self.results.solar_landscape_operation_costs
+                    .get_year(year_i);
+            }
+
+            let solar_landscape_operation_costs =
+                solar_landscape_operation_costs
+                + &solar_landscape_invest
+                * constants::solar_landscape.grant;
+            self.results.solar_landscape_operation_costs
+                .set_year_values(year, &solar_landscape_operation_costs);
         }
+
+        let solar_landscape_production_costs =
+            &solar_landscape_installed_power * constants::solar_landscape.costs;
+        self.results.solar_landscape_production_costs
+            .set_year_values(year, &solar_landscape_production_costs);
+
+        let solar_landscape_buyback = &solar_landscape_installed_power
+            * constants::solar_landscape.buyback_price;
+        self.results.solar_landscape_buyback
+            .set_year_values(year, &solar_landscape_buyback);
+
+        let solar_landscape_profit = &solar_landscape_production_costs
+            - &solar_landscape_buyback;
+        self.results.solar_landscape_profit
+            .set_year_values(year, &solar_landscape_profit);
+
+
+        // Purchase of renewable energy
+
+        let direct_aquisition_reneable_enrgies = self.inputs.
+            direct_aquisition_reneable_enrgies.get_year(year);
+        let direct_aquisition_reneable_enrgies_price = self.inputs.
+            direct_aquisition_reneable_enrgies_price.get_year(year);
+
+        let direct_aquisition_renable_energies_costs =
+            &direct_aquisition_reneable_enrgies
+            * &direct_aquisition_reneable_enrgies_price;
+        self.results.direct_aquisition_renable_energies_costs
+            .set_year_values(year, &direct_aquisition_renable_energies_costs);
+
     }
 }
 
@@ -228,7 +275,9 @@ implement_inputs_energy!{
     roof_solar_sutable_area,
     solar_roof_installed_power_peak,
     solar_roof_portion_self_consumption,
-    solar_landscape_suitable_area
+    solar_landscape_suitable_area,
+    direct_aquisition_reneable_enrgies,
+    direct_aquisition_reneable_enrgies_price
 }
 
 
@@ -299,5 +348,7 @@ implement_results_energy!{
     solar_landscape_grant,
     solar_landscape_operation_costs,
     solar_landscape_production_costs,
+    solar_landscape_buyback,
+    solar_landscape_profit,
     direct_aquisition_renable_energies_costs
 }
