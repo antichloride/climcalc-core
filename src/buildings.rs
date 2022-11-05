@@ -205,6 +205,22 @@ impl Buildings{
             * aquisition_power_mix_price * (1.0 - evu_discount_heat_pump);
         self.results.costs_heat_pump.set_year_values(year, &costs_heat_pump);
     }
+
+    pub fn calculate_emissions(&mut self, year: u32){
+        let consumption_heating_oil = self.results.consumption_heating_oil
+            .get_year(year);
+        let consumption_heating_gas = self.results.consumption_heating_gas
+            .get_year(year);
+
+        let emissions_oil = consumption_heating_oil
+            * constants::EnergySource::oil.emission;
+        self.results.emissions_oil.set_year_values(year, &emissions_oil);
+
+        let emissions_gas = consumption_heating_gas
+            * constants::EnergySource::gas.emission;
+        self.results.emissions_gas.set_year_values(year, &emissions_gas);
+
+    }
 }
 
 
@@ -338,7 +354,9 @@ implement_results_builidngs!{
     invest_thermal_energy_demand,
     invest_grant_heat,
     invest_grant_thermal_enery_demand,
-    costs_heat_pump
+    costs_heat_pump,
+    emissions_oil,
+    emissions_gas
 }
 
 

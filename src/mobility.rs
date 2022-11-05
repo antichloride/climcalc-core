@@ -116,6 +116,12 @@ impl Mobility{
             .set_year_value(year, street_lightning_total_costs);
 
     }
+
+    pub fn calculate_emissions(&mut self, year: u32){
+        let car_fuel_demand = self.results.car_fuel_demand.get_year(year);
+        let car_emissions = car_fuel_demand * oil.emission;
+        self.results.car_emissions.set_year_values(year, &car_emissions);
+    }
 }
 
 
@@ -286,5 +292,6 @@ implement_results_mobility!{
     bev_electric_power_demand,
     car_fuel_demand,
     car_fuel_costs,
-    bev_electric_power_costs
+    bev_electric_power_costs,
+    car_emissions
 }

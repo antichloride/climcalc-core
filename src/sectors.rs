@@ -217,6 +217,17 @@ macro_rules! impl_math_ops_for_sector {
                     }
                 }
             }
+            impl ops::Sub<&SectorsRawValues> for $t{
+                type Output = SectorsRawValues;
+                fn sub(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
+                    SectorsRawValues {
+                        private: self - _rhs.private as f32,
+                        industry: self - _rhs.industry as f32,
+                        schools: self - _rhs.schools as f32,
+                        public: self - _rhs.public as f32,
+                    }
+                }
+            }
             impl ops::Mul<$t> for &SectorsRawValues{
                 type Output = SectorsRawValues;
                 fn mul(self, _rhs: $t) -> SectorsRawValues {

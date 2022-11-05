@@ -216,6 +216,13 @@ impl Energy{
         self.results.direct_aquisition_renable_energies_costs
             .set_year_values(year, &direct_aquisition_renable_energies_costs);
 
+
+        // power injection
+        let solar_roof_electric_power_injection =
+            &solar_roof_installed_power * &(1.0-&solar_roof_self_consumption);
+        self.results.solar_roof_electric_power_injection
+            .set_year_values(year, &solar_roof_electric_power_injection);
+
     }
 
     pub fn calculate_second_stage(
@@ -273,6 +280,18 @@ impl Energy{
             + purchased_energy_mix.private);
 
     }
+    pub fn calculate_emissions(&mut self, year: u32){
+
+        let purchased_energy_mix = self.results
+            .purchased_energy_mix.get_year(year);
+        let aquisition_power_mix_emissions = self.inputs
+            .aquisition_power_mix_emissions.get_year(year);
+
+        let emissions_purchased_energy_mix = &purchased_energy_mix
+            * aquisition_power_mix_emissions * 1e-3;
+        self.results.emissions_purchased_energy_mix
+            .set_year_values(year, &emissions_purchased_energy_mix);
+    }
 }
 
 
@@ -284,6 +303,7 @@ macro_rules! implement_inputs_energy{
             $(
                 $field: SectorsInputs,
              )*
+            pub aquisition_power_mix_emissions: Input,
         }
 
         impl InputsEnergy{
@@ -292,6 +312,7 @@ macro_rules! implement_inputs_energy{
                     $(
                         $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
+                    aquisition_power_mix_emissions: Input::new(id.to_owned()+"/aquisition_power_mix_emissions", start_year, end_year),
                 }
             }
         }
@@ -303,6 +324,7 @@ macro_rules! implement_inputs_energy{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
+                inputs.push(&self.aquisition_power_mix_emissions);
                 return inputs
             }
 
@@ -316,6 +338,7 @@ macro_rules! implement_inputs_energy{
                     $(
                         stringify!($field) => self.$field.get_input_by_id(remaining_id),
                      )*
+                    "aquisition_power_mix_emissions"=> Some(&mut self.aquisition_power_mix_emissions),
                     _ => None,
 
                 }
@@ -411,5 +434,7 @@ implement_results_energy!{
     electric_energy_demand,
     purchased_energy_mix,
     purchased_energy_mix_costs,
-    purchased_energy_mix_emissions
+    purchased_energy_mix_emissions,
+    emissions_purchased_energy_mix,
+    solar_roof_electric_power_injection
 }
