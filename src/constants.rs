@@ -168,3 +168,71 @@ pub mod energy{
     pub const evu_discount_heat_pump: f32 = 0.2;
 
 }
+
+pub mod economy{
+
+    pub mod material{
+        pub mod invest_local{
+            pub const heating_heatpump: f32 = 0.5;
+            pub const energetic_restoration: f32 = 0.3;
+            pub const fast_charging_stations: f32 = 0.65;
+            pub const solar_roof: f32 = 0.5;
+            pub const solar_landscape: f32 = 0.65;
+        }
+        pub mod invest_national{
+            pub const heating_heatpump: f32 = 0.5;
+            pub const energetic_restoration: f32 = 0.3;
+            pub const fast_charging_stations: f32 = 0.65;
+            pub const solar_roof: f32 = 0.5;
+            pub const solar_landscape: f32 = 0.65;
+        }
+    }
+    pub mod invest_work{
+        pub mod community_added_value{
+            pub const heating_heatpump: f32 = 0.3;
+            pub const energetic_restoration: f32 = 0.3;
+            pub const fast_charging_stations: f32 = 0.3;
+            pub const solar_roof: f32 = 0.3;
+            pub const solar_landscape: f32 = 0.15;
+            pub const community: f32 = 0.5;
+        }
+        pub mod national_added_value{
+            pub const heating_heatpump: f32 = 1.0;
+            pub const energetic_restoration: f32 = 1.0;
+            pub const fast_charging_stations: f32 = 1.0;
+            pub const solar_roof: f32 = 1.0;
+            pub const solar_landscape: f32 = 1.0;
+            pub const community: f32 = 1.0;
+        }
+    }
+    pub mod vzw_per_million_turnover{
+        pub mod material{
+            pub const heating_heatpump: f32 = 10.0;
+            pub const energetic_restoration: f32 = 10.0;
+            pub const fast_charging_stations: f32 = 10.0;
+            pub const solar_roof: f32 = 10.0;
+            pub const solar_landscape: f32 = 10.0;
+        }
+        pub mod work{
+            pub const heating_heatpump: f32 = 20.0;
+            pub const energetic_restoration: f32 = 20.0;
+            pub const fast_charging_stations: f32 = 20.0;
+            pub const solar_roof: f32 = 20.0;
+            pub const solar_landscape: f32 = 20.0;
+        }
+    }
+    pub mod maintenance_community_costs{
+        pub mod community_added_value{
+            pub const fast_charging_stations: f32 = 0.3;
+            pub const solar_roof: f32 = 0.3;
+            pub const solar_landscape: f32 = 0.2;
+            pub const community: f32 = 0.75;
+        }
+        pub mod national_added_value{
+            pub const fast_charging_stations: f32 = 1.0;
+            pub const solar_roof: f32 = 1.0;
+            pub const solar_landscape: f32 = 1.0;
+            pub const community: f32 = 0.75;
+        }
+    }
+}

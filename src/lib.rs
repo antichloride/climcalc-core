@@ -6,6 +6,7 @@ mod energy;
 use energy::Energy;
 mod mobility;
 use mobility::Mobility;
+mod economy;
 mod input;
 mod result;
 use result::Results;

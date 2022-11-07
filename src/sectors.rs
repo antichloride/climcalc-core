@@ -72,6 +72,10 @@ impl SectorsRawValues{
             public: (self.public > other.public) as usize as f32,
         };
     }
+
+    pub fn sum(&self) -> f32{
+        return self.private + self.industry + self.schools + self.public;
+    }
 }
 
 impl ops::Mul<SectorsRawValues> for SectorsRawValues{
