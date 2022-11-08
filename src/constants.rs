@@ -235,4 +235,14 @@ pub mod economy{
             pub const community: f32 = 0.75;
         }
     }
+
+    pub mod tax{
+        pub const business_tax: f32 = 0.008;
+        pub const income_per_fte: f32 = 50.0;
+        pub const income_tax_per_fte: f32 = 7.5;
+        pub const income_tax_local_per_fte: f32 = 1.1;
+        pub const turnover_tax: f32 = 0.19;
+        pub const turnover_tax_local_part: f32 = 0.004;
+        pub const corporate_tax: f32 = 0.15;
+    }
 }
