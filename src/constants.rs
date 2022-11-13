@@ -55,7 +55,7 @@ pub mod buildings{
     }
 
     pub mod energetic_restoration{
-        pub const invest: f32 = 2.5;
+        pub const invest__m__eur_per_W_h: f32 = 2.5;
         pub const grant: f32 = 0.3;
     }
 

@@ -185,6 +185,9 @@ impl Buildings{
             // invest/grant heat sources
             // this is calculated by the change of the area of the corresponding
             // heat types from the year before to the current one.
+            // This calculaiton uses the total heat demand (heat and hot water),
+            // because it is assumed that the heater also produces the hot
+            // water.
             let mut invest_heat_sources__M__eur_per_a = SectorsRawValues::new();
             let mut grant_heat_sourcres__M__eur_per_a = SectorsRawValues::new();
 
@@ -211,7 +214,7 @@ impl Buildings{
                         invest_heat_source__M__eur_per_a =
                             (&A_this_year__k__m2 - &A_prev_year__k__m2)
                             * constants::$heat_type.invest__m__eur_per_W_h
-                            * &heat_dmd__k__W_h_per_m2_a
+                            * &total_heat_dmd__M__W_h_per_m2_a
                             * A_this_year__k__m2
                                 .is_greater(&A_prev_year__k__m2);
 
@@ -233,7 +236,6 @@ impl Buildings{
                 }
             }
 
-
             implement_invest_calculation_heating!{
                 (oil_no_condensing, A_heat_oil__k__m2),
                 (oil_with_condensing, A_heat_oil_condensing__k__m2),
@@ -247,29 +249,36 @@ impl Buildings{
             results.grant_heat_sourcres__M__eur_per_a
                 .set_year_values(year, &grant_heat_sourcres__M__eur_per_a);
 
-            // invest/grant thermal heat
-            let thermal_demand_this_year = inputs.heat_dmd__k__W_h_per_m2_a.get_year(year);
-            let thermal_demand_prev_year = inputs.heat_dmd__k__W_h_per_m2_a.get_year(year - 1);
+            // invest/grant energetic renovation
+            // This calculation looks for the change of heat demand from one
+            // year to the next.
+            let heat_dmd_this_year__k__W_h_per_m2_a =
+                inputs.heat_dmd__k__W_h_per_m2_a.get_year(year);
+            let heat_dmd_prev_year__k__W_h_per_m2_a =
+                inputs.heat_dmd__k__W_h_per_m2_a.get_year(year - 1);
 
-            let invest_renovation =
-                (&thermal_demand_this_year - &thermal_demand_prev_year) // TODO: use heat demand
-                                                                        // per A, not toal heat
-                                                                        // demand
-                * constants::energetic_restoration::invest
-                * thermal_demand_this_year.is_greater(&thermal_demand_prev_year)
-                * &floor_A__k__m2;
+            let invest_energetic_renovation__k__eur_per_a =
+                (&heat_dmd_this_year__k__W_h_per_m2_a
+                 - &heat_dmd_prev_year__k__W_h_per_m2_a)
+                * constants::energetic_restoration::invest__m__eur_per_W_h
+                * &floor_A__k__m2
+                * heat_dmd_this_year__k__W_h_per_m2_a
+                    .is_greater(&heat_dmd_prev_year__k__W_h_per_m2_a);
             results.invest_energetic_renovation__M__eur
-                .set_year_values(year, &invest_renovation);
+                .set_year_values(
+                    year,
+                    &invest_energetic_renovation__k__eur_per_a
+                );
 
-            let grant_energetic_renovation__M__eur =
-                (&thermal_demand_this_year - &thermal_demand_prev_year)
-                * constants::energetic_restoration::invest
-                * constants::energetic_restoration::grant
-                * thermal_demand_this_year.is_greater(&thermal_demand_prev_year)
-                * &floor_A__k__m2;
+            let grant_energetic_renovation__M__eur_per_a =
+                &invest_energetic_renovation__k__eur_per_a
+                * constants::energetic_restoration::grant;
 
-            results.grant_energetic_renovation__M__eur
-                .set_year_values(year, &grant_energetic_renovation__M__eur);
+            results.grant_energetic_renovation__M__eur_per_a
+                .set_year_values(
+                    year,
+                    &grant_energetic_renovation__M__eur_per_a
+                );
 
         }
     }
@@ -435,7 +444,7 @@ implement_results_builidngs!{
     invest_heat_sources__M__eur_per_a,
     invest_energetic_renovation__M__eur,
     grant_heat_sourcres__M__eur_per_a,
-    grant_energetic_renovation__M__eur,
+    grant_energetic_renovation__M__eur_per_a,
     costs_heat_pump__M__eur,
     ems_oil__k__to_coe,
     ems_gas__k__to_coe
