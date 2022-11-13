@@ -180,8 +180,8 @@ impl Buildings{
                             * A_this_year.is_greater(&A_prev_year);
                      )*
 
-                    invest_heat_sources__M__eur = invest_heat_sources__M__eur * &heat_dmd__k__W_h_per_m2;
-                    grant_heat_sources__M__eur = grant_heat_sources__M__eur * &heat_dmd__k__W_h_per_m2;
+                    invest_heat_sources__M__eur = invest_heat_sources__M__eur * &heat_dmd__k__W_h_per_m2_a;
+                    grant_heat_sources__M__eur = grant_heat_sources__M__eur * &heat_dmd__k__W_h_per_m2_a;
 
                     results.invest_heat_sources__M__eur.set_year_values(year, &invest_heat_sources__M__eur);
                     results.grant_heat_sources__M__eur.set_year_values(year, &grant_heat_sources__M__eur);
@@ -199,8 +199,8 @@ impl Buildings{
 
 
             // invest/grant thermal heat
-            let thermal_demand_this_year = inputs.heat_dmd__k__W_h_per_m2.get_year(year);
-            let thermal_demand_prev_year = inputs.heat_dmd__k__W_h_per_m2.get_year(year - 1);
+            let thermal_demand_this_year = inputs.heat_dmd__k__W_h_per_m2_a.get_year(year);
+            let thermal_demand_prev_year = inputs.heat_dmd__k__W_h_per_m2_a.get_year(year - 1);
 
             let invest_renovation =
                 (&thermal_demand_this_year - &thermal_demand_prev_year) // TODO: use heat demand
@@ -313,9 +313,9 @@ macro_rules! implement_inputs_builidngs{
 implement_inputs_builidngs!{
     n_buildings,
     floor_A_building__m2,
-    heat_dmd__k__W_h_per_m2,
+    heat_dmd__k__W_h_per_m2_a,
     n_inhabitants__k__,
-    hot_water_dmd__k__W_h_per_m2,
+    hot_water_dmd__k__W_h_per_m2_a,
     elec_dmd_capita__k_W_h_per_a,
     A_heat_oil__k__m2,
     A_heat_oil_condensing__k__m2,
