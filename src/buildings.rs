@@ -121,10 +121,10 @@ impl Buildings{
 
         let cnsmp_oil__M__L =
             (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
-            / constants::EnergySource::oil.calories;
+            / constants::EnergySource::oil.energy_density;
         results.cnsmp_oil__M__L.set_year_values(year, &cnsmp_oil__M__L);
 
-        let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a / constants::EnergySource::gas.calories;
+        let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a / constants::EnergySource::gas.energy_density;
         results.cnsmp_gas__M__m3.set_year_values(year, &cnsmp_gas__M__m3);
 
 

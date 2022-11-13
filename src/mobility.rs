@@ -69,7 +69,7 @@ impl Mobility{
             .set_year_values(year, &bev_electric_power_demand);
 
         let car_fuel_demand = (&n_cars - &n_bev) * &car_mean_traveld_distance
-            * constants::combustor.consumption * oil.calories * 1e-2;
+            * constants::combustor.consumption * oil.energy_density * 1e-2;
         self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
 
         let car_fuel_demand = &car_fuel_demand * constants::price_fuel;

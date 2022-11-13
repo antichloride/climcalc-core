@@ -35,25 +35,25 @@ pub mod buildings{
     pub mod EnergySource{
 
         pub struct EnergySource {
-            pub calories: f32,
+            pub energy_density: f32,
             pub price: f32,
             pub emission: f32,
         }
 
         pub const oil: EnergySource = EnergySource{
-            calories: 10.0,
+            energy_density: 10.0,
             price: 0.9,
             emission: 3.0,
         };
 
         pub const gas: EnergySource = EnergySource{
-            calories: 5.0,
+            energy_density: 5.0,
             price: 0.9,
             emission: 2.0,
         };
 
         pub const other: EnergySource = EnergySource{
-            calories: 0.0,
+            energy_density: 0.0,
             price: 0.9,
             emission: 0.0,
         };
