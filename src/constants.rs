@@ -35,13 +35,13 @@ pub mod buildings{
     pub mod EnergySource{
 
         pub mod oil{
-            pub const energy_density: f32 = 10.0;
+            pub const energy_density__k__W_h_per_L: f32 = 10.0;
             pub const price: f32 = 0.9;
             pub const emission: f32 = 3.0;
         }
 
         pub mod gas{
-            pub const energy_density: f32 = 5.0;
+            pub const energy_density__k__W_h_per_m3: f32 = 5.0;
             pub const price: f32 = 0.9;
             pub const emission: f32 = 2.0;
         }

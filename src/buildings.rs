@@ -117,10 +117,26 @@ impl Buildings{
         }
 
         implement_heat_types_input_consumption!{
-            (oil_no_condensing, A_heat_oil__k__m2, cnsmp_oil__G__W_h_per_a),
-            (oil_with_condensing, A_heat_oil_condensing__k__m2, cnsmp_oil_condensing__G__W_h_per_a),
-            (gas, A_heat_gas__k__m2, cnsmp_gas__G__W_h_per_a),
-            (heat_pump, A_heat_heat_pump__k__m2, cnsmp_elec_heat_pump__G__W_h_per_a)
+            (
+                oil_no_condensing,
+                A_heat_oil__k__m2,
+                cnsmp_oil__G__W_h_per_a
+            ),
+            (
+                oil_with_condensing,
+                A_heat_oil_condensing__k__m2,
+                cnsmp_oil_condensing__G__W_h_per_a
+            ),
+            (
+                gas,
+                A_heat_gas__k__m2,
+                cnsmp_gas__G__W_h_per_a
+            ),
+            (
+                heat_pump,
+                A_heat_heat_pump__k__m2,
+                cnsmp_elec_heat_pump__G__W_h_per_a
+            )
         }
 
         let A_heat_other__k__m2 =
@@ -128,24 +144,28 @@ impl Buildings{
             - &A_heat_oil_condensing__k__m2 - &A_heat_gas__k__m2
             - &A_heat_heat_pump__k__m2;
 
-        let cnsmp_other__G__W_h_per_a = &A_heat_other__k__m2 * &total_heat_dmd__M__W_h_per_m2_a;
-        results.cnsmp_other__G__W_h_per_a.set_year_values(year, &cnsmp_other__G__W_h_per_a);
+        let cnsmp_other__G__W_h_per_a =
+            &A_heat_other__k__m2 * &total_heat_dmd__M__W_h_per_m2_a;
+        results.cnsmp_other__G__W_h_per_a
+            .set_year_values(year, &cnsmp_other__G__W_h_per_a);
 
         let cnsmp_oil__M__L =
             (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
-            / constants::EnergySource::oil::energy_density;
+            / constants::EnergySource::oil::energy_density__k__W_h_per_L;
         results.cnsmp_oil__M__L.set_year_values(year, &cnsmp_oil__M__L);
 
         let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a
-            / constants::EnergySource::gas::energy_density;
+            / constants::EnergySource::gas::energy_density__k__W_h_per_m3;
         results.cnsmp_gas__M__m3.set_year_values(year, &cnsmp_gas__M__m3);
 
 
         // Costs
-        let costs_oil__M__eur =  &cnsmp_oil__M__L * constants::EnergySource::oil::price;
+        let costs_oil__M__eur =
+            &cnsmp_oil__M__L * constants::EnergySource::oil::price;
         results.costs_oil__M__eur.set_year_values(year, &costs_oil__M__eur);
 
-        let costs_gas__M__eur =  &cnsmp_gas__M__m3 * constants::EnergySource::gas::price;
+        let costs_gas__M__eur =
+            &cnsmp_gas__M__m3 * constants::EnergySource::gas::price;
         results.costs_gas__M__eur.set_year_values(year, &costs_gas__M__eur);
 
 
