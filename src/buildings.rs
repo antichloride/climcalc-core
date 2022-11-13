@@ -306,11 +306,11 @@ impl Buildings{
             .get_year(year);
 
         let ems_oil__k__to_coe = cnsmp_oil__M__L_per_a
-            * constants::EnergySource::oil::emission;
+            * constants::EnergySource::oil::emission__kg_coe_per_L;
         self.results.ems_oil__k__to_coe.set_year_values(year, &ems_oil__k__to_coe);
 
         let ems_gas__k__to_coe = cnsmp_gas__M__m3_per_a
-            * constants::EnergySource::gas::emission;
+            * constants::EnergySource::gas::emission__kg_coe_per_m3;
         self.results.ems_gas__k__to_coe.set_year_values(year, &ems_gas__k__to_coe);
 
     }

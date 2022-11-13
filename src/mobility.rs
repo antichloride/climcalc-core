@@ -119,7 +119,7 @@ impl Mobility{
 
     pub fn calculate_emissions(&mut self, year: u32){
         let car_fuel_demand = self.results.car_fuel_demand.get_year(year);
-        let car_emissions = car_fuel_demand * oil::emission;
+        let car_emissions = car_fuel_demand * oil::emission__kg_coe_per_L;
         self.results.car_emissions.set_year_values(year, &car_emissions);
     }
 }
