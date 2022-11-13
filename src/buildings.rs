@@ -149,23 +149,23 @@ impl Buildings{
         results.cnsmp_other__G__W_h_per_a
             .set_year_values(year, &cnsmp_other__G__W_h_per_a);
 
-        let cnsmp_oil__M__L =
+        let cnsmp_oil__M__L_per_a =
             (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
             / constants::EnergySource::oil::energy_density__k__W_h_per_L;
-        results.cnsmp_oil__M__L.set_year_values(year, &cnsmp_oil__M__L);
+        results.cnsmp_oil__M__L_per_a.set_year_values(year, &cnsmp_oil__M__L_per_a);
 
-        let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a
+        let cnsmp_gas__M__m3_per_a = &cnsmp_gas__G__W_h_per_a
             / constants::EnergySource::gas::energy_density__k__W_h_per_m3;
-        results.cnsmp_gas__M__m3.set_year_values(year, &cnsmp_gas__M__m3);
+        results.cnsmp_gas__M__m3_per_a.set_year_values(year, &cnsmp_gas__M__m3_per_a);
 
 
         // Costs
         let costs_oil__M__eur =
-            &cnsmp_oil__M__L * constants::EnergySource::oil::price;
+            &cnsmp_oil__M__L_per_a * constants::EnergySource::oil::price__eur_per_L;
         results.costs_oil__M__eur.set_year_values(year, &costs_oil__M__eur);
 
         let costs_gas__M__eur =
-            &cnsmp_gas__M__m3 * constants::EnergySource::gas::price;
+            &cnsmp_gas__M__m3_per_a * constants::EnergySource::gas::price__eur_per_m3;
         results.costs_gas__M__eur.set_year_values(year, &costs_gas__M__eur);
 
 
@@ -262,16 +262,16 @@ impl Buildings{
     }
 
     pub fn calculate_emissions(&mut self, year: u32){
-        let cnsmp_oil__M__L = self.results.cnsmp_oil__M__L
+        let cnsmp_oil__M__L_per_a = self.results.cnsmp_oil__M__L_per_a
             .get_year(year);
-        let cnsmp_gas__M__m3 = self.results.cnsmp_gas__M__m3
+        let cnsmp_gas__M__m3_per_a = self.results.cnsmp_gas__M__m3_per_a
             .get_year(year);
 
-        let ems_oil__k__to_coe = cnsmp_oil__M__L
+        let ems_oil__k__to_coe = cnsmp_oil__M__L_per_a
             * constants::EnergySource::oil::emission;
         self.results.ems_oil__k__to_coe.set_year_values(year, &ems_oil__k__to_coe);
 
-        let ems_gas__k__to_coe = cnsmp_gas__M__m3
+        let ems_gas__k__to_coe = cnsmp_gas__M__m3_per_a
             * constants::EnergySource::gas::emission;
         self.results.ems_gas__k__to_coe.set_year_values(year, &ems_gas__k__to_coe);
 
@@ -399,8 +399,8 @@ implement_results_builidngs!{
     cnsmp_gas__G__W_h_per_a,
     cnsmp_elec_heat_pump__G__W_h_per_a,
     cnsmp_other__G__W_h_per_a,
-    cnsmp_oil__M__L,
-    cnsmp_gas__M__m3,
+    cnsmp_oil__M__L_per_a,
+    cnsmp_gas__M__m3_per_a,
     costs_oil__M__eur,
     costs_gas__M__eur,
     invest_heat_sources__M__eur,
