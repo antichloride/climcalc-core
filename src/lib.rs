@@ -6,7 +6,6 @@ mod energy;
 use energy::Energy;
 mod mobility;
 use mobility::Mobility;
-mod economy;
 mod input;
 mod result;
 use result::Results;
@@ -55,8 +54,8 @@ impl Calculator{
     fn calculate_second_stage(&mut self, year:u32){
         self.energy.calculate_second_stage(
             year,
-            self.buildings.results.electric_power_demand.get_year(year),
-            self.buildings.results.energy_heating_heat_pump.get_year(year),
+            self.buildings.elec_dmd__G__W_h_per_a().get_year(year),
+            self.buildings.cnsmp_elec_heat_pump__G__W_h_per_a().get_year(year),
             self.mobility.results.bev_electric_power_demand.get_year(year),
         );
         self.mobility.calculate_second_stage(

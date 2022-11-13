@@ -46,6 +46,21 @@ impl Buildings{
 
 
 
+// Implement getter functions
+
+impl Buildings{
+    pub fn total_heat_dmd__G__W_h_per_a(&self) -> &SectorsResult{
+        return &self.results.total_heat_dmd__G__W_h_per_a;
+    }
+    pub fn elec_dmd__G__W_h_per_a(&self) -> &SectorsResult{
+        return &self.results.elec_dmd__G__W_h_per_a;
+    }
+    pub fn cnsmp_elec_heat_pump__G__W_h_per_a(&self) -> &SectorsResult{
+        return &self.results.cnsmp_elec_heat_pump__G__W_h_per_a;
+    }
+
+}
+
 
 
 impl Buildings{
@@ -54,69 +69,71 @@ impl Buildings{
         let inputs = &self.inputs;
         let results = &mut self.results;
 
-        let floor_area_per_building = self.inputs.floor_area_per_building.get_year(year); //in qm
+        let floor_A_building__m2 = self.inputs.floor_A_building__m2.get_year(year); //in qm
         let n_buildings = self.inputs.n_buildings.get_year(year);
-        let n_inhabitants = self.inputs.n_inhabitants.get_year(year);
-        let heat_demand_per_area = self.inputs.heat_demand_per_area.get_year(year);
-        let hot_water_demand_per_capita = self.inputs.hot_water_demand_per_capita.get_year(year); // in kWh/a
-        let electric_power_demand_per_capita = self.inputs.electric_power_demand_per_capita.get_year(year);
+        let n_inhabitants__k__ = self.inputs.n_inhabitants__k__.get_year(year);
+        let heat_dmd__k__W_h_per_m2 = self.inputs.heat_dmd__k__W_h_per_m2.get_year(year);
+        let hot_water_dmd__k__W_h_per_m2 = self.inputs.hot_water_dmd__k__W_h_per_m2.get_year(year); // in kWh/a
+        let elec_dmd_capita__k_W_h_per_a = self.inputs.elec_dmd_capita__k_W_h_per_a.get_year(year);
 
-        let floor_area = &floor_area_per_building * &n_buildings * 1e-3; // in kqm
-        results.floor_area.set_year_values(year, &floor_area);
+        let floor_A__k__m2 = &floor_A_building__m2 * &n_buildings * 1e-3; // in kqm
+        results.floor_A__k__m2.set_year_values(year, &floor_A__k__m2);
 
-        let thermal_energy_demand = (&n_inhabitants * &hot_water_demand_per_capita
-            + &heat_demand_per_area * &floor_area) * 1e-3;
-        results.thermal_energy_demand.set_year_values(year, &thermal_energy_demand);
+        let total_heat_dmd__G__W_h_per_a = (&n_inhabitants__k__ * &hot_water_dmd__k__W_h_per_m2
+            + &heat_dmd__k__W_h_per_m2 * &floor_A__k__m2) * 1e-3;
+        results.total_heat_dmd__G__W_h_per_a.set_year_values(year, &total_heat_dmd__G__W_h_per_a);
 
-        let electric_power_demand = &electric_power_demand_per_capita
-            * &n_inhabitants * 1e-3;
-        results.electric_power_demand.set_year_values(year, &electric_power_demand);
+        let elec_dmd__G__W_h_per_a = &elec_dmd_capita__k_W_h_per_a
+            * &n_inhabitants__k__ * 1e-3;
+        results.elec_dmd__G__W_h_per_a.set_year_values(year, &elec_dmd__G__W_h_per_a);
 
 
         // Energy Consumption of different heating types
-        let thermal_energy_per_floor_area = &thermal_energy_demand * &floor_area;
+        let thermal_energy_per_floor_A = &total_heat_dmd__G__W_h_per_a / &floor_A__k__m2;
 
-        let area_heating_oil_no_condensing = self.inputs.area_heating_oil_no_condensing.get_year(year);
-        let area_heating_oil_with_condensing = self.inputs.area_heating_oil_with_condensing.get_year(year);
-        let area_heating_gas = self.inputs.area_heating_gas.get_year(year);
-        let area_heating_heat_pump = self.inputs.area_heating_heat_pump.get_year(year);
-        let area_heating_other = self.inputs.area_heating_other.get_year(year);
+        let A_heat_oil__k__m2 = self.inputs.A_heat_oil__k__m2.get_year(year);
+        let A_heat_oil_condensing__k__m2 = self.inputs.A_heat_oil_condensing__k__m2.get_year(year);
+        let A_heat_gas__k__m2 = self.inputs.A_heat_gas__k__m2.get_year(year);
+        let A_heat_heat_pump__k__m2 = self.inputs.A_heat_heat_pump__k__m2.get_year(year);
+        let A_heating_other = &floor_A__k__m2 - &A_heat_oil__k__m2
+            - &A_heat_oil_condensing__k__m2 - &A_heat_gas__k__m2
+            - &A_heat_heat_pump__k__m2;
 
 
-        let energy_heating_oil_no_condendsing = &area_heating_oil_no_condensing
-            * &thermal_energy_per_floor_area / constants::oil_no_condensing.efficency;
-        results.energy_heating_oil_no_condendsing.set_year_values(year, &energy_heating_oil_no_condendsing);
+        let cnsmp_oil__G__W_h_per_a = &A_heat_oil__k__m2
+            * &thermal_energy_per_floor_A / constants::oil_no_condensing.efficency;
+        results.cnsmp_oil__G__W_h_per_a.set_year_values(year, &cnsmp_oil__G__W_h_per_a);
 
-        let energy_heating_oil_with_condendsing = &area_heating_oil_with_condensing
-            * &thermal_energy_per_floor_area / constants::oil_with_condensing.efficency;
-        results.energy_heating_oil_with_condendsing.set_year_values(year, &energy_heating_oil_with_condendsing);
+        let cnsmp_oil_condensing__G__W_h_per_a = &A_heat_oil_condensing__k__m2
+            * &thermal_energy_per_floor_A / constants::oil_with_condensing.efficency;
+        results.cnsmp_oil_condensing__G__W_h_per_a.set_year_values(year, &cnsmp_oil_condensing__G__W_h_per_a);
 
-        let energy_heating_gas = &area_heating_gas
-            * &thermal_energy_per_floor_area / constants::gas.efficency;
-        results.energy_heating_gas.set_year_values(year, &energy_heating_gas);
+        let cnsmp_gas__G__W_h_per_a = &A_heat_gas__k__m2
+            * &thermal_energy_per_floor_A / constants::gas.efficency;
+        results.cnsmp_gas__G__W_h_per_a.set_year_values(year, &cnsmp_gas__G__W_h_per_a);
 
-        let energy_heating_heat_pump = &area_heating_heat_pump
-            * &thermal_energy_per_floor_area / constants::heat_pump.efficency;
-        results.energy_heating_heat_pump.set_year_values(year, &energy_heating_heat_pump);
+        let cnsmp_elec_heat_pump__G__W_h_per_a = &A_heat_heat_pump__k__m2
+            * &thermal_energy_per_floor_A / constants::heat_pump.efficency;
+        results.cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(year, &cnsmp_elec_heat_pump__G__W_h_per_a);
 
-        let energy_heating_other = &area_heating_other * &thermal_energy_per_floor_area;
-        results.energy_heating_other.set_year_values(year, &energy_heating_other);
+        let cnsmp_other__G__W_h_per_a = &A_heating_other * &thermal_energy_per_floor_A;
+        results.cnsmp_other__G__W_h_per_a.set_year_values(year, &cnsmp_other__G__W_h_per_a);
 
-        let consumption_heating_oil =
-            (&energy_heating_oil_no_condendsing + &energy_heating_oil_with_condendsing)
+        let cnsmp_oil__M__L =
+            (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
             / constants::EnergySource::oil.calories;
-        results.consumption_heating_oil.set_year_values(year, &consumption_heating_oil);
+        results.cnsmp_oil__M__L.set_year_values(year, &cnsmp_oil__M__L);
 
-        let consumption_heating_gas = &energy_heating_gas / constants::EnergySource::gas.calories;
-        results.consumption_heating_gas.set_year_values(year, &consumption_heating_gas);
+        let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a / constants::EnergySource::gas.calories;
+        results.cnsmp_gas__M__m3.set_year_values(year, &cnsmp_gas__M__m3);
 
 
         // Costs
-        let costs_heating_oil =  &consumption_heating_oil * constants::EnergySource::oil.price;
-        results.costs_heating_oil.set_year_values(year, &costs_heating_oil);
+        let costs_oil__M__eur =  &cnsmp_oil__M__L * constants::EnergySource::oil.price;
+        results.costs_oil__M__eur.set_year_values(year, &costs_oil__M__eur);
 
-        let costs_heating_gas =  &consumption_heating_gas * constants::EnergySource::gas.price;
-        results.costs_heating_gas.set_year_values(year, &costs_heating_gas);
+        let costs_gas__M__eur =  &cnsmp_gas__M__m3 * constants::EnergySource::gas.price;
+        results.costs_gas__M__eur.set_year_values(year, &costs_gas__M__eur);
 
 
         // Invests and Grants
@@ -124,68 +141,73 @@ impl Buildings{
 
             // invest/grant heating
             macro_rules! implement_invest_calculation_heating{
-                ($(($heat_type: ident, $heat_type_area: ident)),*) => {
+                ($(($heat_type: ident, $heat_type_A: ident)),*) => {
 
-                    let mut area_this_year: SectorsRawValues;
-                    let mut area_prev_year: SectorsRawValues;
+                    let mut A_this_year: SectorsRawValues;
+                    let mut A_prev_year: SectorsRawValues;
 
 
-                    let mut invest_heat = SectorsRawValues::new();
-                    let mut invest_grant_heat = SectorsRawValues::new();
+                    let mut invest_heat_sources__M__eur = SectorsRawValues::new();
+                    let mut grant_heat_sources__M__eur = SectorsRawValues::new();
 
                     $(
                         // invest heatings
-                        area_this_year = self.inputs.$heat_type_area.get_year(year);
-                        area_prev_year = self.inputs.$heat_type_area.get_year(year-1);
+                        A_this_year = self.inputs.$heat_type_A.get_year(year);
+                        A_prev_year = self.inputs.$heat_type_A.get_year(year-1);
 
-                        invest_heat = invest_heat
-                            + (&area_this_year - &area_prev_year)
+                        invest_heat_sources__M__eur = invest_heat_sources__M__eur
+                            + (&A_this_year - &A_prev_year)
                             * constants::$heat_type.invest
-                            * area_this_year.is_greater(&area_prev_year);
+                            * A_this_year.is_greater(&A_prev_year);
 
-                        invest_grant_heat = invest_grant_heat
-                            + (&area_this_year - &area_prev_year)
+                        grant_heat_sources__M__eur = grant_heat_sources__M__eur
+                            + (&A_this_year - &A_prev_year)
                             * constants::$heat_type.invest
                             * constants::$heat_type.grant
-                            * area_this_year.is_greater(&area_prev_year);
+                            * A_this_year.is_greater(&A_prev_year);
                      )*
 
-                    results.invest_heat.set_year_values(year, &invest_heat);
-                    results.invest_grant_heat.set_year_values(year, &invest_grant_heat);
+                    invest_heat_sources__M__eur = invest_heat_sources__M__eur * &heat_dmd__k__W_h_per_m2;
+                    grant_heat_sources__M__eur = grant_heat_sources__M__eur * &heat_dmd__k__W_h_per_m2;
+
+                    results.invest_heat_sources__M__eur.set_year_values(year, &invest_heat_sources__M__eur);
+                    results.grant_heat_sources__M__eur.set_year_values(year, &grant_heat_sources__M__eur);
                 }
             }
 
 
             implement_invest_calculation_heating!{
-                (oil_no_condensing, area_heating_oil_no_condensing),
-                (oil_with_condensing, area_heating_oil_with_condensing),
-                (gas, area_heating_gas),
-                (heat_pump, area_heating_heat_pump),
-                (other, area_heating_other)
+                (oil_no_condensing, A_heat_oil__k__m2),
+                (oil_with_condensing, A_heat_oil_condensing__k__m2),
+                (gas, A_heat_gas__k__m2),
+                (heat_pump, A_heat_heat_pump__k__m2)
+                // TODO: check how A_heat_other must be added here
             }
 
 
             // invest/grant thermal heat
-            let thermal_demand_this_year = inputs.heat_demand_per_area.get_year(year);
-            let thermal_demand_prev_year = inputs.heat_demand_per_area.get_year(year - 1);
+            let thermal_demand_this_year = inputs.heat_dmd__k__W_h_per_m2.get_year(year);
+            let thermal_demand_prev_year = inputs.heat_dmd__k__W_h_per_m2.get_year(year - 1);
 
-            let invest_thermal_energy_demand =
-                (&thermal_demand_this_year - &thermal_demand_prev_year)
+            let invest_renovation =
+                (&thermal_demand_this_year - &thermal_demand_prev_year) // TODO: use heat demand
+                                                                        // per A, not toal heat
+                                                                        // demand
                 * constants::energetic_restoration::invest
                 * thermal_demand_this_year.is_greater(&thermal_demand_prev_year)
-                * &floor_area;
-            results.invest_thermal_energy_demand
-                .set_year_values(year, &invest_thermal_energy_demand);
+                * &floor_A__k__m2;
+            results.invest_energetic_renovation__M__eur
+                .set_year_values(year, &invest_renovation);
 
-            let invest_grant_thermal_enery_demand =
+            let grant_energetic_renovation__M__eur =
                 (&thermal_demand_this_year - &thermal_demand_prev_year)
                 * constants::energetic_restoration::invest
                 * constants::energetic_restoration::grant
                 * thermal_demand_this_year.is_greater(&thermal_demand_prev_year)
-                * &floor_area;
+                * &floor_A__k__m2;
 
-            results.invest_grant_thermal_enery_demand
-                .set_year_values(year, &invest_grant_thermal_enery_demand);
+            results.grant_energetic_renovation__M__eur
+                .set_year_values(year, &grant_energetic_renovation__M__eur);
 
         }
     }
@@ -193,32 +215,32 @@ impl Buildings{
     pub fn calculate_second_stage(
         &mut self,
         year: u32,
-        aquisition_power_mix_price: &Results,
+        custom_power_mix_price: &Results,
         ){
 
-        let energy_heating_heat_pump = self.results.energy_heating_heat_pump
+        let cnsmp_elec_heat_pump__G__W_h_per_a = self.results.cnsmp_elec_heat_pump__G__W_h_per_a
             .get_year(year);
-        let aquisition_power_mix_price = aquisition_power_mix_price
+        let custom_power_mix_price = custom_power_mix_price
             .get_year(year);
 
-        let costs_heat_pump = &energy_heating_heat_pump
-            * aquisition_power_mix_price * (1.0 - evu_discount_heat_pump);
-        self.results.costs_heat_pump.set_year_values(year, &costs_heat_pump);
+        let costs_heat_pump__M__eur = &cnsmp_elec_heat_pump__G__W_h_per_a
+            * custom_power_mix_price * (1.0 - evu_discount_heat_pump);
+        self.results.costs_heat_pump__M__eur.set_year_values(year, &costs_heat_pump__M__eur);
     }
 
     pub fn calculate_emissions(&mut self, year: u32){
-        let consumption_heating_oil = self.results.consumption_heating_oil
+        let cnsmp_oil__M__L = self.results.cnsmp_oil__M__L
             .get_year(year);
-        let consumption_heating_gas = self.results.consumption_heating_gas
+        let cnsmp_gas__M__m3 = self.results.cnsmp_gas__M__m3
             .get_year(year);
 
-        let emissions_oil = consumption_heating_oil
+        let ems_oil__k__to_coe = cnsmp_oil__M__L
             * constants::EnergySource::oil.emission;
-        self.results.emissions_oil.set_year_values(year, &emissions_oil);
+        self.results.ems_oil__k__to_coe.set_year_values(year, &ems_oil__k__to_coe);
 
-        let emissions_gas = consumption_heating_gas
+        let ems_gas__k__to_coe = cnsmp_gas__M__m3
             * constants::EnergySource::gas.emission;
-        self.results.emissions_gas.set_year_values(year, &emissions_gas);
+        self.results.ems_gas__k__to_coe.set_year_values(year, &ems_gas__k__to_coe);
 
     }
 }
@@ -277,17 +299,15 @@ macro_rules! implement_inputs_builidngs{
 
 implement_inputs_builidngs!{
     n_buildings,
-    floor_area_per_building,
-    heat_demand_per_area,
-    n_inhabitants,
-    hot_water_demand_per_capita,
-    heat_demand,
-    electric_power_demand_per_capita,
-    area_heating_oil_no_condensing,
-    area_heating_oil_with_condensing,
-    area_heating_gas,
-    area_heating_heat_pump,
-    area_heating_other
+    floor_A_building__m2,
+    heat_dmd__k__W_h_per_m2,
+    n_inhabitants__k__,
+    hot_water_dmd__k__W_h_per_m2,
+    elec_dmd_capita__k_W_h_per_a,
+    A_heat_oil__k__m2,
+    A_heat_oil_condensing__k__m2,
+    A_heat_gas__k__m2,
+    A_heat_heat_pump__k__m2
 }
 
 macro_rules! implement_results_builidngs{
@@ -338,25 +358,25 @@ macro_rules! implement_results_builidngs{
 }
 
 implement_results_builidngs!{
-    floor_area,
-    thermal_energy_demand,
-    electric_power_demand,
-    energy_heating_oil_no_condendsing,
-    energy_heating_oil_with_condendsing,
-    energy_heating_gas,
-    energy_heating_heat_pump,
-    energy_heating_other,
-    consumption_heating_oil,
-    consumption_heating_gas,
-    costs_heating_oil,
-    costs_heating_gas,
-    invest_heat,
-    invest_thermal_energy_demand,
-    invest_grant_heat,
-    invest_grant_thermal_enery_demand,
-    costs_heat_pump,
-    emissions_oil,
-    emissions_gas
+    floor_A__k__m2,
+    total_heat_dmd__G__W_h_per_a,
+    elec_dmd__G__W_h_per_a,
+    cnsmp_oil__G__W_h_per_a,
+    cnsmp_oil_condensing__G__W_h_per_a,
+    cnsmp_gas__G__W_h_per_a,
+    cnsmp_elec_heat_pump__G__W_h_per_a,
+    cnsmp_other__G__W_h_per_a,
+    cnsmp_oil__M__L,
+    cnsmp_gas__M__m3,
+    costs_oil__M__eur,
+    costs_gas__M__eur,
+    invest_heat_sources__M__eur,
+    invest_energetic_renovation__M__eur,
+    grant_heat_sources__M__eur,
+    grant_energetic_renovation__M__eur,
+    costs_heat_pump__M__eur,
+    ems_oil__k__to_coe,
+    ems_gas__k__to_coe
 }
 
 
@@ -375,10 +395,10 @@ mod tests{
         let end_year = 2025 as u32;
         let mut buildings = Buildings::new(start_year, end_year);
 
-        buildings.inputs.floor_area_per_building.private.set_values(720.0);
-        buildings.inputs.floor_area_per_building.industry.set_values(3000.0);
-        buildings.inputs.floor_area_per_building.schools.set_values(8000.0);
-        buildings.inputs.floor_area_per_building.public.set_values(300.0);
+        buildings.inputs.floor_A_building__m2.private.set_values(720.0);
+        buildings.inputs.floor_A_building__m2.industry.set_values(3000.0);
+        buildings.inputs.floor_A_building__m2.schools.set_values(8000.0);
+        buildings.inputs.floor_A_building__m2.public.set_values(300.0);
 
         buildings.inputs.n_buildings.private.set_values(5000.0);
         buildings.inputs.n_buildings.industry.set_values(200.0);
@@ -387,7 +407,7 @@ mod tests{
 
         buildings.calculate(start_year);
 
-        assert_eq!(buildings.results.floor_area.get_year_values(start_year),
+        assert_eq!(buildings.results.floor_A.get_year_values(start_year),
                    [3600.0002,600.0,80.0,6.0000005]);
     }
 }

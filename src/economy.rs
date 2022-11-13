@@ -4,6 +4,7 @@ use crate::energy::ResultsEnergy;
 use crate::mobility::ResultsMobility;
 use crate::constants::economy as constants;
 use crate::constants::energy as constants_energy;
+use crate::sectors::SectorsResult;
 
 macro_rules! implement_economy{
     ($($field:ident),*) => {
@@ -96,6 +97,7 @@ impl Economy{
         year: u32,
         results_buildings: ResultsBuildings,
         results_energy: ResultsEnergy,
+        buildings_total_heat_dmd__G__W_h_per_a: SectorsResult,
     ){
 
         // heating
@@ -129,8 +131,8 @@ impl Economy{
 
 
         // thermal heat demand
-        let invest_thermal_energy_demand = results_buildings
-            .invest_thermal_energy_demand.get_year(year).sum();
+        let invest_thermal_energy_demand =
+            buildings_total_heat_dmd__G__W_h_per_a.get_year(year).sum();
 
         let invest_heat_demand_material = invest_thermal_energy_demand *
             constants::material::invest_local::energetic_restoration;
