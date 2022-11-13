@@ -27,36 +27,30 @@ pub mod buildings{
         grant: 0.3,
     };
     pub const other: HeatType = HeatType {
-        efficency: 0.5,
+        efficency: 1.0,
         invest: 0.0,
         grant: 0.5,
     };
 
     pub mod EnergySource{
 
-        pub struct EnergySource {
-            pub energy_density: f32,
-            pub price: f32,
-            pub emission: f32,
+        pub mod oil{
+            pub const energy_density: f32 = 10.0;
+            pub const price: f32 = 0.9;
+            pub const emission: f32 = 3.0;
         }
 
-        pub const oil: EnergySource = EnergySource{
-            energy_density: 10.0,
-            price: 0.9,
-            emission: 3.0,
-        };
+        pub mod gas{
+            pub const energy_density: f32 = 5.0;
+            pub const price: f32 = 0.9;
+            pub const emission: f32 = 2.0;
+        }
 
-        pub const gas: EnergySource = EnergySource{
-            energy_density: 5.0,
-            price: 0.9,
-            emission: 2.0,
-        };
-
-        pub const other: EnergySource = EnergySource{
-            energy_density: 0.0,
-            price: 0.9,
-            emission: 0.0,
-        };
+        pub mod other{
+            pub const energy_density: f32 = 0.0;
+            pub const price: f32 = 0.9;
+            pub const emission: f32 = 0.0;
+        }
 
     }
 

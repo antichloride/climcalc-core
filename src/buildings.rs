@@ -69,70 +69,83 @@ impl Buildings{
         let inputs = &self.inputs;
         let results = &mut self.results;
 
-        let floor_A_building__m2 = self.inputs.floor_A_building__m2.get_year(year); //in qm
+        let floor_A_building__m2 =
+            self.inputs.floor_A_building__m2.get_year(year);
         let n_buildings = self.inputs.n_buildings.get_year(year);
         let n_inhabitants__k__ = self.inputs.n_inhabitants__k__.get_year(year);
-        let heat_dmd__k__W_h_per_m2 = self.inputs.heat_dmd__k__W_h_per_m2.get_year(year);
-        let hot_water_dmd__k__W_h_per_m2 = self.inputs.hot_water_dmd__k__W_h_per_m2.get_year(year); // in kWh/a
-        let elec_dmd_capita__k_W_h_per_a = self.inputs.elec_dmd_capita__k_W_h_per_a.get_year(year);
+        let heat_dmd__k__W_h_per_m2_a =
+            self.inputs.heat_dmd__k__W_h_per_m2_a.get_year(year);
+        let hot_water_dmd__k__W_h_per_m2_a =
+            self.inputs.hot_water_dmd__k__W_h_per_m2_a.get_year(year);
+        let elec_dmd_capita__k_W_h_per_a =
+            self.inputs.elec_dmd_capita__k_W_h_per_a.get_year(year);
 
-        let floor_A__k__m2 = &floor_A_building__m2 * &n_buildings * 1e-3; // in kqm
+        let floor_A__k__m2 = &floor_A_building__m2 * &n_buildings * 1e-3;
         results.floor_A__k__m2.set_year_values(year, &floor_A__k__m2);
 
-        let total_heat_dmd__G__W_h_per_a = (&n_inhabitants__k__ * &hot_water_dmd__k__W_h_per_m2
-            + &heat_dmd__k__W_h_per_m2 * &floor_A__k__m2) * 1e-3;
-        results.total_heat_dmd__G__W_h_per_a.set_year_values(year, &total_heat_dmd__G__W_h_per_a);
+        let total_heat_dmd__G__W_h_per_a =
+            (&n_inhabitants__k__ * &hot_water_dmd__k__W_h_per_m2_a
+            + &heat_dmd__k__W_h_per_m2_a * &floor_A__k__m2) * 1e-3;
+        results.total_heat_dmd__G__W_h_per_a
+            .set_year_values(year, &total_heat_dmd__G__W_h_per_a);
 
         let elec_dmd__G__W_h_per_a = &elec_dmd_capita__k_W_h_per_a
             * &n_inhabitants__k__ * 1e-3;
-        results.elec_dmd__G__W_h_per_a.set_year_values(year, &elec_dmd__G__W_h_per_a);
+        results.elec_dmd__G__W_h_per_a
+            .set_year_values(year, &elec_dmd__G__W_h_per_a);
 
 
         // Energy Consumption of different heating types
-        let thermal_energy_per_floor_A = &total_heat_dmd__G__W_h_per_a / &floor_A__k__m2;
+        let total_heat_dmd__M__W_h_per_m2_a =
+            &total_heat_dmd__G__W_h_per_a / &floor_A__k__m2;
 
-        let A_heat_oil__k__m2 = self.inputs.A_heat_oil__k__m2.get_year(year);
-        let A_heat_oil_condensing__k__m2 = self.inputs.A_heat_oil_condensing__k__m2.get_year(year);
-        let A_heat_gas__k__m2 = self.inputs.A_heat_gas__k__m2.get_year(year);
-        let A_heat_heat_pump__k__m2 = self.inputs.A_heat_heat_pump__k__m2.get_year(year);
-        let A_heating_other = &floor_A__k__m2 - &A_heat_oil__k__m2
+        macro_rules! implement_heat_types_input_consumption{
+                ($((
+                    $heat_type: ident,
+                    $heat_type_A: ident,
+                    $heat_type_cnsmp_in: ident
+                )),*) => {
+                    $(
+                        let $heat_type_A = self.inputs.$heat_type_A.get_year(year);
+                        let $heat_type_cnsmp_in = &$heat_type_A
+                            * &total_heat_dmd__M__W_h_per_m2_a
+                            / constants::$heat_type.efficency;
+                        results.$heat_type_cnsmp_in
+                            .set_year_values(year,&$heat_type_cnsmp_in);
+                     )*
+            }
+        }
+
+        implement_heat_types_input_consumption!{
+            (oil_no_condensing, A_heat_oil__k__m2, cnsmp_oil__G__W_h_per_a),
+            (oil_with_condensing, A_heat_oil_condensing__k__m2, cnsmp_oil_condensing__G__W_h_per_a),
+            (gas, A_heat_gas__k__m2, cnsmp_gas__G__W_h_per_a),
+            (heat_pump, A_heat_heat_pump__k__m2, cnsmp_elec_heat_pump__G__W_h_per_a)
+        }
+
+        let A_heat_other__k__m2 =
+            &floor_A__k__m2 - &A_heat_oil__k__m2
             - &A_heat_oil_condensing__k__m2 - &A_heat_gas__k__m2
             - &A_heat_heat_pump__k__m2;
 
-
-        let cnsmp_oil__G__W_h_per_a = &A_heat_oil__k__m2
-            * &thermal_energy_per_floor_A / constants::oil_no_condensing.efficency;
-        results.cnsmp_oil__G__W_h_per_a.set_year_values(year, &cnsmp_oil__G__W_h_per_a);
-
-        let cnsmp_oil_condensing__G__W_h_per_a = &A_heat_oil_condensing__k__m2
-            * &thermal_energy_per_floor_A / constants::oil_with_condensing.efficency;
-        results.cnsmp_oil_condensing__G__W_h_per_a.set_year_values(year, &cnsmp_oil_condensing__G__W_h_per_a);
-
-        let cnsmp_gas__G__W_h_per_a = &A_heat_gas__k__m2
-            * &thermal_energy_per_floor_A / constants::gas.efficency;
-        results.cnsmp_gas__G__W_h_per_a.set_year_values(year, &cnsmp_gas__G__W_h_per_a);
-
-        let cnsmp_elec_heat_pump__G__W_h_per_a = &A_heat_heat_pump__k__m2
-            * &thermal_energy_per_floor_A / constants::heat_pump.efficency;
-        results.cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(year, &cnsmp_elec_heat_pump__G__W_h_per_a);
-
-        let cnsmp_other__G__W_h_per_a = &A_heating_other * &thermal_energy_per_floor_A;
+        let cnsmp_other__G__W_h_per_a = &A_heat_other__k__m2 * &total_heat_dmd__M__W_h_per_m2_a;
         results.cnsmp_other__G__W_h_per_a.set_year_values(year, &cnsmp_other__G__W_h_per_a);
 
         let cnsmp_oil__M__L =
             (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
-            / constants::EnergySource::oil.energy_density;
+            / constants::EnergySource::oil::energy_density;
         results.cnsmp_oil__M__L.set_year_values(year, &cnsmp_oil__M__L);
 
-        let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a / constants::EnergySource::gas.energy_density;
+        let cnsmp_gas__M__m3 = &cnsmp_gas__G__W_h_per_a
+            / constants::EnergySource::gas::energy_density;
         results.cnsmp_gas__M__m3.set_year_values(year, &cnsmp_gas__M__m3);
 
 
         // Costs
-        let costs_oil__M__eur =  &cnsmp_oil__M__L * constants::EnergySource::oil.price;
+        let costs_oil__M__eur =  &cnsmp_oil__M__L * constants::EnergySource::oil::price;
         results.costs_oil__M__eur.set_year_values(year, &costs_oil__M__eur);
 
-        let costs_gas__M__eur =  &cnsmp_gas__M__m3 * constants::EnergySource::gas.price;
+        let costs_gas__M__eur =  &cnsmp_gas__M__m3 * constants::EnergySource::gas::price;
         results.costs_gas__M__eur.set_year_values(year, &costs_gas__M__eur);
 
 
@@ -235,11 +248,11 @@ impl Buildings{
             .get_year(year);
 
         let ems_oil__k__to_coe = cnsmp_oil__M__L
-            * constants::EnergySource::oil.emission;
+            * constants::EnergySource::oil::emission;
         self.results.ems_oil__k__to_coe.set_year_values(year, &ems_oil__k__to_coe);
 
         let ems_gas__k__to_coe = cnsmp_gas__M__m3
-            * constants::EnergySource::gas.emission;
+            * constants::EnergySource::gas::emission;
         self.results.ems_gas__k__to_coe.set_year_values(year, &ems_gas__k__to_coe);
 
     }

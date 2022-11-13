@@ -69,7 +69,7 @@ impl Mobility{
             .set_year_values(year, &bev_electric_power_demand);
 
         let car_fuel_demand = (&n_cars - &n_bev) * &car_mean_traveld_distance
-            * constants::combustor.consumption * oil.energy_density * 1e-2;
+            * constants::combustor.consumption * oil::energy_density * 1e-2;
         self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
 
         let car_fuel_demand = &car_fuel_demand * constants::price_fuel;
@@ -119,7 +119,7 @@ impl Mobility{
 
     pub fn calculate_emissions(&mut self, year: u32){
         let car_fuel_demand = self.results.car_fuel_demand.get_year(year);
-        let car_emissions = car_fuel_demand * oil.emission;
+        let car_emissions = car_fuel_demand * oil::emission;
         self.results.car_emissions.set_year_values(year, &car_emissions);
     }
 }
