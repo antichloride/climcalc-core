@@ -289,14 +289,15 @@ impl Buildings{
         custom_power_mix_price: &Results,
         ){
 
-        let cnsmp_elec_heat_pump__G__W_h_per_a = self.results.cnsmp_elec_heat_pump__G__W_h_per_a
-            .get_year(year);
-        let custom_power_mix_price = custom_power_mix_price
-            .get_year(year);
+        let cnsmp_elec_heat_pump__G__W_h_per_a =
+            self.results.cnsmp_elec_heat_pump__G__W_h_per_a.get_year(year);
+        let custom_power_mix_price =
+            custom_power_mix_price.get_year(year);
 
         let costs_heat_pump__M__eur = &cnsmp_elec_heat_pump__G__W_h_per_a
             * custom_power_mix_price * (1.0 - evu_discount_heat_pump);
-        self.results.costs_heat_pump__M__eur.set_year_values(year, &costs_heat_pump__M__eur);
+        self.results.costs_heat_pump__M__eur
+            .set_year_values(year, &costs_heat_pump__M__eur);
     }
 
     pub fn calculate_emissions(&mut self, year: u32){
@@ -307,11 +308,13 @@ impl Buildings{
 
         let ems_oil__k__to_coe = cnsmp_oil__M__L_per_a
             * constants::EnergySource::oil::emission__kg_coe_per_L;
-        self.results.ems_oil__k__to_coe.set_year_values(year, &ems_oil__k__to_coe);
+        self.results.ems_oil__k__to_coe
+            .set_year_values(year, &ems_oil__k__to_coe);
 
         let ems_gas__k__to_coe = cnsmp_gas__M__m3_per_a
             * constants::EnergySource::gas::emission__kg_coe_per_m3;
-        self.results.ems_gas__k__to_coe.set_year_values(year, &ems_gas__k__to_coe);
+        self.results.ems_gas__k__to_coe
+            .set_year_values(year, &ems_gas__k__to_coe);
 
     }
 }
@@ -330,10 +333,18 @@ macro_rules! implement_inputs_builidngs{
         }
 
         impl InputsBuildings{
-            fn new(id: &str, start_year: u32, end_year: u32) -> InputsBuildings {
+            fn new(
+                id: &str,
+                start_year: u32,
+                end_year: u32
+            ) -> InputsBuildings {
                 return InputsBuildings{
                     $(
-                        $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
+                        $field: SectorsInputs::new(
+                            id.to_owned()+"/"+stringify!($field),
+                            start_year,
+                            end_year
+                        ),
                      )*
                 }
             }
@@ -357,7 +368,8 @@ macro_rules! implement_inputs_builidngs{
 
                 match splitted_id[0]{
                     $(
-                        stringify!($field) => self.$field.get_input_by_id(remaining_id),
+                        stringify!($field)
+                            => self.$field.get_input_by_id(remaining_id),
                      )*
                     _ => None,
 
@@ -391,10 +403,18 @@ macro_rules! implement_results_builidngs{
         }
 
         impl ResultsBuildings{
-            fn new(id: &str, start_year: u32, end_year: u32) -> ResultsBuildings{
+            fn new(
+                id: &str,
+                start_year: u32,
+                end_year: u32
+            ) -> ResultsBuildings{
                 return ResultsBuildings{
                     $(
-                        $field: SectorsResult::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
+                        $field: SectorsResult::new(
+                            id.to_owned()+"/"+stringify!($field),
+                            start_year,
+                            end_year
+                        ),
                      )*
                 }
             }
@@ -415,7 +435,8 @@ macro_rules! implement_results_builidngs{
 
                 match splitted_id[0]{
                     $(
-                        stringify!($field)=> self.$field.get_results_by_id(remaining_id),
+                        stringify!($field)
+                            => self.$field.get_results_by_id(remaining_id),
                      )*
                     _ => None,
 
