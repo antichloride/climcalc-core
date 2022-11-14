@@ -102,46 +102,46 @@ pub mod mobility{
 pub mod energy{
 
     pub struct RenewableEnergy{
-        pub invest: f32,
-        pub grant: f32,
+        pub invest__m__eur_per_Wp: f32,
+        pub grant__m__eur_per_Wp: f32,
         pub operation_costs: f32,
         pub lifecycle: f32,
-        pub peak_power_to_mean_power: f32,
-        pub buyback_price: f32,
-        pub power_per_area: f32,
+        pub Wp_to_W_h_per_a: f32,
+        pub buyback_price__m__eur_per_W_h: f32,
+        pub power_per_area__k__Wp_per_m2: f32,
         pub costs: f32,
     }
 
     pub const solar_roof: RenewableEnergy = RenewableEnergy{
-        invest: 1500.0,
-        grant: 500.0,
+        invest__m__eur_per_Wp: 1500.0,
+        grant__m__eur_per_Wp: 500.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
-        peak_power_to_mean_power: 900.0,
-        buyback_price: 0.07,
-        power_per_area: 0.17,
+        Wp_to_W_h_per_a: 900.0,
+        buyback_price__m__eur_per_W_h: 0.07,
+        power_per_area__k__Wp_per_m2: 0.17,
         costs: 0.07,
     };
 
     pub const solar_landscape: RenewableEnergy = RenewableEnergy{
-        invest: 1200.0,
-        grant: 500.0,
+        invest__m__eur_per_Wp: 1200.0,
+        grant__m__eur_per_Wp: 500.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
-        peak_power_to_mean_power: 900.0,
-        buyback_price: 0.07,
-        power_per_area: 0.17,
+        Wp_to_W_h_per_a: 900.0,
+        buyback_price__m__eur_per_W_h: 0.07,
+        power_per_area__k__Wp_per_m2: 0.17,
         costs: 0.05,
     };
 
     pub const wind_onshore: RenewableEnergy = RenewableEnergy{
-        invest: 2000.0,
-        grant: 750.0,
+        invest__m__eur_per_Wp: 2000.0,
+        grant__m__eur_per_Wp: 750.0,
         operation_costs: 0.02,
         lifecycle: 20.0,
-        peak_power_to_mean_power: 1300.0,
-        buyback_price: 0.0,
-        power_per_area: 0.0,
+        Wp_to_W_h_per_a: 1300.0,
+        buyback_price__m__eur_per_W_h: 0.0,
+        power_per_area__k__Wp_per_m2: 0.0,
         costs: 0.08,
     };
 
