@@ -306,15 +306,15 @@ impl Buildings{
         let cnsmp_gas__M__m3_per_a = self.results.cnsmp_gas__M__m3_per_a
             .get_year(year);
 
-        let ems_oil__k__to_coe = cnsmp_oil__M__L_per_a
+        let ems_oil__k__to_coe_per_a = cnsmp_oil__M__L_per_a
             * constants::EnergySource::oil::emission__kg_coe_per_L;
-        self.results.ems_oil__k__to_coe
-            .set_year_values(year, &ems_oil__k__to_coe);
+        self.results.ems_oil__k__to_coe_per_a
+            .set_year_values(year, &ems_oil__k__to_coe_per_a);
 
-        let ems_gas__k__to_coe = cnsmp_gas__M__m3_per_a
+        let ems_gas__k__to_coe_per_a = cnsmp_gas__M__m3_per_a
             * constants::EnergySource::gas::emission__kg_coe_per_m3;
-        self.results.ems_gas__k__to_coe
-            .set_year_values(year, &ems_gas__k__to_coe);
+        self.results.ems_gas__k__to_coe_per_a
+            .set_year_values(year, &ems_gas__k__to_coe_per_a);
 
     }
 }
@@ -467,8 +467,8 @@ implement_results_builidngs!{
     grant_heat_sourcres__M__eur_per_a,
     grant_energetic_renovation__M__eur_per_a,
     costs_heat_pump__M__eur,
-    ems_oil__k__to_coe,
-    ems_gas__k__to_coe
+    ems_oil__k__to_coe_per_a,
+    ems_gas__k__to_coe_per_a
 }
 
 

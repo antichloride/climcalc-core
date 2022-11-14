@@ -43,183 +43,166 @@ impl Energy{
     }
 }
 
+impl Energy{
+    pub fn nrg_own_mix_price__m__eur_per_W_h(&self) -> &Results{
+        return &self.results.nrg_own_mix_price__m__eur_per_W_h;
+    }
+    pub fn prchsd_nrg_mix__G__W_h_per_a(&self) -> &SectorsResult{
+        return &self.results.prchsd_nrg_mix__G__W_h_per_a;
+    }
+
+}
+
 
 impl Energy{
     pub fn calculate(&mut self, year: u32){
 
         // Solar Roof
-        let roof_area = self.inputs.roof_area.get_year(year);
-        let roof_solar_sutable_area = self.inputs.roof_solar_sutable_area
+        let rf_A__k__m2 = self.inputs.rf_A__k__m2.get_year(year);
+        let sol_rf_suitable_A_part = self.inputs.sol_rf_suitable_A_part
             .get_year(year);
-        let solar_roof_installed_power_peak = self.inputs
-            .solar_roof_installed_power_peak.get_year(year);
-        let solar_roof_portion_self_consumption = self.inputs
-            .solar_roof_portion_self_consumption.get_year(year);
+        let sol_rf_installed__M__Wp = self.inputs
+            .sol_rf_installed__M__Wp.get_year(year);
+        let sol_rf_self_cnsmp_part = self.inputs
+            .sol_rf_self_cnsmp_part.get_year(year);
 
-        let solar_roof_power_peak_potential = &roof_area
-            * &roof_solar_sutable_area * constants::solar_roof.power_per_area;
-        self.results.solar_roof_power_peak_potential
-            .set_year_values(year, &solar_roof_power_peak_potential);
+        let sol_rf_installed__M__Wp = &rf_A__k__m2
+            * &sol_rf_suitable_A_part * constants::solar_roof.power_per_area;
+        self.results.sol_rf_installed__M__Wp
+            .set_year_values(year, &sol_rf_installed__M__Wp);
 
-        let solar_roof_installed_power = &solar_roof_installed_power_peak
+        let sol_rf_nrg__G__W_h_per_a = &sol_rf_installed__M__Wp
             * constants::solar_roof.peak_power_to_mean_power * 1e-3;
-        self.results.solar_roof_installed_power
-            .set_year_values(year, &solar_roof_installed_power);
+        self.results.sol_rf_nrg__G__W_h_per_a
+            .set_year_values(year, &sol_rf_nrg__G__W_h_per_a);
 
-        let solar_roof_self_consumption = &solar_roof_installed_power
-            * &solar_roof_portion_self_consumption;
-        self.results.solar_roof_self_consumption
-            .set_year_values(year, &solar_roof_self_consumption);
+        let sol_rf_self_cnsmp__G__W_h_per_a = &sol_rf_nrg__G__W_h_per_a
+            * &sol_rf_self_cnsmp_part;
+        self.results.sol_rf_self_cnsmp__G__W_h_per_a
+            .set_year_values(year, &sol_rf_self_cnsmp__G__W_h_per_a);
 
         if year != self.start_year{
 
-            let solar_roof_installed_power_peak_this_year = self.inputs
-                .solar_roof_installed_power_peak.get_year(year);
-            let solar_roof_installed_power_peak_prev_year = self.inputs
-                .solar_roof_installed_power_peak.get_year(year - 1);
+            let sol_rf_installed__M__Wp_this_year = self.inputs
+                .sol_rf_installed__M__Wp.get_year(year);
+            let sol_rf_installed__M__Wp_prev_year = self.inputs
+                .sol_rf_installed__M__Wp.get_year(year - 1);
 
-            let solar_roof_invest =
-                (&solar_roof_installed_power_peak_this_year
-                 - &solar_roof_installed_power_peak_prev_year)
+            let sol_rf_invest__M__eur_per_a =
+                (&sol_rf_installed__M__Wp_this_year
+                 - &sol_rf_installed__M__Wp_prev_year)
                 * constants::solar_roof.invest * 1e-3
-                * solar_roof_installed_power_peak_this_year
-                    .is_greater(&solar_roof_installed_power_peak_prev_year);
-            self.results.solar_roof_invest
-                .set_year_values(year, &solar_roof_invest);
+                * sol_rf_installed__M__Wp_this_year
+                    .is_greater(&sol_rf_installed__M__Wp_prev_year);
+            self.results.sol_rf_invest__M__eur_per_a
+                .set_year_values(year, &sol_rf_invest__M__eur_per_a);
 
-            let solar_roof_grant =
-                (&solar_roof_installed_power_peak_this_year
-                 - &solar_roof_installed_power_peak_prev_year)
+            // The grant is calculated in euro per power peak
+            let sol_rf_grant__M__eur_per_a =
+                (&sol_rf_installed__M__Wp_this_year
+                 - &sol_rf_installed__M__Wp_prev_year)
                 * constants::solar_roof.grant * 1e-3
-                * solar_roof_installed_power_peak_this_year
-                    .is_greater(&solar_roof_installed_power_peak_prev_year);
-            self.results.solar_roof_grant
-                .set_year_values(year, &solar_roof_grant);
+                * sol_rf_installed__M__Wp_this_year
+                    .is_greater(&sol_rf_installed__M__Wp_prev_year);
+            self.results.sol_rf_grant__M__eur_per_a
+                .set_year_values(year, &sol_rf_grant__M__eur_per_a);
 
-            let mut solar_roof_operation_costs = SectorsRawValues::new();
 
-            for year_i in self.start_year..year{
-                solar_roof_operation_costs = solar_roof_operation_costs
-                    + self.results.solar_roof_operation_costs.get_year(year_i);
-            }
 
-            solar_roof_operation_costs = solar_roof_operation_costs
-                + &solar_roof_invest * constants::solar_roof.operation_costs;
-            self.results.solar_roof_operation_costs
-                .set_year_values(year, &solar_roof_operation_costs)
+            let sol_rf_os__M__eur_per_a_last_year = self.results.sol_rf_os__M__eur_per_a.get_year(year-1);
+            let sol_rf_os__M__eur_per_a = &sol_rf_os__M__eur_per_a_last_year
+                + &(&sol_rf_invest__M__eur_per_a * constants::solar_roof.operation_costs);
+            self.results.sol_rf_os__M__eur_per_a
+                .set_year_values(year, &sol_rf_os__M__eur_per_a)
 
         }
 
-        let solar_roof_buyback = (&solar_roof_installed_power
-            - &solar_roof_self_consumption)
+        let sol_rf_revenue__M__eur_per_a = (&sol_rf_nrg__G__W_h_per_a
+            - &sol_rf_self_cnsmp__G__W_h_per_a)
             * constants::solar_roof.buyback_price;
-        self.results.solar_roof_buyback
-            .set_year_values(year, &solar_roof_buyback);
-
-        let solar_roof_costs = &solar_roof_self_consumption
-            * constants::solar_roof.costs - &solar_roof_buyback;
-        self.results.solar_roof_costs.set_year_values(year, &solar_roof_costs);
-
-        let solar_roof_costs_per_kwh = &solar_roof_costs
-            / &solar_roof_installed_power;
-        self.results.solar_roof_costs_per_kwh
-            .set_year_values(year, &solar_roof_costs_per_kwh);
+        self.results.sol_rf_revenue__M__eur_per_a
+            .set_year_values(year, &sol_rf_revenue__M__eur_per_a);
 
 
         // Solar Landscape
 
-        let solar_landscape_suitable_area = self.inputs
-            .solar_landscape_suitable_area.get_year(year);
+        let sol_os_installed_A__ha = self.inputs
+            .sol_os_installed_A__ha.get_year(year);
 
-        let solar_landscape_installed_power_peak = 1e-1
-            * &solar_landscape_suitable_area
+        let sol_os_installed__M__Wp = 1e-1
+            * &sol_os_installed_A__ha
             * constants::solar_landscape.power_per_area;
-        self.results.solar_landscape_installed_power_peak
-            .set_year_values(year, &solar_landscape_installed_power_peak);
+        self.results.sol_os_installed__M__Wp
+            .set_year_values(year, &sol_os_installed__M__Wp);
 
-        let solar_landscape_installed_power = 1e-3
-            * &solar_landscape_installed_power_peak
+        let sol_os_nrg__G__W_h_per_a = 1e-3
+            * &sol_os_installed__M__Wp
             * constants::solar_landscape.power_per_area;
-        self.results.solar_landscape_installed_power
-            .set_year_values(year, &solar_landscape_installed_power);
+        self.results.sol_os_nrg__G__W_h_per_a
+            .set_year_values(year, &sol_os_nrg__G__W_h_per_a);
 
         if year != self.start_year{
 
-            let solar_landscape_installed_power_peak_this_year =
-                self.results.solar_landscape_installed_power_peak.get_year(year);
-            let solar_landscape_installed_power_peak_prev_year =
-                self.results.solar_landscape_installed_power_peak
+            let sol_os_installed__M__Wp_this_year =
+                self.results.sol_os_installed__M__Wp.get_year(year);
+            let sol_os_installed__M__Wp_prev_year =
+                self.results.sol_os_installed__M__Wp
                 .get_year(year - 1);
 
-            let solar_landscape_invest = 1e-3
-               * (&solar_landscape_installed_power_peak_this_year
-                - &solar_landscape_installed_power_peak_prev_year)
+            let sol_os_invest__M__eur_per_a = 1e-3
+               * (&sol_os_installed__M__Wp_this_year
+                - &sol_os_installed__M__Wp_prev_year)
                * constants::solar_landscape.invest
-               * solar_landscape_installed_power_peak_this_year
-                    .is_greater(&solar_landscape_installed_power_peak_prev_year);
-            self.results.solar_landscape_invest
-                .set_year_values(year, &solar_landscape_invest);
+               * sol_os_installed__M__Wp_this_year
+                    .is_greater(&sol_os_installed__M__Wp_prev_year);
+            self.results.sol_os_invest__M__eur_per_a
+                .set_year_values(year, &sol_os_invest__M__eur_per_a);
 
-            let solar_landscape_grant = 1e-3
-               * (&solar_landscape_installed_power_peak_this_year
-                - &solar_landscape_installed_power_peak_prev_year)
+            let sol_os_grant__M__eur_per_a = 1e-3
+               * (&sol_os_installed__M__Wp_this_year
+                - &sol_os_installed__M__Wp_prev_year)
                * constants::solar_landscape.grant
-               * solar_landscape_installed_power_peak_this_year
-                    .is_greater(&solar_landscape_installed_power_peak_prev_year);
-            self.results.solar_landscape_grant
-                .set_year_values(year, &solar_landscape_grant);
+               * sol_os_installed__M__Wp_this_year
+                    .is_greater(&sol_os_installed__M__Wp_prev_year);
+            self.results.sol_os_grant__M__eur_per_a
+                .set_year_values(year, &sol_os_grant__M__eur_per_a);
 
 
-            let mut solar_landscape_operation_costs = SectorsRawValues::new();
+            let mut sol_os_om__M__eur_per_a = SectorsRawValues::new();
 
             for year_i in self.start_year..year{
-                solar_landscape_operation_costs =
-                    solar_landscape_operation_costs
-                    + self.results.solar_landscape_operation_costs
+                sol_os_om__M__eur_per_a =
+                    sol_os_om__M__eur_per_a
+                    + self.results.sol_os_om__M__eur_per_a
                     .get_year(year_i);
             }
 
-            let solar_landscape_operation_costs =
-                solar_landscape_operation_costs
-                + &solar_landscape_invest
+            let sol_os_om__M__eur_per_a =
+                sol_os_om__M__eur_per_a
+                + &sol_os_invest__M__eur_per_a
                 * constants::solar_landscape.grant;
-            self.results.solar_landscape_operation_costs
-                .set_year_values(year, &solar_landscape_operation_costs);
+            self.results.sol_os_om__M__eur_per_a
+                .set_year_values(year, &sol_os_om__M__eur_per_a);
         }
-
-        let solar_landscape_production_costs =
-            &solar_landscape_installed_power * constants::solar_landscape.costs;
-        self.results.solar_landscape_production_costs
-            .set_year_values(year, &solar_landscape_production_costs);
-
-        let solar_landscape_buyback = &solar_landscape_installed_power
-            * constants::solar_landscape.buyback_price;
-        self.results.solar_landscape_buyback
-            .set_year_values(year, &solar_landscape_buyback);
-
-        let solar_landscape_profit = &solar_landscape_production_costs
-            - &solar_landscape_buyback;
-        self.results.solar_landscape_profit
-            .set_year_values(year, &solar_landscape_profit);
 
 
         // Purchase of renewable energy
 
-        let direct_aquisition_reneable_enrgies = self.inputs.
-            direct_aquisition_reneable_enrgies.get_year(year);
-        let direct_aquisition_reneable_enrgies_price = self.inputs.
-            direct_aquisition_reneable_enrgies_price.get_year(year);
+        let prchsd_renewable_nrg__G__W_h_per_a = self.inputs.
+            prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
+        let renewable_nrg_price__m__eur_per_W_h = self.inputs.
+            renewable_nrg_price__m__eur_per_W_h.get_year(year);
 
-        let direct_aquisition_renable_energies_costs =
-            &direct_aquisition_reneable_enrgies
-            * &direct_aquisition_reneable_enrgies_price;
-        self.results.direct_aquisition_renable_energies_costs
-            .set_year_values(year, &direct_aquisition_renable_energies_costs);
+        let prchsd_renewable_nrg__M__eur_per_a =
+            &prchsd_renewable_nrg__G__W_h_per_a
+            * &renewable_nrg_price__m__eur_per_W_h;
+        self.results.prchsd_renewable_nrg__M__eur_per_a
+            .set_year_values(year, &prchsd_renewable_nrg__M__eur_per_a);
 
 
         // power injection
         let solar_roof_electric_power_injection =
-            &solar_roof_installed_power * &(1.0-&solar_roof_self_consumption);
+            &sol_rf_nrg__G__W_h_per_a * &(1.0-&sol_rf_self_cnsmp__G__W_h_per_a);
         self.results.solar_roof_electric_power_injection
             .set_year_values(year, &solar_roof_electric_power_injection);
 
@@ -234,63 +217,64 @@ impl Energy{
         ){
 
 
-        let mut electric_energy_demand = &electric_power_demand_buildings
+        let mut elec_nrg_dmd__G__W_h_per_a = &electric_power_demand_buildings
             + &energy_heating_heat_pump + bev_electric_power_demand;
-        electric_energy_demand.public += electric_energy_demand.private;
-        self.results.electric_energy_demand
-            .set_year_values(year, &electric_energy_demand);
+        elec_nrg_dmd__G__W_h_per_a.public += elec_nrg_dmd__G__W_h_per_a.schools;
+        self.results.elec_nrg_dmd__G__W_h_per_a
+            .set_year_values(year, &elec_nrg_dmd__G__W_h_per_a);
 
-        let solar_roof_self_consumption = self.results
-            .solar_roof_self_consumption.get_year(year);
-        let direct_aquisition_reneable_enrgies = self.inputs
-            .direct_aquisition_reneable_enrgies.get_year(year);
+        let sol_rf_self_cnsmp__G__W_h_per_a = self.results
+            .sol_rf_self_cnsmp__G__W_h_per_a.get_year(year);
+        let prchsd_renewable_nrg__G__W_h_per_a = self.inputs
+            .prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
 
-        let purchased_energy_mix = &electric_energy_demand
-            - &solar_roof_self_consumption
-            - &direct_aquisition_reneable_enrgies;
-        self.results.purchased_energy_mix
-            .set_year_values(year, &purchased_energy_mix);
+        let prchsd_nrg_mix__G__W_h_per_a = &elec_nrg_dmd__G__W_h_per_a
+            - &sol_rf_self_cnsmp__G__W_h_per_a
+            - &prchsd_renewable_nrg__G__W_h_per_a;
+        self.results.prchsd_nrg_mix__G__W_h_per_a
+            .set_year_values(year, &prchsd_nrg_mix__G__W_h_per_a);
 
-        let aquisition_power_mix = self.inputs.aquisition_power_mix
-            .get_year(year);
+        // TODO: rename to price german power mix
+        let nrg_mix_price__m__eur_per_W_h =
+            self.inputs.nrg_mix_price__m__eur_per_W_h.get_year(year);
 
-        let purchased_energy_mix_costs = &purchased_energy_mix
-            * &aquisition_power_mix
-            * purchased_energy_mix.is_greater(&SectorsRawValues::new());
-        self.results.purchased_energy_mix_costs
-            .set_year_values(year, &purchased_energy_mix_costs);
+        let prchsd_nrg_mix_costs__M__eur_per_a = &prchsd_nrg_mix__G__W_h_per_a
+            * &nrg_mix_price__m__eur_per_W_h
+            * prchsd_nrg_mix__G__W_h_per_a.is_greater(&SectorsRawValues::new());
+        self.results.prchsd_nrg_mix_costs__M__eur_per_a
+            .set_year_values(year, &prchsd_nrg_mix_costs__M__eur_per_a);
 
-        let purchased_energy_mix_emissions =
+        let prchsd_nrg_mix_ems__k__to_coe_per_a =
             constants::evu_power_mix::coal
             * constants::evu_emissions::coal
             + constants::evu_power_mix::gas
             * constants::evu_emissions::gas;
 
-        let solar_roof_costs = self.results.solar_roof_costs.get_year(year);
-        let direct_aquisition_renable_energies_costs = self.results
-            .direct_aquisition_renable_energies_costs.get_year(year);
-        let direct_aquisition_reneable_enrgies = self.inputs
-            .direct_aquisition_reneable_enrgies.get_year(year);
+        let prchsd_renewable_nrg__M__eur_per_a = self.results
+            .prchsd_renewable_nrg__M__eur_per_a.get_year(year);
+        let prchsd_renewable_nrg__G__W_h_per_a = self.inputs
+            .prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
 
-        let aquisition_power_mix_price = (solar_roof_costs.private
-            + direct_aquisition_renable_energies_costs.private
-            + purchased_energy_mix_costs.private)
-            / (solar_roof_self_consumption.private
-            + direct_aquisition_reneable_enrgies.private
-            + purchased_energy_mix.private);
+        // TODO: rename to somthing like price_own_mix and update equaiton (email)
+        let nrg_own_mix_price__m__eur_per_W_h = (
+            prchsd_renewable_nrg__M__eur_per_a.private
+            + prchsd_nrg_mix_costs__M__eur_per_a.private)
+            / (sol_rf_self_cnsmp__G__W_h_per_a.private
+            + prchsd_renewable_nrg__G__W_h_per_a.private
+            + prchsd_nrg_mix__G__W_h_per_a.private);
 
     }
     pub fn calculate_emissions(&mut self, year: u32){
 
-        let purchased_energy_mix = self.results
-            .purchased_energy_mix.get_year(year);
-        let aquisition_power_mix_emissions = self.inputs
-            .aquisition_power_mix_emissions.get_year(year);
+        let prchsd_nrg_mix__G__W_h_per_a = self.results
+            .prchsd_nrg_mix__G__W_h_per_a.get_year(year);
+        let nrg_mix_ems__m__kg_per_W_h = self.inputs
+            .nrg_mix_ems__m__kg_per_W_h.get_year(year);
 
-        let emissions_purchased_energy_mix = &purchased_energy_mix
-            * aquisition_power_mix_emissions * 1e-3;
-        self.results.emissions_purchased_energy_mix
-            .set_year_values(year, &emissions_purchased_energy_mix);
+        let prchsd_nrg_mix_ems__k__to_coe_per_a = &prchsd_nrg_mix__G__W_h_per_a
+            * nrg_mix_ems__m__kg_per_W_h * 1e-3;
+        self.results.prchsd_nrg_mix_ems__k__to_coe_per_a
+            .set_year_values(year, &prchsd_nrg_mix_ems__k__to_coe_per_a);
     }
 }
 
@@ -303,7 +287,7 @@ macro_rules! implement_inputs_energy{
             $(
                 $field: SectorsInputs,
              )*
-            pub aquisition_power_mix_emissions: Input,
+            pub nrg_mix_ems__m__kg_per_W_h: Input,
         }
 
         impl InputsEnergy{
@@ -312,7 +296,7 @@ macro_rules! implement_inputs_energy{
                     $(
                         $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
-                    aquisition_power_mix_emissions: Input::new(id.to_owned()+"/aquisition_power_mix_emissions", start_year, end_year),
+                    nrg_mix_ems__m__kg_per_W_h: Input::new(id.to_owned()+"/nrg_mix_ems__m__kg_per_W_h", start_year, end_year),
                 }
             }
         }
@@ -324,7 +308,7 @@ macro_rules! implement_inputs_energy{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
-                inputs.push(&self.aquisition_power_mix_emissions);
+                inputs.push(&self.nrg_mix_ems__m__kg_per_W_h);
                 return inputs
             }
 
@@ -338,7 +322,7 @@ macro_rules! implement_inputs_energy{
                     $(
                         stringify!($field) => self.$field.get_input_by_id(remaining_id),
                      )*
-                    "aquisition_power_mix_emissions"=> Some(&mut self.aquisition_power_mix_emissions),
+                    "nrg_mix_ems__m__kg_per_W_h"=> Some(&mut self.nrg_mix_ems__m__kg_per_W_h),
                     _ => None,
 
                 }
@@ -350,14 +334,14 @@ macro_rules! implement_inputs_energy{
 
 
 implement_inputs_energy!{
-    roof_area,
-    roof_solar_sutable_area,
-    solar_roof_installed_power_peak,
-    solar_roof_portion_self_consumption,
-    solar_landscape_suitable_area,
-    direct_aquisition_reneable_enrgies,
-    direct_aquisition_reneable_enrgies_price,
-    aquisition_power_mix
+    rf_A__k__m2,
+    sol_rf_suitable_A_part,
+    sol_rf_installed__M__Wp,
+    sol_rf_self_cnsmp_part,
+    sol_os_installed_A__ha,
+    prchsd_renewable_nrg__G__W_h_per_a,
+    renewable_nrg_price__m__eur_per_W_h,
+    nrg_mix_price__m__eur_per_W_h
 }
 
 
@@ -368,7 +352,7 @@ macro_rules! implement_results_energy{
             $(
                 pub $field: SectorsResult,
              )*
-            pub aquisition_power_mix_price: Results,
+            pub nrg_own_mix_price__m__eur_per_W_h: Results,
         }
 
         impl ResultsEnergy{
@@ -377,7 +361,7 @@ macro_rules! implement_results_energy{
                     $(
                         $field: SectorsResult::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
-                    aquisition_power_mix_price: Results::new(id.to_owned()+"/aquisition_power_mix_price", start_year, end_year),
+                    nrg_own_mix_price__m__eur_per_W_h: Results::new(id.to_owned()+"/nrg_own_mix_price__m__eur_per_W_h", start_year, end_year),
                 }
             }
 
@@ -386,7 +370,7 @@ macro_rules! implement_results_energy{
                 $(
                     results.extend(self.$field.get_results());
                  )*
-                results.push(&self.aquisition_power_mix_price);
+                results.push(&self.nrg_own_mix_price__m__eur_per_W_h);
                 return results
             }
 
@@ -400,7 +384,7 @@ macro_rules! implement_results_energy{
                     $(
                         stringify!($field)=> self.$field.get_results_by_id(remaining_id),
                      )*
-                    "aquisition_power_mix_price"=> Some(&mut self.aquisition_power_mix_price),
+                    "nrg_own_mix_price__m__eur_per_W_h"=> Some(&mut self.nrg_own_mix_price__m__eur_per_W_h),
                     _ => None,
 
                 }
@@ -413,28 +397,24 @@ macro_rules! implement_results_energy{
 }
 
 implement_results_energy!{
-    solar_roof_power_peak_potential,
-    solar_roof_installed_power,
-    solar_roof_self_consumption,
-    solar_roof_invest,
-    solar_roof_grant,
-    solar_roof_operation_costs,
-    solar_roof_buyback,
-    solar_roof_costs,
-    solar_roof_costs_per_kwh,
-    solar_landscape_installed_power_peak,
-    solar_landscape_installed_power,
-    solar_landscape_invest,
-    solar_landscape_grant,
-    solar_landscape_operation_costs,
-    solar_landscape_production_costs,
-    solar_landscape_buyback,
-    solar_landscape_profit,
-    direct_aquisition_renable_energies_costs,
-    electric_energy_demand,
-    purchased_energy_mix,
-    purchased_energy_mix_costs,
-    purchased_energy_mix_emissions,
-    emissions_purchased_energy_mix,
+    sol_rf_installed__M__Wp,
+    sol_rf_nrg__G__W_h_per_a,
+    sol_rf_self_cnsmp__G__W_h_per_a,
+    sol_rf_invest__M__eur_per_a,
+    sol_rf_grant__M__eur_per_a,
+    sol_rf_os__M__eur_per_a,
+    sol_rf_revenue__M__eur_per_a,
+    sol_os_installed__M__Wp,
+    sol_os_nrg__G__W_h_per_a,
+    sol_os_invest__M__eur_per_a,
+    sol_os_grant__M__eur_per_a,
+    sol_os_om__M__eur_per_a,
+    sol_os_prod_costs__M__eur_per_a,
+    prchsd_renewable_nrg__M__eur_per_a,
+    elec_nrg_dmd__G__W_h_per_a,
+    prchsd_nrg_mix__G__W_h_per_a,
+    prchsd_nrg_mix_costs__M__eur_per_a,
+    prchsd_nrg_mix_ems__k__to_coe_per_a,
+    //emissions_prchsd_nrg_mix__G__W_h_per_a,
     solar_roof_electric_power_injection
 }

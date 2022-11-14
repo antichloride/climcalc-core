@@ -60,11 +60,11 @@ impl Calculator{
         );
         self.mobility.calculate_second_stage(
             year,
-            self.energy.results.purchased_energy_mix.get_year(year),
-            self.energy.results.aquisition_power_mix_price.get_year(year),
+            self.energy.prchsd_nrg_mix__G__W_h_per_a().get_year(year),
+            self.energy.nrg_own_mix_price__m__eur_per_W_h().get_year(year),
         );
         self.buildings.calculate_second_stage(year,
-            &self.energy.results.aquisition_power_mix_price);
+            &self.energy.nrg_own_mix_price__m__eur_per_W_h());
     }
 
     fn calculate_emissions(&mut self, year: u32){
