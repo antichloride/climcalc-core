@@ -56,7 +56,7 @@ impl Calculator{
             year,
             self.buildings.elec_dmd__G__W_h_per_a().get_year(year),
             self.buildings.cnsmp_elec_heat_pump__G__W_h_per_a().get_year(year),
-            self.mobility.results.bev_electric_power_demand.get_year(year),
+            self.mobility.bev_elec_nrg_dmd__G__W_h_per_a().get_year(year),
         );
         self.mobility.calculate_second_stage(
             year,

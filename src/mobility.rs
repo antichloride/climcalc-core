@@ -18,8 +18,10 @@ impl Mobility{
 
     pub fn new(start_year: u32, end_year: u32) -> Mobility{
         return Mobility{
-            inputs: InputsMobility::new("mobility/inputs", start_year, end_year),
-            results: ResultsMobility::new("mobility/results", start_year, end_year),
+            inputs: InputsMobility
+                ::new("mobility/inputs", start_year, end_year),
+            results: ResultsMobility
+                ::new("mobility/results", start_year, end_year),
             start_year: start_year,
             end_year: end_year,
         }
@@ -44,36 +46,46 @@ impl Mobility{
     }
 }
 
+impl Mobility{
+    pub fn bev_elec_nrg_dmd__G__W_h_per_a(&self) -> &SectorsResult{
+        return &self.results.bev_elec_nrg_dmd__G__W_h_per_a;
+    }
+}
 
 impl Mobility{
     pub fn calculate(&mut self, year: u32){
 
-        let n_bev = self.inputs.n_bev.get_year(year);
-        let n_cars = self.inputs.n_cars.get_year(year);
-        let car_mean_traveld_distance = self.inputs.car_mean_traveld_distance
-            .get_year(year);
+        let n_bev__k__ = self.inputs.n_bev__k__.get_year(year);
+        let n_cars__k__ = self.inputs.n_cars__k__.get_year(year);
+        let traveld_dist_car__M__m_per_a =
+            self.inputs.traveld_dist_car__M__m_per_a.get_year(year);
 
         if year != self.start_year{
-            let n_bev_this_year = self.inputs.n_bev.get_year(year);
-            let n_bev_prev_year = self.inputs.n_bev.get_year(year - 1);
+            let n_bev__k___this_year =
+                self.inputs.n_bev__k__.get_year(year);
+            let n_bev__k___prev_year =
+                self.inputs.n_bev__k__.get_year(year - 1);
 
-            let cars_grant = (&n_bev_this_year - &n_bev_prev_year)
+            let cars_grant__M__eur_per_a = (&n_bev__k___this_year - &n_bev__k___prev_year)
                 * constants::bev.grant
-                * n_bev_this_year.is_greater(&n_bev_prev_year);
-            self.results.cars_grant.set_year_values(year, &cars_grant);
+                * n_bev__k___this_year.is_greater(&n_bev__k___prev_year);
+            self.results.cars_grant__M__eur_per_a.set_year_values(year, &cars_grant__M__eur_per_a);
         }
 
-        let bev_electric_power_demand = &n_bev * &car_mean_traveld_distance
+        let bev_elec_nrg_dmd__G__W_h_per_a = &n_bev__k__
+            * &traveld_dist_car__M__m_per_a
             * constants::bev.consumption * 1e-2;
-        self.results.bev_electric_power_demand
-            .set_year_values(year, &bev_electric_power_demand);
+        self.results.bev_elec_nrg_dmd__G__W_h_per_a
+            .set_year_values(year, &bev_elec_nrg_dmd__G__W_h_per_a);
 
-        let car_fuel_demand = (&n_cars - &n_bev) * &car_mean_traveld_distance
-            * constants::combustor.consumption * oil::energy_density__k__W_h_per_L * 1e-2;
-        self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
+        let cars_fuel_dmd__M__L_per_a = (&n_cars__k__ - &n_bev__k__)
+            * &traveld_dist_car__M__m_per_a
+            * constants::combustor.consumption
+            * oil::energy_density__k__W_h_per_L * 1e-2;
+        self.results.cars_fuel_dmd__M__L_per_a.set_year_values(year, &cars_fuel_dmd__M__L_per_a);
 
-        let car_fuel_demand = &car_fuel_demand * constants::price_fuel;
-        self.results.car_fuel_demand.set_year_values(year, &car_fuel_demand);
+        let cars_fuel_dmd__M__L_per_a = &cars_fuel_dmd__M__L_per_a * constants::price_fuel;
+        self.results.cars_fuel_dmd__M__L_per_a.set_year_values(year, &cars_fuel_dmd__M__L_per_a);
 
     }
 
@@ -84,43 +96,43 @@ impl Mobility{
         aquisition_power_mix_price: f32,
         ){
 
-        let bev_electric_power_demand = self.results.bev_electric_power_demand
+        let bev_elec_nrg_dmd__G__W_h_per_a = self.results.bev_elec_nrg_dmd__G__W_h_per_a
             .get_year(year);
 
-        let bev_electric_power_demand = &bev_electric_power_demand
+        let bev_elec_nrg_dmd__G__W_h_per_a = &bev_elec_nrg_dmd__G__W_h_per_a
             * &purchased_energy_mix;
-        self.results.bev_electric_power_demand
-            .set_year_values(year, &bev_electric_power_demand);
+        self.results.bev_elec_nrg_dmd__G__W_h_per_a
+            .set_year_values(year, &bev_elec_nrg_dmd__G__W_h_per_a);
 
         // Street lighning
-        let n_laterns = self.inputs.n_laterns.get_year(year);
-        let power_consumption_per_latern = self.inputs
-            .power_consumption_per_latern.get_year(year);
-        let maintanence_costs_per_lantern = self.inputs
-            .maintanence_costs_per_lantern.get_year(year);
+        let n_ls__k__ = self.inputs.n_ls__k__.get_year(year);
+        let nrg_cnsmp_sl__k__W_h_per_a = self.inputs
+            .nrg_cnsmp_sl__k__W_h_per_a.get_year(year);
+        let sl_om_costs__eur_per_a = self.inputs
+            .sl_om_costs__eur_per_a.get_year(year);
 
-        let street_lightning_power_costs = n_laterns
-            * power_consumption_per_latern
+        let sl_nrg_costs__M__eur_per_a = n_ls__k__
+            * nrg_cnsmp_sl__k__W_h_per_a
             * aquisition_power_mix_price / 100.0;
-        self.results.street_lightning_power_costs
-            .set_year_value(year, street_lightning_power_costs);
+        self.results.sl_nrg_costs__M__eur_per_a
+            .set_year_value(year, sl_nrg_costs__M__eur_per_a);
 
-        let street_lighting_maintenance_costs = n_laterns
-            * maintanence_costs_per_lantern;
-        self.results.street_lighting_maintenance_costs
-            .set_year_value(year, street_lighting_maintenance_costs);
+        let sl_om_costs__M__eur_per_a = n_ls__k__
+            * sl_om_costs__eur_per_a;
+        self.results.sl_om_costs__M__eur_per_a
+            .set_year_value(year, sl_om_costs__M__eur_per_a);
 
-        let street_lightning_total_costs =
-            street_lightning_power_costs + street_lighting_maintenance_costs;
-        self.results.street_lightning_total_costs
-            .set_year_value(year, street_lightning_total_costs);
+        let sl_total_costs__M__eur_per_a =
+            sl_nrg_costs__M__eur_per_a + sl_om_costs__M__eur_per_a;
+        self.results.sl_total_costs__M__eur_per_a
+            .set_year_value(year, sl_total_costs__M__eur_per_a);
 
     }
 
     pub fn calculate_emissions(&mut self, year: u32){
-        let car_fuel_demand = self.results.car_fuel_demand.get_year(year);
-        let car_emissions = car_fuel_demand * oil::emission__kg_coe_per_L;
-        self.results.car_emissions.set_year_values(year, &car_emissions);
+        let cars_fuel_dmd__M__L_per_a = self.results.cars_fuel_dmd__M__L_per_a.get_year(year);
+        let cars_ems__k__to_coe_per_a = cars_fuel_dmd__M__L_per_a * oil::emission__kg_coe_per_L;
+        self.results.cars_ems__k__to_coe_per_a.set_year_values(year, &cars_ems__k__to_coe_per_a);
     }
 }
 
@@ -133,29 +145,33 @@ macro_rules! implement_inputs_mobility{
             $(
                 $field: SectorsInputs,
              )*
-            n_laterns: Input,
-            power_consumption_per_latern: Input,
-            maintanence_costs_per_lantern: Input,
+            n_ls__k__: Input,
+            nrg_cnsmp_sl__k__W_h_per_a: Input,
+            sl_om_costs__eur_per_a: Input,
         }
 
         impl InputsMobility{
             fn new(id: &str, start_year: u32, end_year: u32) -> InputsMobility {
                 return InputsMobility{
                     $(
-                        $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
+                        $field: SectorsInputs::new(
+                            id.to_owned()+"/"+stringify!($field),
+                            start_year,
+                            end_year
+                        ),
                      )*
-                        n_laterns: Input::new(
-                            id.to_owned()+"/n_laterns",
+                        n_ls__k__: Input::new(
+                            id.to_owned()+"/n_ls__k__",
                             start_year,
                             end_year,
                         ),
-                        power_consumption_per_latern: Input::new(
-                            id.to_owned()+"/power_consumption_per_latern",
+                        nrg_cnsmp_sl__k__W_h_per_a: Input::new(
+                            id.to_owned()+"/nrg_cnsmp_sl__k__W_h_per_a",
                             start_year,
                             end_year,
                         ),
-                        maintanence_costs_per_lantern: Input::new(
-                            id.to_owned()+"/maintanence_costs_per_lantern",
+                        sl_om_costs__eur_per_a: Input::new(
+                            id.to_owned()+"/sl_om_costs__eur_per_a",
                             start_year,
                             end_year,
                         ),
@@ -170,9 +186,9 @@ macro_rules! implement_inputs_mobility{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
-                inputs.push(&self.n_laterns);
-                inputs.push(&self.power_consumption_per_latern);
-                inputs.push(&self.maintanence_costs_per_lantern);
+                inputs.push(&self.n_ls__k__);
+                inputs.push(&self.nrg_cnsmp_sl__k__W_h_per_a);
+                inputs.push(&self.sl_om_costs__eur_per_a);
                 return inputs
             }
 
@@ -184,13 +200,14 @@ macro_rules! implement_inputs_mobility{
 
                 match splitted_id[0]{
                     $(
-                        stringify!($field) => self.$field.get_input_by_id(remaining_id),
+                        stringify!($field) =>
+                            self.$field.get_input_by_id(remaining_id),
                      )*
-                    n_laterns=> Some(&mut self.n_laterns),
-                    power_consumption_per_latern=> Some(
-                        &mut self.power_consumption_per_latern),
-                    maintanence_costs_per_lantern=> Some(
-                        &mut self.maintanence_costs_per_lantern),
+                    n_ls__k__=> Some(&mut self.n_ls__k__),
+                    nrg_cnsmp_sl__k__W_h_per_a=> Some(
+                        &mut self.nrg_cnsmp_sl__k__W_h_per_a),
+                    sl_om_costs__eur_per_a=> Some(
+                        &mut self.sl_om_costs__eur_per_a),
                     _ => None,
 
                 }
@@ -202,9 +219,9 @@ macro_rules! implement_inputs_mobility{
 
 
 implement_inputs_mobility!{
-    n_cars,
-    n_bev,
-    car_mean_traveld_distance
+    n_cars__k__,
+    n_bev__k__,
+    traveld_dist_car__M__m_per_a
 }
 
 
@@ -215,13 +232,17 @@ macro_rules! implement_results_mobility{
             $(
                 pub $field: SectorsResult,
              )*
-            street_lightning_power_costs: Results,
-            street_lighting_maintenance_costs: Results,
-            street_lightning_total_costs: Results,
+            sl_nrg_costs__M__eur_per_a: Results,
+            sl_om_costs__M__eur_per_a: Results,
+            sl_total_costs__M__eur_per_a: Results,
         }
 
         impl ResultsMobility{
-            fn new(id: &str, start_year: u32, end_year: u32) -> ResultsMobility{
+            fn new(
+                id: &str,
+                start_year: u32,
+                end_year: u32
+            ) -> ResultsMobility{
                 return ResultsMobility{
                     $(
                         $field: SectorsResult::new(
@@ -230,18 +251,18 @@ macro_rules! implement_results_mobility{
                             end_year
                         ),
                      )*
-                        street_lightning_power_costs: Results::new(
-                            id.to_owned()+"/street_lightning_power_costs",
+                        sl_nrg_costs__M__eur_per_a: Results::new(
+                            id.to_owned()+"/sl_nrg_costs__M__eur_per_a",
                             start_year,
                             end_year,
                         ),
-                        street_lighting_maintenance_costs: Results::new(
-                            id.to_owned()+"/street_lighting_maintenance_costs",
+                        sl_om_costs__M__eur_per_a: Results::new(
+                            id.to_owned()+"/sl_om_costs__M__eur_per_a",
                             start_year,
                             end_year,
                         ),
-                        street_lightning_total_costs: Results::new(
-                            id.to_owned()+"/street_lightning_total_costs",
+                        sl_total_costs__M__eur_per_a: Results::new(
+                            id.to_owned()+"/sl_total_costs__M__eur_per_a",
                             start_year,
                             end_year,
                         ),
@@ -253,9 +274,9 @@ macro_rules! implement_results_mobility{
                 $(
                     results.extend(self.$field.get_results());
                  )*
-                results.push(&self.street_lightning_power_costs);
-                results.push(&self.street_lighting_maintenance_costs);
-                results.push(&self.street_lightning_total_costs);
+                results.push(&self.sl_nrg_costs__M__eur_per_a);
+                results.push(&self.sl_om_costs__M__eur_per_a);
+                results.push(&self.sl_total_costs__M__eur_per_a);
                 return results
             }
 
@@ -270,12 +291,12 @@ macro_rules! implement_results_mobility{
                         stringify!($field)=> self.$field
                             .get_results_by_id(remaining_id),
                      )*
-                    "street_lightning_power_costs"=> Some(
-                        &mut self.street_lightning_power_costs),
-                    "street_lighting_maintenance_costs"=> Some(
-                        &mut self.street_lighting_maintenance_costs),
-                    "street_lightning_total_costs"=> Some(
-                        &mut self.street_lightning_total_costs),
+                    "sl_nrg_costs__M__eur_per_a"=> Some(
+                        &mut self.sl_nrg_costs__M__eur_per_a),
+                    "sl_om_costs__M__eur_per_a"=> Some(
+                        &mut self.sl_om_costs__M__eur_per_a),
+                    "sl_total_costs__M__eur_per_a"=> Some(
+                        &mut self.sl_total_costs__M__eur_per_a),
                     _ => None,
 
                 }
@@ -288,10 +309,10 @@ macro_rules! implement_results_mobility{
 }
 
 implement_results_mobility!{
-    cars_grant,
-    bev_electric_power_demand,
-    car_fuel_demand,
-    car_fuel_costs,
-    bev_electric_power_costs,
-    car_emissions
+    cars_grant__M__eur_per_a,
+    bev_elec_nrg_dmd__G__W_h_per_a,
+    cars_fuel_dmd__M__L_per_a,
+    cars_fuel_costs__M__eur_per_a,
+    bev_nrg_costs__M__eur_per_a,
+    cars_ems__k__to_coe_per_a
 }

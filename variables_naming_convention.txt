@@ -17,6 +17,7 @@
     om -> operation and maintenance
     production -> prod
     purchased -> prchsd
+    street light -> sl
 
 
 2. Units
@@ -122,3 +123,22 @@ Energy:
         prchsd_nrg_mix__G__W_h_per_a,
         prchsd_nrg_mix_costs__M__eur_per_a,
         prchsd_nrg_mix_ems__k__to_coe_per_a,
+
+Mobility:
+    Inputs:
+        n_cars__k__,
+        n_bev__k__,
+        traveld_dist_car__M__m_per_a
+        n_laterns__k__
+        nrg_cnsmp_lantern__k__W_h_per_a,
+        sl_om_costs__eur_per_a,
+    Results:
+        cars_grant__M__eur_per_a,
+        bev_elec_nrg_dmd__G__W_h_per_a,
+        cars_fuel_dmd__M__L_per_a
+        cars_fuel_costs__M__eur_per_a,
+        bev_nrg_costs__M__eur_per_a,
+        cars_ems__k__to_coe_per_a
+        sl_nrg_costs__M__eur_per_a
+        sl_om_costs__M__eur_per_a
+        sl_total_costs__M__eur_per_a
