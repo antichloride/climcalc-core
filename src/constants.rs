@@ -67,36 +67,26 @@ pub mod mobility{
 
         pub const price_fuel: f32 = 1.7;
 
-        pub struct Vehicle {
-            pub price: f32,
-            pub grant: f32,
-            pub consumption: f32,
-            pub fuel_costs: f32,
-            pub operation_costs: f32,
-            pub taxes_and_checks: f32,
-            pub lifecycle: f32,
+        pub mod bev{
+            pub const price: f32 = 35.0;
+            pub const grant_per_car__k__eur: f32 = 9.0;
+            pub const nrg_cnsmp__1em2__W_h_per_m: f32 = 16.0;
+            pub const om_costs: f32 = 0.05;
+            pub const fuel_costs: f32 = 0.05;
+            pub const taxes_and_checks: f32 = 1.0;
+            pub const lifecycle: f32 = 10.0;
         }
 
-        pub const bev: Vehicle = Vehicle{
-            price: 35.0,
-            grant: 9.0,
-            consumption: 24.0,
-            fuel_costs: 0.3,
-            operation_costs: 0.05,
-            taxes_and_checks: 1.0,
-            lifecycle: 10.0,
-        };
+        pub mod combustor{
+            pub const price: f32 = 30.0;
+            pub const grant_per_car__k__eur: f32 = 0.0;
+            pub const nrg_cnsmp__1em2__W_h_per_m: f32 = 70.0;
+            pub const fuel_costs: f32 = 0.07;
+            pub const om_costs: f32 = 0.05;
+            pub const taxes_and_checks: f32 = 1.0;
+            pub const lifecycle: f32 = 10.0;
+        }
 
-
-        pub const combustor: Vehicle = Vehicle{
-            price: 30.0,
-            grant: 0.0,
-            consumption: 70.0,
-            fuel_costs: 0.17,
-            operation_costs: 0.05,
-            taxes_and_checks: 1.0,
-            lifecycle: 10.0,
-        };
 }
 
 pub mod energy{

@@ -47,10 +47,6 @@ impl Energy{
     pub fn nrg_own_mix_price__m__eur_per_W_h(&self) -> &Results{
         return &self.results.nrg_own_mix_price__m__eur_per_W_h;
     }
-    pub fn prchsd_nrg_mix__G__W_h_per_a(&self) -> &SectorsResult{
-        return &self.results.prchsd_nrg_mix__G__W_h_per_a;
-    }
-
 }
 
 
