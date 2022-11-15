@@ -13,6 +13,10 @@ use input::Input;
 mod sectors;
 mod constants;
 
+#[cfg(test)]
+#[macro_use]
+extern crate approx;
+
 #[wasm_bindgen]
 pub struct Calculator {
     buildings: Buildings,

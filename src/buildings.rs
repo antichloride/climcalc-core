@@ -480,27 +480,29 @@ mod tests{
     use super::*;
     extern crate wasm_bindgen_test;
     use wasm_bindgen_test::*;
+    mod buildings_test_case;
+    use buildings_test_case::create_buildings;
+
+
+    fn assert(a: [f32; 4], b: [f32; 4]){
+        assert_relative_eq!(a[0], b[0]);
+        assert_relative_eq!(a[1], b[1]);
+        assert_relative_eq!(a[2], b[2]);
+        assert_relative_eq!(a[3], b[3]);
+    }
 
     #[test]
-    fn test_calculation() {
-        let start_year = 2022 as u32;
-        let end_year = 2025 as u32;
-        let mut buildings = Buildings::new(start_year, end_year);
-
-        buildings.inputs.floor_A_building__m2.private.set_values(720.0);
-        buildings.inputs.floor_A_building__m2.industry.set_values(3000.0);
-        buildings.inputs.floor_A_building__m2.schools.set_values(8000.0);
-        buildings.inputs.floor_A_building__m2.public.set_values(300.0);
-
-        buildings.inputs.n_buildings.private.set_values(5000.0);
-        buildings.inputs.n_buildings.industry.set_values(200.0);
-        buildings.inputs.n_buildings.schools.set_values(10.0);
-        buildings.inputs.n_buildings.public.set_values(20.0);
+    fn test_buildings_calculate() {
+        let start_year: u32 = 2022 as u32;
+        let end_year: u32 = 2025 as u32;
+        let mut buildings = create_buildings(start_year, end_year);
 
         buildings.calculate(start_year);
 
-        assert_eq!(buildings.results.floor_A.get_year_values(start_year),
-                   [3600.0002,600.0,80.0,6.0000005]);
+        assert(
+            buildings.results.floor_A__k__m2.get_year_values(start_year),
+            [3816111.0, 1463772.0, 104125.82, 43205.76],
+        );
     }
 }
 
