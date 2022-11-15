@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 use crate::sectors::SectorsInputs;
 use crate::sectors::SectorsResult;
 use crate::sectors::SectorsRawValues;
@@ -11,7 +13,6 @@ pub struct Buildings {
     inputs: InputsBuildings,
     pub results: ResultsBuildings,
     start_year: u32,
-    end_year: u32,
 }
 
 impl Buildings{
@@ -23,7 +24,6 @@ impl Buildings{
             results: ResultsBuildings
                 ::new("buildings/results", start_year, end_year),
             start_year: start_year,
-            end_year: end_year,
         }
     }
 
@@ -51,9 +51,6 @@ impl Buildings{
 // Implement getter functions
 
 impl Buildings{
-    pub fn total_heat_dmd__G__W_h_per_a(&self) -> &SectorsResult{
-        return &self.results.total_heat_dmd__G__W_h_per_a;
-    }
     pub fn elec_dmd__G__W_h_per_a(&self) -> &SectorsResult{
         return &self.results.elec_dmd__G__W_h_per_a;
     }
@@ -197,14 +194,10 @@ impl Buildings{
                     let mut A_this_year__k__m2: SectorsRawValues;
                     let mut A_prev_year__k__m2: SectorsRawValues;
 
-
+                    let mut invest_heat_source__M__eur_per_a: SectorsRawValues;
+                    let mut grant_heat_source__M__eur_per_a: SectorsRawValues;
 
                     $(
-
-                        let mut invest_heat_source__M__eur_per_a =
-                            SectorsRawValues::new();
-                        let mut grant_heat_source__M__eur_per_a =
-                            SectorsRawValues::new();
 
                         A_this_year__k__m2 =
                             self.inputs.$heat_type_A__k__m2.get_year(year);

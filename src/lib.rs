@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use serde_wasm_bindgen::to_value;
 
 mod buildings;
 use buildings::Buildings;
@@ -88,7 +89,7 @@ impl Calculator{
 
     pub fn list_input_ids(&self) -> JsValue{
         let vec: Vec<_> = self.get_inputs().iter().map(|&a| &a.id).collect();
-        return JsValue::from_serde(&vec).unwrap();
+        return to_value(&vec).unwrap();
     }
 
     fn get_input_by_id(&mut self, id: &str) -> Option<&mut Input>{
@@ -137,7 +138,7 @@ impl Calculator{
 
     pub fn list_result_ids(&self) -> JsValue{
         let vec: Vec<_> = self.get_results_list().iter().map(|&a| &a.id).collect();
-        return JsValue::from_serde(&vec).unwrap();
+        return to_value(&vec).unwrap();
     }
 
     fn get_results_by_id(&mut self, id: &str) -> Option<&mut Results>{
@@ -217,7 +218,7 @@ impl Calculator{
 
     pub fn list_measure_ids(&self) -> JsValue{
         let vec: Vec<_> = self.get_inputs().iter().map(|&a| a.list_measure_ids()).collect();
-        return JsValue::from_serde(&vec).unwrap();
+        return to_value(&vec).unwrap();
     }
 }
 

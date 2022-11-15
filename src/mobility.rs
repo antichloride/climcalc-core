@@ -1,17 +1,18 @@
+#![allow(non_snake_case)]
+
 use crate::sectors::SectorsInputs;
 use crate::sectors::SectorsResult;
-use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 use crate::input::Input;
 use crate::input::InputFields;
 use crate::constants::mobility as constants;
 use crate::constants::buildings::EnergySource::oil;
 
+
 pub struct Mobility {
     inputs: InputsMobility,
     pub results: ResultsMobility,
     start_year: u32,
-    end_year: u32,
 }
 
 impl Mobility{
@@ -23,7 +24,6 @@ impl Mobility{
             results: ResultsMobility
                 ::new("mobility/results", start_year, end_year),
             start_year: start_year,
-            end_year: end_year,
         }
     }
 
@@ -209,10 +209,10 @@ macro_rules! implement_inputs_mobility{
                         stringify!($field) =>
                             self.$field.get_input_by_id(remaining_id),
                      )*
-                    n_sl__k__=> Some(&mut self.n_sl__k__),
-                    nrg_cnsmp_per_sl__k__W_h_per_a=> Some(
+                    "n_sl__k__"=> Some(&mut self.n_sl__k__),
+                    "nrg_cnsmp_per_sl__k__W_h_per_a"=> Some(
                         &mut self.nrg_cnsmp_per_sl__k__W_h_per_a),
-                    om_costs_per_sl__eur_per_a=> Some(
+                    "om_costs_per_sl__eur_per_a"=> Some(
                         &mut self.om_costs_per_sl__eur_per_a),
                     _ => None,
 

@@ -35,21 +35,24 @@ impl Input{
         }
     }
 
-    pub fn get_measure_index(&self, measure: &Measure) -> usize{
-        return self.measures.iter().position(|m| ptr::eq(&m, &measure)).unwrap();
-    }
+    //TODO: check if needed
+    // pub fn get_measure_index(&self, measure: &Measure) -> usize{
+    //     return self.measures.iter().position(|m| ptr::eq(&m, &measure)).unwrap();
+    // }
 
     pub fn set_values(&mut self, value: f32){
         self.values = vec![value; (self.end_year-self.start_year+1) as usize];
+        self.apply_measures();
     }
 
     pub fn get_value(& self) -> f32{
         return self.values[0];
     }
 
-    pub fn get_measures(& self) -> &Vec<Measure>{
-        return & self.measures;
-    }
+    //TODO: check if needed
+    // pub fn get_measures(& self) -> &Vec<Measure>{
+    //     return & self.measures;
+    // }
 
     pub fn add_measure(&mut self, id: &str, start_year: u32, end_year: u32, delta: f32){
         self.measures.push(Measure{
@@ -99,7 +102,7 @@ impl Input{
 
 }
 
-struct Measure {
+pub struct Measure {
     id: String,
     start_year: u32,
     end_year: u32,
@@ -108,7 +111,7 @@ struct Measure {
 
 impl Measure{
 
-    fn delta_per_year(&self, year: u32) -> f32{
+    pub fn delta_per_year(&self, year: u32) -> f32{
         // start_yaer is the first yaer in which the measure is applied
         // end year is the last year in which the measures is applied
         // the target delta is reached at the end of the end_year

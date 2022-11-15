@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 use crate::sectors::SectorsInputs;
 use crate::sectors::SectorsResult;
 use crate::sectors::SectorsRawValues;
@@ -10,7 +12,6 @@ pub struct Energy {
     pub inputs: InputsEnergy,
     pub results: ResultsEnergy,
     start_year: u32,
-    end_year: u32,
 }
 
 impl Energy{
@@ -20,7 +21,6 @@ impl Energy{
             inputs: InputsEnergy::new("energy/inputs", start_year, end_year),
             results: ResultsEnergy::new("energy/results", start_year, end_year),
             start_year: start_year,
-            end_year: end_year,
         }
     }
 
@@ -62,10 +62,10 @@ impl Energy{
         let sol_rf_self_cnsmp_part = self.inputs
             .sol_rf_self_cnsmp_part.get_year(year);
 
-        let sol_rf_installed__M__Wp = &rf_A__k__m2 * &sol_rf_suitable_A_part
+        let sol_rf_potential__M__Wp = &rf_A__k__m2 * &sol_rf_suitable_A_part
             * constants::solar_roof.power_per_area__k__Wp_per_m2;
-        self.results.sol_rf_installed__M__Wp
-            .set_year_values(year, &sol_rf_installed__M__Wp);
+        self.results.sol_rf_potential__M__Wp
+            .set_year_values(year, &sol_rf_potential__M__Wp);
 
         let sol_rf_nrg__G__W_h_per_a = &sol_rf_installed__M__Wp
             * constants::solar_roof.Wp_to_W_h_per_a * 1e-3;
@@ -236,11 +236,11 @@ impl Energy{
             .set_year_values(year, &prchsd_nrg_mix_costs__M__eur_per_a);
 
         //TODO: What is this for?
-        let prchsd_nrg_mix_ems__k__to_coe_per_a =
-            constants::evu_power_mix::coal
-            * constants::evu_emissions::coal
-            + constants::evu_power_mix::gas
-            * constants::evu_emissions::gas;
+        // let prchsd_nrg_mix_ems__k__to_coe_per_a =
+        //     constants::evu_power_mix::coal
+        //     * constants::evu_emissions::coal
+        //     + constants::evu_power_mix::gas
+        //     * constants::evu_emissions::gas;
 
         let prchsd_renewable_nrg__M__eur_per_a = self.results
             .prchsd_renewable_nrg__M__eur_per_a.get_year(year);
@@ -255,6 +255,8 @@ impl Energy{
             / (sol_rf_self_cnsmp__G__W_h_per_a.private
             + prchsd_renewable_nrg__G__W_h_per_a.private
             + prchsd_nrg_mix__G__W_h_per_a.private);
+        self.results.nrg_own_mix_price__m__eur_per_W_h
+            .set_year_value(year, nrg_own_mix_price__m__eur_per_W_h)
 
     }
     pub fn calculate_emissions(&mut self, year: u32){
@@ -391,7 +393,7 @@ macro_rules! implement_results_energy{
 }
 
 implement_results_energy!{
-    sol_rf_installed__M__Wp,
+    sol_rf_potential__M__Wp,
     sol_rf_nrg__G__W_h_per_a,
     sol_rf_self_cnsmp__G__W_h_per_a,
     sol_rf_invest__M__eur_per_a,
