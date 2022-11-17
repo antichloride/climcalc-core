@@ -279,16 +279,16 @@ impl Buildings{
     pub fn calculate_second_stage(
         &mut self,
         year: u32,
-        custom_power_mix_price: &Results,
+        nrg_own_mix_price__m__eur_per_W_h: &SectorsResult,
         ){
 
         let cnsmp_elec_heat_pump__G__W_h_per_a =
             self.results.cnsmp_elec_heat_pump__G__W_h_per_a.get_year(year);
-        let custom_power_mix_price =
-            custom_power_mix_price.get_year(year);
+        let nrg_own_mix_price__m__eur_per_W_h =
+            nrg_own_mix_price__m__eur_per_W_h.get_year(year);
 
         let costs_heat_pump__M__eur = &cnsmp_elec_heat_pump__G__W_h_per_a
-            * custom_power_mix_price * (1.0 - evu_discount_heat_pump);
+            * &nrg_own_mix_price__m__eur_per_W_h * (1.0 - evu_discount_heat_pump);
         self.results.costs_heat_pump__M__eur
             .set_year_values(year, &costs_heat_pump__M__eur);
     }

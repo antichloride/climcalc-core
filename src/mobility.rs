@@ -1,6 +1,7 @@
 #![allow(non_snake_case)]
 
 use crate::sectors::SectorsInputs;
+use crate::sectors::SectorsRawValues;
 use crate::sectors::SectorsResult;
 use crate::result::Results;
 use crate::input::Input;
@@ -111,14 +112,14 @@ impl Mobility{
     pub fn calculate_second_stage(
         &mut self,
         year: u32,
-        nrg_own_mix_price__m__eur_per_W_h: f32,
+        nrg_own_mix_price__m__eur_per_W_h: SectorsRawValues,
     ){
 
         let bev_elec_nrg_dmd__G__W_h_per_a =
             self.results.bev_elec_nrg_dmd__G__W_h_per_a.get_year(year);
 
         let bev_elec_nrg_price__G__W_h_per_a = &bev_elec_nrg_dmd__G__W_h_per_a
-            * nrg_own_mix_price__m__eur_per_W_h;
+            * &nrg_own_mix_price__m__eur_per_W_h;
         self.results.bev_elec_nrg_price__G__W_h_per_a
             .set_year_values(year, &bev_elec_nrg_price__G__W_h_per_a);
 
@@ -131,7 +132,7 @@ impl Mobility{
 
         let sl_nrg_costs__M__eur_per_a = n_sl__k__
             * nrg_cnsmp_per_sl__k__W_h_per_a
-            * nrg_own_mix_price__m__eur_per_W_h * 1e-3;
+            * nrg_own_mix_price__m__eur_per_W_h.public* 1e-3;
         self.results.sl_nrg_costs__M__eur_per_a
             .set_year_value(year, sl_nrg_costs__M__eur_per_a);
 

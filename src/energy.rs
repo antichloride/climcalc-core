@@ -44,7 +44,7 @@ impl Energy{
 }
 
 impl Energy{
-    pub fn nrg_own_mix_price__m__eur_per_W_h(&self) -> &Results{
+    pub fn nrg_own_mix_price__m__eur_per_W_h(&self) -> &SectorsResult{
         return &self.results.nrg_own_mix_price__m__eur_per_W_h;
     }
 }
@@ -104,7 +104,6 @@ impl Energy{
                 .set_year_values(year, &sol_rf_grant__M__eur_per_a);
 
 
-
             let sol_rf_om__M__eur_per_a_last_year =
                 self.results.sol_rf_om__M__eur_per_a.get_year(year-1);
             let sol_rf_om__M__eur_per_a = &sol_rf_om__M__eur_per_a_last_year
@@ -125,7 +124,7 @@ impl Energy{
             .set_year_values(year, &sol_rf_revenue__M__eur_per_a);
 
 
-        // Solar Landscape
+        // Solar Open Space
 
         let sol_os_installed_A__ha = self.inputs
             .sol_os_installed_A__ha.get_year(year);
@@ -243,19 +242,20 @@ impl Energy{
 
         let prchsd_renewable_nrg__M__eur_per_a = self.results
             .prchsd_renewable_nrg__M__eur_per_a.get_year(year);
-        let prchsd_renewable_nrg__G__W_h_per_a = self.inputs
-            .prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
 
-        // TODO: update equaiton (email)
-        // TODO: Why is this only for private?
-        let nrg_own_mix_price__m__eur_per_W_h = (
-            prchsd_renewable_nrg__M__eur_per_a.private
-            + prchsd_nrg_mix_costs__M__eur_per_a.private)
-            / (sol_rf_self_cnsmp__G__W_h_per_a.private
-            + prchsd_renewable_nrg__G__W_h_per_a.private
-            + prchsd_nrg_mix__G__W_h_per_a.private);
+        let sol_rf_om__M__eur_per_a =
+            self.results.sol_rf_om__M__eur_per_a.get_year(year);
+        let sol_rf_revenue__M__eur_per_a =
+            self.results.sol_rf_revenue__M__eur_per_a.get_year(year);
+
+        let total_nrg_costs__M__eur_per_a = &prchsd_renewable_nrg__M__eur_per_a
+            + &prchsd_nrg_mix_costs__M__eur_per_a + sol_rf_om__M__eur_per_a
+            - &sol_rf_revenue__M__eur_per_a;
+
+        let nrg_own_mix_price__m__eur_per_W_h = &total_nrg_costs__M__eur_per_a
+            / &elec_nrg_dmd__G__W_h_per_a;
         self.results.nrg_own_mix_price__m__eur_per_W_h
-            .set_year_value(year, nrg_own_mix_price__m__eur_per_W_h)
+            .set_year_values(year, &nrg_own_mix_price__m__eur_per_W_h)
 
     }
     pub fn calculate_emissions(&mut self, year: u32){
@@ -347,7 +347,7 @@ macro_rules! implement_results_energy{
             $(
                 pub $field: SectorsResult,
              )*
-            pub nrg_own_mix_price__m__eur_per_W_h: Results,
+            // pub nrg_own_mix_price__m__eur_per_W_h: Results,
         }
 
         impl ResultsEnergy{
@@ -356,7 +356,7 @@ macro_rules! implement_results_energy{
                     $(
                         $field: SectorsResult::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
-                    nrg_own_mix_price__m__eur_per_W_h: Results::new(id.to_owned()+"/nrg_own_mix_price__m__eur_per_W_h", start_year, end_year),
+                    // nrg_own_mix_price__m__eur_per_W_h: Results::new(id.to_owned()+"/nrg_own_mix_price__m__eur_per_W_h", start_year, end_year),
                 }
             }
 
@@ -365,7 +365,7 @@ macro_rules! implement_results_energy{
                 $(
                     results.extend(self.$field.get_results());
                  )*
-                results.push(&self.nrg_own_mix_price__m__eur_per_W_h);
+                // results.push(&self.nrg_own_mix_price__m__eur_per_W_h);
                 return results
             }
 
@@ -379,7 +379,7 @@ macro_rules! implement_results_energy{
                     $(
                         stringify!($field)=> self.$field.get_results_by_id(remaining_id),
                      )*
-                    "nrg_own_mix_price__m__eur_per_W_h"=> Some(&mut self.nrg_own_mix_price__m__eur_per_W_h),
+                    // "nrg_own_mix_price__m__eur_per_W_h"=> Some(&mut self.nrg_own_mix_price__m__eur_per_W_h),
                     _ => None,
 
                 }
@@ -409,5 +409,6 @@ implement_results_energy!{
     elec_nrg_dmd__G__W_h_per_a,
     prchsd_nrg_mix__G__W_h_per_a,
     prchsd_nrg_mix_costs__M__eur_per_a,
-    prchsd_nrg_mix_ems__k__to_coe_per_a
+    prchsd_nrg_mix_ems__k__to_coe_per_a,
+    nrg_own_mix_price__m__eur_per_W_h
 }
