@@ -50,6 +50,9 @@ impl Mobility{
     pub fn bev_elec_nrg_dmd__G__W_h_per_a(&self) -> &SectorsResult{
         return &self.results.bev_elec_nrg_dmd__G__W_h_per_a;
     }
+    pub fn sl_nrg_dmd__G__W_h_per_a(&self) -> &Results {
+        return &self.results.sl_nrg_dmd__G__W_h_per_a;
+    }
 }
 
 impl Mobility{
@@ -91,6 +94,17 @@ impl Mobility{
             &cars_fuel_dmd__M__L_per_a * constants::price_fuel;
         self.results.cars_fuel_dmd__M__L_per_a
             .set_year_values(year, &cars_fuel_dmd__M__L_per_a);
+
+        // Street lightning
+        let n_sl__k__ = self.inputs.n_sl__k__.get_year(year);
+        let nrg_cnsmp_per_sl__k__W_h_per_a =
+            self.inputs.nrg_cnsmp_per_sl__k__W_h_per_a.get_year(year);
+
+        let sl_nrg_dmd__G__W_h_per_a = n_sl__k__ * 1e-3
+            * nrg_cnsmp_per_sl__k__W_h_per_a;
+        self.results.sl_nrg_dmd__G__W_h_per_a
+            .set_year_value(year, sl_nrg_dmd__G__W_h_per_a);
+
 
     }
 
@@ -238,6 +252,7 @@ macro_rules! implement_results_mobility{
             $(
                 pub $field: SectorsResult,
              )*
+            sl_nrg_dmd__G__W_h_per_a: Results,
             sl_nrg_costs__M__eur_per_a: Results,
             sl_om_costs__M__eur_per_a: Results,
             sl_total_costs__M__eur_per_a: Results,
@@ -257,6 +272,11 @@ macro_rules! implement_results_mobility{
                             end_year
                         ),
                      )*
+                        sl_nrg_dmd__G__W_h_per_a: Results::new(
+                            id.to_owned()+"/sl_nrg_dmd__G__W_h_per_a",
+                            start_year,
+                            end_year,
+                        ),
                         sl_nrg_costs__M__eur_per_a: Results::new(
                             id.to_owned()+"/sl_nrg_costs__M__eur_per_a",
                             start_year,
@@ -280,6 +300,7 @@ macro_rules! implement_results_mobility{
                 $(
                     results.extend(self.$field.get_results());
                  )*
+                results.push(&self.sl_nrg_dmd__G__W_h_per_a);
                 results.push(&self.sl_nrg_costs__M__eur_per_a);
                 results.push(&self.sl_om_costs__M__eur_per_a);
                 results.push(&self.sl_total_costs__M__eur_per_a);
@@ -297,6 +318,8 @@ macro_rules! implement_results_mobility{
                         stringify!($field)=> self.$field
                             .get_results_by_id(remaining_id),
                      )*
+                    "sl_nrg_dmd__G__W_h_per_a"=> Some(
+                        &mut self.sl_nrg_dmd__G__W_h_per_a),
                     "sl_nrg_costs__M__eur_per_a"=> Some(
                         &mut self.sl_nrg_costs__M__eur_per_a),
                     "sl_om_costs__M__eur_per_a"=> Some(

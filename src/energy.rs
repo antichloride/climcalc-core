@@ -20,7 +20,7 @@ impl Energy{
         return Energy{
             inputs: InputsEnergy::new("energy/inputs", start_year, end_year),
             results: ResultsEnergy::new("energy/results", start_year, end_year),
-            start_year: start_year,
+            start_year,
         }
     }
 
@@ -105,15 +105,15 @@ impl Energy{
 
 
 
-            let sol_rf_os__M__eur_per_a_last_year =
-                self.results.sol_rf_os__M__eur_per_a.get_year(year-1);
-            let sol_rf_os__M__eur_per_a = &sol_rf_os__M__eur_per_a_last_year
+            let sol_rf_om__M__eur_per_a_last_year =
+                self.results.sol_rf_om__M__eur_per_a.get_year(year-1);
+            let sol_rf_om__M__eur_per_a = &sol_rf_om__M__eur_per_a_last_year
                 + &(
                     &sol_rf_invest__M__eur_per_a
                     * constants::solar_roof.operation_costs
                     );
-            self.results.sol_rf_os__M__eur_per_a
-                .set_year_values(year, &sol_rf_os__M__eur_per_a)
+            self.results.sol_rf_om__M__eur_per_a
+                .set_year_values(year, &sol_rf_om__M__eur_per_a)
 
         }
 
@@ -203,14 +203,13 @@ impl Energy{
         electric_power_demand_buildings: SectorsRawValues,
         energy_heating_heat_pump: SectorsRawValues,
         bev_electric_power_demand: SectorsRawValues,
+        sl_nrg_dmd__G__W_h_per_a: f32,
         ){
 
-
-        //TODO: Add lantern energy demand
         let mut elec_nrg_dmd__G__W_h_per_a = &electric_power_demand_buildings
             + &energy_heating_heat_pump + bev_electric_power_demand;
         elec_nrg_dmd__G__W_h_per_a.public +=
-            elec_nrg_dmd__G__W_h_per_a.schools;
+            elec_nrg_dmd__G__W_h_per_a.schools + sl_nrg_dmd__G__W_h_per_a;
         self.results.elec_nrg_dmd__G__W_h_per_a
             .set_year_values(year, &elec_nrg_dmd__G__W_h_per_a);
 
@@ -398,8 +397,7 @@ implement_results_energy!{
     sol_rf_self_cnsmp__G__W_h_per_a,
     sol_rf_invest__M__eur_per_a,
     sol_rf_grant__M__eur_per_a,
-    // TODO: rename os to om
-    sol_rf_os__M__eur_per_a,
+    sol_rf_om__M__eur_per_a,
     sol_rf_revenue__M__eur_per_a,
     sol_os_installed__M__Wp,
     sol_os_nrg__G__W_h_per_a,
