@@ -262,11 +262,11 @@ impl Energy{
 
         let prchsd_nrg_mix__G__W_h_per_a = self.results
             .prchsd_nrg_mix__G__W_h_per_a.get_year(year);
-        let nrg_mix_ems__m__kg_per_W_h = self.inputs
-            .nrg_mix_ems__m__kg_per_W_h.get_year(year);
+        let nrg_mix_ems__m__g_per_W_h = self.inputs
+            .nrg_mix_ems__m__g_per_W_h.get_year(year);
 
         let prchsd_nrg_mix_ems__k__to_coe_per_a = &prchsd_nrg_mix__G__W_h_per_a
-            * nrg_mix_ems__m__kg_per_W_h * 1e-3;
+            * nrg_mix_ems__m__g_per_W_h * 1e-3;
         self.results.prchsd_nrg_mix_ems__k__to_coe_per_a
             .set_year_values(year, &prchsd_nrg_mix_ems__k__to_coe_per_a);
     }
@@ -282,7 +282,7 @@ macro_rules! implement_inputs_energy{
                 $field: SectorsInputs,
              )*
             //TODO: Correct this to gramm
-            pub nrg_mix_ems__m__kg_per_W_h: Input,
+            pub nrg_mix_ems__m__g_per_W_h: Input,
         }
 
         impl InputsEnergy{
@@ -291,7 +291,7 @@ macro_rules! implement_inputs_energy{
                     $(
                         $field: SectorsInputs::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
                      )*
-                    nrg_mix_ems__m__kg_per_W_h: Input::new(id.to_owned()+"/nrg_mix_ems__m__kg_per_W_h", start_year, end_year),
+                    nrg_mix_ems__m__g_per_W_h: Input::new(id.to_owned()+"/nrg_mix_ems__m__g_per_W_h", start_year, end_year),
                 }
             }
         }
@@ -303,7 +303,7 @@ macro_rules! implement_inputs_energy{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
-                inputs.push(&self.nrg_mix_ems__m__kg_per_W_h);
+                inputs.push(&self.nrg_mix_ems__m__g_per_W_h);
                 return inputs
             }
 
@@ -317,7 +317,7 @@ macro_rules! implement_inputs_energy{
                     $(
                         stringify!($field) => self.$field.get_input_by_id(remaining_id),
                      )*
-                    "nrg_mix_ems__m__kg_per_W_h"=> Some(&mut self.nrg_mix_ems__m__kg_per_W_h),
+                    "nrg_mix_ems__m__g_per_W_h"=> Some(&mut self.nrg_mix_ems__m__g_per_W_h),
                     _ => None,
 
                 }
