@@ -47,6 +47,18 @@ impl Energy{
     pub fn nrg_own_mix_price__m__eur_per_W_h(&self) -> &SectorsResult{
         return &self.results.nrg_own_mix_price__m__eur_per_W_h;
     }
+    pub fn sol_rf_invest__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.sol_rf_invest__M__eur_per_a;
+    }
+    pub fn sol_os_invest__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.sol_os_invest__M__eur_per_a;
+    }
+    pub fn sol_rf_om__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.sol_rf_om__M__eur_per_a;
+    }
+    pub fn sol_os_om__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.sol_rf_om__M__eur_per_a;
+    }
 }
 
 
@@ -262,6 +274,7 @@ impl Energy{
 
         let prchsd_nrg_mix__G__W_h_per_a = self.results
             .prchsd_nrg_mix__G__W_h_per_a.get_year(year);
+        // TODO: use constants for that
         let nrg_mix_ems__m__g_per_W_h = self.inputs
             .nrg_mix_ems__m__g_per_W_h.get_year(year);
 

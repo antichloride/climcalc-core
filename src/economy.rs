@@ -1,15 +1,19 @@
+#![allow(non_snake_case)]
+
 use crate::result::Results;
-use crate::buildings::ResultsBuildings;
-use crate::energy::ResultsEnergy;
-use crate::mobility::ResultsMobility;
+// use crate::buildings::ResultsBuildings;
+// use crate::energy::ResultsEnergy;
+// use crate::mobility::ResultsMobility;
 use crate::constants::economy as constants;
 use crate::constants::energy as constants_energy;
-use crate::sectors::SectorsResult;
+//use crate::sectors::SectorsResult;
+use crate::energy::Energy;
+use crate::buildings::Buildings;
 
 macro_rules! implement_economy{
     ($($field:ident),*) => {
 
-        struct Economy{
+        pub struct Economy{
             start_year: u32,
             $(
                 $field: Results,
@@ -17,11 +21,11 @@ macro_rules! implement_economy{
         }
 
         impl Economy{
-            fn new(id: &str, start_year: u32, end_year: u32) -> Economy {
+            pub fn new(start_year: u32, end_year: u32) -> Economy {
                 return Economy{
                     start_year: start_year,
                     $(
-                        $field: Results::new(id.to_owned()+"/"+stringify!($field), start_year, end_year),
+                        $field: Results::new("economy/".to_owned()+stringify!($field), start_year, end_year),
                      )*
                 }
             }
@@ -34,13 +38,8 @@ macro_rules! implement_economy{
                 return results;
             }
 
-            fn get_results_by_id(&mut self, id: &str) -> Option<&mut Results>{
-                let binding = id.to_string();
-                let splitted_id: Vec<&str> = binding.split("/").collect();
-                let binding_b = &splitted_id[1..].join("/");
-                let remaining_id = binding_b.as_str();
-
-                match splitted_id[0]{
+            pub fn get_results_by_id(&mut self, id: &str) -> Option<&mut Results>{
+                match id{
                     $(
                         stringify!($field)=> Some(&mut self.$field),
                      )*
@@ -74,9 +73,9 @@ implement_economy!{
     turnover_solar_landscape_crafting_local,
     turnover_solar_landscape_crafting_national,
     turnover_solar_landscape_production_national,
-    jobs_crafting_local,
-    jobs_crafting_national,
-    jobs_production_national,
+    n_jobs_crafting_local,
+    n_jobs_crafting_national,
+    n_jobs_production_national,
     income_local,
     income_national,
     income_tax_local,
@@ -95,27 +94,26 @@ impl Economy{
     pub fn calculate(
         &mut self,
         year: u32,
-        results_buildings: ResultsBuildings,
-        results_energy: ResultsEnergy,
-        buildings_total_heat_dmd__G__W_h_per_a: SectorsResult,
+        buildings: &Buildings,
+        energy: &Energy,
     ){
 
-        // heating
-        let buildings_invest_heat = results_buildings.invest_heat
-            .get_year(year).sum();
+        // heat
+        let invest_heat_sources__M__eur_per_a =
+            buildings.invest_heat_sources__M__eur_per_a().get_year(year).sum();
 
-        let invest_heating_material = buildings_invest_heat *
+        let invest_heating_material = invest_heat_sources__M__eur_per_a *
             constants::material::invest_local::heating_heatpump;
         self.invest_heating_material
             .set_year_value(year, invest_heating_material);
 
-        let invest_heating_work = buildings_invest_heat *
+        let invest_heating_work = invest_heat_sources__M__eur_per_a *
             (1.0 - constants::material::invest_local::heating_heatpump);
         self.invest_heating_work
             .set_year_value(year, invest_heating_work);
 
         let turnover_heating_crafting_local = invest_heating_work *
-            constants::invest_work::community_added_value::heating_heatpump;
+            constants::invest_work::loacal_value_add::heating_heatpump;
         self.turnover_heating_crafting_local
             .set_year_value(year, turnover_heating_crafting_local);
 
@@ -130,22 +128,24 @@ impl Economy{
             .set_year_value(year, turnover_heating_production_national);
 
 
-        // thermal heat demand
-        let invest_thermal_energy_demand =
-            buildings_total_heat_dmd__G__W_h_per_a.get_year(year).sum();
+        // energetic renovation
+        let invest_energetic_renovation__M__eur_per_a =
+            buildings.invest_energetic_renovation__M__eur_per_a()
+            .get_year(year).sum();
 
-        let invest_heat_demand_material = invest_thermal_energy_demand *
-            constants::material::invest_local::energetic_restoration;
+        let invest_heat_demand_material =
+            invest_energetic_renovation__M__eur_per_a
+            * constants::material::invest_local::energetic_restoration;
         self.invest_heat_demand_material
             .set_year_value(year, invest_heat_demand_material);
 
-        let invest_heat_demand_work = invest_thermal_energy_demand *
-            (1.0 - constants::material::invest_local::energetic_restoration);
+        let invest_heat_demand_work = invest_energetic_renovation__M__eur_per_a
+            * (1.0 - constants::material::invest_local::energetic_restoration);
         self.invest_heat_demand_work
             .set_year_value(year, invest_heat_demand_work);
 
         let turnover_heat_demand_crafting_local = invest_heat_demand_work *
-            constants::invest_work::community_added_value::energetic_restoration;
+            constants::invest_work::loacal_value_add::energetic_restoration;
         self.turnover_heat_demand_crafting_local
             .set_year_value(year, turnover_heat_demand_crafting_local);
 
@@ -154,32 +154,34 @@ impl Economy{
         self.turnover_heat_demand_crafting_national
             .set_year_value(year, turnover_heat_demand_crafting_national);
 
-        let turnover_heat_demand_production_national = invest_heat_demand_material *
-            constants::material::invest_national::energetic_restoration;
+        let turnover_heat_demand_production_national =
+            invest_heat_demand_material
+            * constants::material::invest_national::energetic_restoration;
         self.turnover_heat_demand_production_national
             .set_year_value(year, turnover_heat_demand_production_national);
 
 
         // solar roof
-        let invest_solar_roof = results_energy
-            .solar_roof_invest.get_year(year).sum();
+        let sol_rf_invest__M__eur_per_a =
+            energy.sol_rf_invest__M__eur_per_a().get_year(year).sum();
 
-        let invest_solar_roof_material = invest_solar_roof *
+        let invest_solar_roof_material = sol_rf_invest__M__eur_per_a *
             constants::material::invest_local::solar_roof;
         self.invest_solar_roof_material
             .set_year_value(year, invest_solar_roof_material);
 
-        let invest_solar_roof_work = invest_solar_roof *
+        let invest_solar_roof_work = sol_rf_invest__M__eur_per_a *
             (1.0 - constants::material::invest_local::solar_roof);
         self.invest_solar_roof_work
             .set_year_value(year, invest_solar_roof_work);
 
-        let maintenance_solar_roof_work = results_energy.solar_roof_invest
-            .sum_years(self.start_year, year).sum()
-            * constants_energy::solar_roof.operation_costs;
+        let maintenance_solar_roof_work = energy.sol_rf_om__M__eur_per_a()
+            .sum_years(self.start_year, year).sum();
+        self.maintenance_solar_roof_work
+            .set_year_value(year, maintenance_solar_roof_work);
 
         let turnover_solar_roof_crafting_local = invest_solar_roof_work *
-            constants::invest_work::community_added_value::solar_roof;
+            constants::invest_work::loacal_value_add::solar_roof;
         self.turnover_solar_roof_crafting_local
             .set_year_value(year, turnover_solar_roof_crafting_local);
 
@@ -196,25 +198,26 @@ impl Economy{
 
 
         // solar landscape
-        let invest_solar_landscape = results_energy
-            .solar_landscape_invest.get_year(year).sum();
+        let sol_om_invest__M__eur_per_a =
+            energy.sol_os_invest__M__eur_per_a().get_year(year).sum();
 
-        let invest_solar_landscape_material = invest_solar_landscape *
+        let invest_solar_landscape_material = sol_om_invest__M__eur_per_a *
             constants::material::invest_local::solar_landscape;
         self.invest_solar_landscape_material
             .set_year_value(year, invest_solar_landscape_material);
 
-        let invest_solar_landscape_work = invest_solar_landscape *
+        let invest_solar_landscape_work = sol_om_invest__M__eur_per_a *
             (1.0 - constants::material::invest_local::solar_landscape);
         self.invest_solar_landscape_work
             .set_year_value(year, invest_solar_landscape_work);
 
-        let maintenance_solar_landscape_work = results_energy.solar_landscape_invest
-            .sum_years(self.start_year, year).sum()
-            * constants_energy::solar_landscape.operation_costs;
+        let maintenance_solar_landscape_work = energy.sol_os_om__M__eur_per_a()
+            .sum_years(self.start_year, year).sum();
+        self.maintenance_solar_landscape_work
+            .set_year_value(year, maintenance_solar_landscape_work);
 
         let turnover_solar_landscape_crafting_local = invest_solar_landscape_work *
-            constants::invest_work::community_added_value::solar_landscape;
+            constants::invest_work::loacal_value_add::solar_landscape;
         self.turnover_solar_landscape_crafting_local
             .set_year_value(year, turnover_solar_landscape_crafting_local);
 
@@ -230,48 +233,52 @@ impl Economy{
 
 
         // jobs
-        let jobs_crafting_local =
+        // TODO: add om costs solar
+        let n_jobs_crafting_local =
             &turnover_heating_crafting_local
-            / constants::vzw_per_million_turnover::work::heating_heatpump
+            / constants::fte_per_million_turnover::work::heating_heatpump
             + &turnover_heat_demand_crafting_local
-            / constants::vzw_per_million_turnover::work::energetic_restoration
-            + &turnover_solar_roof_crafting_local
-            / constants::vzw_per_million_turnover::work::solar_roof
-            + &turnover_solar_landscape_crafting_local
-            / constants::vzw_per_million_turnover::work::solar_landscape;
-        self.jobs_crafting_local.set_year_value(year, jobs_crafting_local);
+            / constants::fte_per_million_turnover::work::energetic_restoration
+            + (&turnover_solar_roof_crafting_local
+               + &maintenance_solar_roof_work)
+            / constants::fte_per_million_turnover::work::solar_roof
+            + (&turnover_solar_landscape_crafting_local
+               + &maintenance_solar_landscape_work)
+            / constants::fte_per_million_turnover::work::solar_landscape;
+        self.n_jobs_crafting_local.set_year_value(year, n_jobs_crafting_local);
 
-        let jobs_crafting_national =
+        // TODO: add om costs solar
+        let n_jobs_crafting_national =
             &turnover_heating_crafting_national
-            / constants::vzw_per_million_turnover::work::heating_heatpump
+            / constants::fte_per_million_turnover::work::heating_heatpump
             + &turnover_heat_demand_crafting_national
-            / constants::vzw_per_million_turnover::work::energetic_restoration
+            / constants::fte_per_million_turnover::work::energetic_restoration
             + &turnover_solar_roof_crafting_national
-            / constants::vzw_per_million_turnover::work::solar_roof
+            / constants::fte_per_million_turnover::work::solar_roof
             + &turnover_solar_landscape_crafting_national
-            / constants::vzw_per_million_turnover::work::solar_landscape;
-        self.jobs_crafting_national
-            .set_year_value(year, jobs_crafting_national);
+            / constants::fte_per_million_turnover::work::solar_landscape;
+        self.n_jobs_crafting_national
+            .set_year_value(year, n_jobs_crafting_national);
 
-        let jobs_production_national =
+        let n_jobs_production_national =
             &turnover_heating_production_national
-            / constants::vzw_per_million_turnover::material::heating_heatpump
+            / constants::fte_per_million_turnover::material::heating_heatpump
             + &turnover_heat_demand_production_national
-            / constants::vzw_per_million_turnover::material::energetic_restoration
+            / constants::fte_per_million_turnover::material::energetic_restoration
             + &turnover_solar_roof_production_national
-            / constants::vzw_per_million_turnover::material::solar_roof
+            / constants::fte_per_million_turnover::material::solar_roof
             + &turnover_solar_landscape_production_national
-            / constants::vzw_per_million_turnover::material::solar_landscape;
-        self.jobs_production_national
-            .set_year_value(year, jobs_production_national);
+            / constants::fte_per_million_turnover::material::solar_landscape;
+        self.n_jobs_production_national
+            .set_year_value(year, n_jobs_production_national);
 
 
         // taxes
-        let income_local = jobs_crafting_local
+        let income_local = n_jobs_crafting_local
             * constants::tax::income_per_fte;
         self.income_local.set_year_value(year, income_local);
 
-        let income_national = jobs_crafting_national + jobs_production_national
+        let income_national = n_jobs_crafting_national + n_jobs_production_national
             * constants::tax::income_per_fte;
         self.income_national.set_year_value(year, income_national);
 
@@ -283,25 +290,27 @@ impl Economy{
             * constants::tax::income_tax_per_fte;
         self.income_tax_national.set_year_value(year, income_tax_national);
 
+        // TODO: use variables for that
+        // TDOO: recheck this formula
         let turnover_local_with_local_part_of_material =
             turnover_heating_crafting_local
             + invest_heating_material
-            * constants::invest_work::community_added_value::heating_heatpump
+            * constants::invest_work::loacal_value_add::heating_heatpump
             + turnover_heat_demand_crafting_local
             + invest_heat_demand_material
-            * constants::invest_work::community_added_value::energetic_restoration
+            * constants::invest_work::loacal_value_add::energetic_restoration
             + turnover_solar_roof_crafting_local
             + invest_solar_roof_material
-            * constants::invest_work::community_added_value::solar_roof
+            * constants::invest_work::loacal_value_add::solar_roof
             + turnover_solar_landscape_crafting_local
             + invest_solar_landscape_material
-            * constants::invest_work::community_added_value::solar_landscape;
+            * constants::invest_work::loacal_value_add::solar_landscape;
         self.turnover_local_with_local_part_of_material
             .set_year_value(year, turnover_local_with_local_part_of_material);
 
-        let turnover_national = buildings_invest_heat
-            + invest_thermal_energy_demand
-            + invest_solar_roof + invest_solar_landscape;
+        let turnover_national = invest_heat_sources__M__eur_per_a
+            + invest_energetic_renovation__M__eur_per_a
+            + sol_rf_invest__M__eur_per_a + sol_om_invest__M__eur_per_a;
         self.turnover_national.set_year_value(year, turnover_national);
 
         let turnover_tax_local = turnover_local_with_local_part_of_material

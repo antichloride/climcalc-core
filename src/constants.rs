@@ -173,7 +173,7 @@ pub mod economy{
         }
     }
     pub mod invest_work{
-        pub mod community_added_value{
+        pub mod loacal_value_add{
             pub const heating_heatpump: f32 = 0.3;
             pub const energetic_restoration: f32 = 0.3;
             pub const fast_charging_stations: f32 = 0.3;
@@ -190,7 +190,7 @@ pub mod economy{
             pub const community: f32 = 1.0;
         }
     }
-    pub mod vzw_per_million_turnover{
+    pub mod fte_per_million_turnover{
         pub mod material{
             pub const heating_heatpump: f32 = 10.0;
             pub const energetic_restoration: f32 = 10.0;
@@ -207,7 +207,7 @@ pub mod economy{
         }
     }
     pub mod maintenance_community_costs{
-        pub mod community_added_value{
+        pub mod loacal_value_add{
             pub const fast_charging_stations: f32 = 0.3;
             pub const solar_roof: f32 = 0.3;
             pub const solar_landscape: f32 = 0.2;

@@ -287,21 +287,20 @@ impl SectorsResult{
         };
     }
 
-    // TODO: check if this function is really not needed
-    // pub fn sum_years(
-    //     &self,
-    //     start_year: u32,
-    //     end_year: u32
-    // ) -> SectorsRawValues{
+    pub fn sum_years(
+        &self,
+        start_year: u32,
+        end_year: u32
+    ) -> SectorsRawValues{
 
-    //     return SectorsRawValues{
-    //         private: self.private.sum_years(start_year, end_year),
-    //         industry: self.industry.sum_years(start_year, end_year),
-    //         schools: self.schools.sum_years(start_year, end_year),
-    //         public: self.public.sum_years(start_year, end_year),
-    //     };
+        return SectorsRawValues{
+            private: self.private.sum_years(start_year, end_year),
+            industry: self.industry.sum_years(start_year, end_year),
+            schools: self.schools.sum_years(start_year, end_year),
+            public: self.public.sum_years(start_year, end_year),
+        };
 
-    // }
+    }
 
     pub fn set_year_values(&mut self, year: u32, values: &SectorsRawValues){
         self.private.set_year_value(year, values.private);

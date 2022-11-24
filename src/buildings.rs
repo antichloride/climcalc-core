@@ -57,7 +57,18 @@ impl Buildings{
     pub fn cnsmp_elec_heat_pump__G__W_h_per_a(&self) -> &SectorsResult{
         return &self.results.cnsmp_elec_heat_pump__G__W_h_per_a;
     }
-
+    pub fn invest_heat_sources__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.invest_heat_sources__M__eur_per_a;
+    }
+    pub fn invest_energetic_renovation__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.invest_energetic_renovation__M__eur_per_a;
+    }
+    pub fn grant_heat_sources__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.grant_heat_sources__M__eur_per_a;
+    }
+    pub fn grant_energetic_renovation__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.grant_energetic_renovation__M__eur_per_a;
+    }
 }
 
 
@@ -186,7 +197,7 @@ impl Buildings{
             // because it is assumed that the heater also produces the hot
             // water.
             let mut invest_heat_sources__M__eur_per_a = SectorsRawValues::new();
-            let mut grant_heat_sourcres__M__eur_per_a = SectorsRawValues::new();
+            let mut grant_heat_sources__M__eur_per_a = SectorsRawValues::new();
 
             macro_rules! implement_invest_calculation_heating{
                 ($(($heat_type: ident, $heat_type_A__k__m2: ident)),*) => {
@@ -219,8 +230,8 @@ impl Buildings{
                             invest_heat_sources__M__eur_per_a +
                             invest_heat_source__M__eur_per_a;
 
-                        grant_heat_sourcres__M__eur_per_a =
-                            grant_heat_sourcres__M__eur_per_a +
+                        grant_heat_sources__M__eur_per_a =
+                            grant_heat_sources__M__eur_per_a +
                             grant_heat_source__M__eur_per_a;
 
 
@@ -239,8 +250,8 @@ impl Buildings{
 
             results.invest_heat_sources__M__eur_per_a
                 .set_year_values(year, &invest_heat_sources__M__eur_per_a);
-            results.grant_heat_sourcres__M__eur_per_a
-                .set_year_values(year, &grant_heat_sourcres__M__eur_per_a);
+            results.grant_heat_sources__M__eur_per_a
+                .set_year_values(year, &grant_heat_sources__M__eur_per_a);
 
             // invest/grant energetic renovation
             // This calculation looks for the change of heat demand from one
@@ -257,7 +268,7 @@ impl Buildings{
                 * &floor_A__k__m2
                 * heat_dmd_this_year__k__W_h_per_m2_a
                     .is_greater(&heat_dmd_prev_year__k__W_h_per_m2_a);
-            results.invest_energetic_renovation__M__eur
+            results.invest_energetic_renovation__M__eur_per_a
                 .set_year_values(
                     year,
                     &invest_energetic_renovation__k__eur_per_a
@@ -456,8 +467,8 @@ implement_results_builidngs!{
     costs_oil__M__eur_per_a,
     costs_gas__M__eur_per_a,
     invest_heat_sources__M__eur_per_a,
-    invest_energetic_renovation__M__eur,
-    grant_heat_sourcres__M__eur_per_a,
+    invest_energetic_renovation__M__eur_per_a,
+    grant_heat_sources__M__eur_per_a,
     grant_energetic_renovation__M__eur_per_a,
     costs_heat_pump__M__eur,
     ems_oil__k__to_coe_per_a,

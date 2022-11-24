@@ -13,6 +13,8 @@ use result::Results;
 use input::Input;
 mod sectors;
 mod constants;
+mod economy;
+use economy::Economy;
 
 #[cfg(test)]
 #[macro_use]
@@ -23,6 +25,7 @@ pub struct Calculator {
     buildings: Buildings,
     mobility: Mobility,
     energy: Energy,
+    economy: Economy,
     pub start_year: u32,
     pub end_year: u32,
 }
@@ -35,6 +38,7 @@ impl Calculator{
             buildings: Buildings::new(start_year, end_year),
             mobility: Mobility::new(start_year, end_year),
             energy: Energy::new(start_year, end_year),
+            economy: Economy::new(start_year, end_year),
             start_year: start_year,
             end_year: end_year,
         };
@@ -43,10 +47,10 @@ impl Calculator{
 
     pub fn calculate_over_years(&mut self){
         for year in self.start_year..self.end_year + 1{
-
             self.calculate_first_stage(year);
             self.calculate_second_stage(year);
             self.calculate_emissions(year);
+            self.economy.calculate(year, &self.buildings, &self.energy);
         }
     }
 
@@ -134,6 +138,7 @@ impl Calculator{
         list.extend(self.buildings.get_results());
         list.extend(self.mobility.get_results());
         list.extend(self.energy.get_results());
+        list.extend(self.economy.get_results());
         return list;
     }
 
@@ -152,6 +157,7 @@ impl Calculator{
             "buildings" => self.buildings.get_results_by_id(&remaining_id),
             "mobility" => self.mobility.get_results_by_id(&remaining_id),
             "energy" => self.energy.get_results_by_id(&remaining_id),
+            "economy" => self.economy.get_results_by_id(&remaining_id),
             _ => None,
         }
     }

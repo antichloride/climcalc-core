@@ -1,7 +1,7 @@
 use crate::result::Results;
-use crate::buildings::ResultsBuildings;
-use crate::energy::ResultsEnergy;
-use crate::mobility::ResultsMobility;
+use crate::buildings::Buildings;
+use crate::energy::Energy;
+use crate::mobility::Mobility;
 
 macro_rules! implement_steakholders{
     ($($field:ident),*) => {
@@ -69,16 +69,18 @@ impl Steakholders{
     pub fn calculate(
         &mut self,
         year: u32,
-        results_buildings: ResultsBuildings,
-        results_energy: ResultsEnergy,
-        results_mobility: ResultsMobility,
+        buildings: Buildings,
+        energy: Energy,
+        mobility: Mobility,
     ){
         let private_invest_buildings =
-            &results_buildings.invest_heat.get_year(year).private
-            + &results_buildings.invest_thermal_energy_demand
+            &buildings.invest_heat_sources__M__eur_per_a
                 .get_year(year).private
-            - &results_buildings.invest_grant_heat.get_year(year).private;
-            - &results_buildings.invest_grant_thermal_enery_demand
+            + &buildings.invest_energetic_renovation__M__eur_per_a
+                .get_year(year).private
+            - &buildings.grant_heat_sources__M__eur_per_a
+                .get_year(year).private;
+            - &buildings.grant_energetic_renovation__M__eur_per_a
                 .get_year(year).private;
 
         let private_invest_energy =
