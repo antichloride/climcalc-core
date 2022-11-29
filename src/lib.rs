@@ -15,6 +15,8 @@ mod sectors;
 mod constants;
 mod economy;
 use economy::Economy;
+mod steakholders;
+use steakholders::Steakholders;
 
 #[cfg(test)]
 #[macro_use]
@@ -26,6 +28,7 @@ pub struct Calculator {
     mobility: Mobility,
     energy: Energy,
     economy: Economy,
+    steakholders: Steakholders,
     pub start_year: u32,
     pub end_year: u32,
 }
@@ -39,6 +42,7 @@ impl Calculator{
             mobility: Mobility::new(start_year, end_year),
             energy: Energy::new(start_year, end_year),
             economy: Economy::new(start_year, end_year),
+            steakholders: Steakholders::new(start_year, end_year),
             start_year: start_year,
             end_year: end_year,
         };
@@ -51,6 +55,13 @@ impl Calculator{
             self.calculate_second_stage(year);
             self.calculate_emissions(year);
             self.economy.calculate(year, &self.buildings, &self.energy);
+            self.steakholders.calculate(
+                year,
+                &self.buildings,
+                &self.energy,
+                &self.mobility,
+                &self.economy,
+            )
         }
     }
 

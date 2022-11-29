@@ -54,6 +54,15 @@ impl Mobility{
     pub fn sl_nrg_dmd__G__W_h_per_a(&self) -> &Results {
         return &self.results.sl_nrg_dmd__G__W_h_per_a;
     }
+    pub fn bev_nrg_costs__M__eur_per_a(&self) -> &SectorsResult {
+        return &self.results.bev_nrg_costs__M__eur_per_a;
+    }
+    pub fn cars_fuel_costs__M__eur_per_a(&self) -> &SectorsResult {
+        return &self.results.cars_fuel_costs__M__eur_per_a;
+    }
+    pub fn cars_grant__M__eur_per_a(&self) -> &SectorsResult {
+        return &self.results.cars_grant__M__eur_per_a;
+    }
 }
 
 impl Mobility{

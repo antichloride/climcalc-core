@@ -156,6 +156,8 @@ pub mod energy{
 
 pub mod economy{
 
+    pub const revenue_margin: f32 = 0.05;
+
     pub mod material{
         pub mod invest_local{
             pub const heating_heatpump: f32 = 0.5;

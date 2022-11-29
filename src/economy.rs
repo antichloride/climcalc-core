@@ -80,13 +80,38 @@ implement_economy!{
     income_national,
     income_tax_local,
     income_tax_national,
-    turnover_local_with_local_part_of_material,
+    turnover_local,
     turnover_national,
     turnover_tax_local,
     turnover_tax_national,
     business_tax_local,
     business_tax_national,
     corporate_tax_national
+}
+
+
+impl Economy{
+    pub fn turnover_local__M__eur(&self) -> &Results{
+        return &self.turnover_local;
+    }
+    pub fn income_tax_local__M__eur(&self) -> &Results{
+        return &self.income_tax_local;
+    }
+    pub fn business_tax_local__M__eur(&self) -> &Results{
+        return &self.business_tax_local;
+    }
+    pub fn income_tax_national__M__eur(&self) -> &Results{
+        return &self.income_tax_national;
+    }
+    pub fn turnover_tax_national__M__eur(&self) -> &Results{
+        return &self.turnover_tax_national;
+    }
+    pub fn business_tax_national__M__eur(&self) -> &Results{
+        return &self.business_tax_national;
+    }
+    pub fn corporate_tax_national__M__eur(&self) -> &Results{
+        return &self.corporate_tax_national;
+    }
 }
 
 
@@ -233,7 +258,6 @@ impl Economy{
 
 
         // jobs
-        // TODO: add om costs solar
         let n_jobs_crafting_local =
             &turnover_heating_crafting_local
             / constants::fte_per_million_turnover::work::heating_heatpump
@@ -247,15 +271,16 @@ impl Economy{
             / constants::fte_per_million_turnover::work::solar_landscape;
         self.n_jobs_crafting_local.set_year_value(year, n_jobs_crafting_local);
 
-        // TODO: add om costs solar
         let n_jobs_crafting_national =
             &turnover_heating_crafting_national
             / constants::fte_per_million_turnover::work::heating_heatpump
             + &turnover_heat_demand_crafting_national
             / constants::fte_per_million_turnover::work::energetic_restoration
-            + &turnover_solar_roof_crafting_national
+            + (&turnover_solar_roof_crafting_national
+               + &maintenance_solar_roof_work)
             / constants::fte_per_million_turnover::work::solar_roof
-            + &turnover_solar_landscape_crafting_national
+            + (&turnover_solar_landscape_crafting_national
+               + &maintenance_solar_landscape_work)
             / constants::fte_per_million_turnover::work::solar_landscape;
         self.n_jobs_crafting_national
             .set_year_value(year, n_jobs_crafting_national);
@@ -290,9 +315,7 @@ impl Economy{
             * constants::tax::income_tax_per_fte;
         self.income_tax_national.set_year_value(year, income_tax_national);
 
-        // TODO: use variables for that
-        // TDOO: recheck this formula
-        let turnover_local_with_local_part_of_material =
+        let turnover_local =
             turnover_heating_crafting_local
             + invest_heating_material
             * constants::invest_work::loacal_value_add::heating_heatpump
@@ -305,15 +328,15 @@ impl Economy{
             + turnover_solar_landscape_crafting_local
             + invest_solar_landscape_material
             * constants::invest_work::loacal_value_add::solar_landscape;
-        self.turnover_local_with_local_part_of_material
-            .set_year_value(year, turnover_local_with_local_part_of_material);
+        self.turnover_local
+            .set_year_value(year, turnover_local);
 
         let turnover_national = invest_heat_sources__M__eur_per_a
             + invest_energetic_renovation__M__eur_per_a
             + sol_rf_invest__M__eur_per_a + sol_om_invest__M__eur_per_a;
         self.turnover_national.set_year_value(year, turnover_national);
 
-        let turnover_tax_local = turnover_local_with_local_part_of_material
+        let turnover_tax_local = turnover_local
             * constants::tax::turnover_tax_local_part
             * constants::tax::turnover_tax;
         self.turnover_tax_local.set_year_value(year, turnover_tax_local);
@@ -322,7 +345,7 @@ impl Economy{
             * constants::tax::turnover_tax;
         self.turnover_tax_national.set_year_value(year, turnover_tax_national);
 
-        let business_tax_local = turnover_local_with_local_part_of_material
+        let business_tax_local = turnover_local
             * constants::tax::business_tax;
         self.business_tax_local.set_year_value(year, business_tax_local);
 
@@ -333,6 +356,8 @@ impl Economy{
         let corporate_tax_national = turnover_national
             * constants::tax::corporate_tax;
         self.corporate_tax_national.set_year_value(year, corporate_tax_national);
+
+        //TDOD: Add energy tax
 
     }
 }

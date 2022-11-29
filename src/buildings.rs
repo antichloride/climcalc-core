@@ -69,6 +69,12 @@ impl Buildings{
     pub fn grant_energetic_renovation__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.grant_energetic_renovation__M__eur_per_a;
     }
+    pub fn costs_oil__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.costs_oil__M__eur_per_a;
+    }
+    pub fn costs_gas__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.costs_gas__M__eur_per_a;
+    }
 }
 
 
