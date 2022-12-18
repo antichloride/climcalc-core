@@ -29,7 +29,7 @@ pub mod buildings{
     };
     pub const other: HeatType = HeatType {
         efficency: 1.0,
-        invest__m__eur_per_W_h: 0.0,
+        invest__m__eur_per_W_h: 1.0,
         grant: 0.5,
     };
 

@@ -153,18 +153,13 @@ impl Buildings{
                 heat_pump,
                 A_heat_heat_pump__k__m2,
                 cnsmp_elec_heat_pump__G__W_h_per_a
+            ),
+            (
+                other,
+                A_heat_other__k__m2,
+                cnsmp_other__G__W_h_per_a
             )
         }
-
-        let A_heat_other__k__m2 =
-            &floor_A__k__m2 - &A_heat_oil__k__m2
-            - &A_heat_oil_condensing__k__m2 - &A_heat_gas__k__m2
-            - &A_heat_heat_pump__k__m2;
-
-        let cnsmp_other__G__W_h_per_a =
-            &A_heat_other__k__m2 * &total_heat_dmd__M__W_h_per_m2_a;
-        results.cnsmp_other__G__W_h_per_a
-            .set_year_values(year, &cnsmp_other__G__W_h_per_a);
 
         let cnsmp_oil__M__L_per_a =
             (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
@@ -250,8 +245,8 @@ impl Buildings{
                 (oil_no_condensing, A_heat_oil__k__m2),
                 (oil_with_condensing, A_heat_oil_condensing__k__m2),
                 (gas, A_heat_gas__k__m2),
-                (heat_pump, A_heat_heat_pump__k__m2)
-                // TODO: add other
+                (heat_pump, A_heat_heat_pump__k__m2),
+                (other, A_heat_other__k__m2)
             }
 
             results.invest_heat_sources__M__eur_per_a
@@ -400,7 +395,8 @@ implement_inputs_builidngs!{
     A_heat_oil__k__m2,
     A_heat_oil_condensing__k__m2,
     A_heat_gas__k__m2,
-    A_heat_heat_pump__k__m2
+    A_heat_heat_pump__k__m2,
+    A_heat_other__k__m2
 }
 
 macro_rules! implement_results_builidngs{
