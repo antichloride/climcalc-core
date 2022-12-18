@@ -357,7 +357,7 @@ impl Economy{
             * constants::tax::corporate_tax;
         self.corporate_tax_national.set_year_value(year, corporate_tax_national);
 
-        //TDOD: Add energy tax
+        //TODO: Add energy tax
 
     }
 }
