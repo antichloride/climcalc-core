@@ -158,6 +158,8 @@ impl Energy{
 
         let sol_os_installed_A__ha = self.inputs
             .sol_os_installed_A__ha.get_year(year);
+        let sol_os_self_cnsmp_part = self.inputs
+            .sol_os_self_cnsmp_part.get_year(year);
 
         let sol_os_installed__M__Wp = 1e-1
             * &sol_os_installed_A__ha
@@ -170,6 +172,11 @@ impl Energy{
             * constants::solar_landscape.Wp_to_W_h_per_a;
         self.results.sol_os_nrg__G__W_h_per_a
             .set_year_values(year, &sol_os_nrg__G__W_h_per_a);
+
+        let sol_os_self_cnsmp__G__W_h_per_a = &sol_os_nrg__G__W_h_per_a
+            * &sol_os_self_cnsmp_part;
+        self.results.sol_os_self_cnsmp__G__W_h_per_a
+            .set_year_values(year, &sol_os_self_cnsmp__G__W_h_per_a);
 
         if year != self.start_year{
 
@@ -210,10 +217,9 @@ impl Energy{
                 .set_year_values(year, &sol_os_om__M__eur_per_a)
         }
 
-        // TODO: Add self consumption to solar os
         let sol_os_revenue__M__eur_per_a =
             (&sol_os_nrg__G__W_h_per_a
-            //- &sol_os_self_cnsmp__G__W_h_per_a
+                - &sol_os_self_cnsmp__G__W_h_per_a
             )
             * constants::solar_landscape.buyback_price__m__eur_per_W_h;
         self.results.sol_os_revenue__M__eur_per_a
@@ -253,12 +259,14 @@ impl Energy{
 
         let sol_rf_self_cnsmp__G__W_h_per_a =
             self.results.sol_rf_self_cnsmp__G__W_h_per_a.get_year(year);
+        let sol_os_self_cnsmp__G__W_h_per_a =
+            self.results.sol_os_self_cnsmp__G__W_h_per_a.get_year(year);
         let prchsd_renewable_nrg__G__W_h_per_a =
             self.inputs.prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
 
-        //TODO: Add self consumption solar open space
         let prchsd_nrg_mix__G__W_h_per_a = &elec_nrg_dmd__G__W_h_per_a
             - &sol_rf_self_cnsmp__G__W_h_per_a
+            - &sol_os_self_cnsmp__G__W_h_per_a
             - &prchsd_renewable_nrg__G__W_h_per_a;
         self.results.prchsd_nrg_mix__G__W_h_per_a
             .set_year_values(year, &prchsd_nrg_mix__G__W_h_per_a);
@@ -366,6 +374,7 @@ implement_inputs_energy!{
     sol_rf_installed__M__Wp,
     sol_rf_self_cnsmp_part,
     sol_os_installed_A__ha,
+    sol_os_self_cnsmp_part,
     prchsd_renewable_nrg__G__W_h_per_a,
     renewable_nrg_price__m__eur_per_W_h,
     nrg_mix_price__m__eur_per_W_h
@@ -379,6 +388,7 @@ macro_rules! implement_results_energy{
             $(
                 pub $field: SectorsResult,
              )*
+            // Note that is only to easily add a single value atribute again if needed
             // pub nrg_own_mix_price__m__eur_per_W_h: Results,
         }
 
@@ -433,6 +443,7 @@ implement_results_energy!{
     sol_rf_revenue__M__eur_per_a,
     sol_os_installed__M__Wp,
     sol_os_nrg__G__W_h_per_a,
+    sol_os_self_cnsmp__G__W_h_per_a,
     sol_os_invest__M__eur_per_a,
     sol_os_grant__M__eur_per_a,
     sol_os_om__M__eur_per_a,
