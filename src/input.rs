@@ -16,7 +16,7 @@ impl Input{
             values: vec![0.0; (end_year-start_year+1) as usize],
             measures: Vec::from([]),
             start_year: start_year,
-            end_year: start_year,
+            end_year: end_year,
         }
     }
 
@@ -25,7 +25,7 @@ impl Input{
     }
 
     pub fn apply_measures(&mut self) {
-        for year_index in 1..self.start_year-self.end_year {
+        for year_index in 1..(self.end_year-self.start_year+1) {
             self.values[year_index as usize] =
                 self.values[(year_index - 1) as usize];
             for measure in &self.measures {
