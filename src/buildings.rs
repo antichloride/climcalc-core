@@ -504,6 +504,8 @@ mod tests{
         let mut buildings = create_buildings(start_year, end_year);
 
         buildings.calculate(start_year);
+        buildings.calculate(start_year+1);
+        buildings.calculate(start_year+2);
 
         assert(
             buildings.results.floor_A__k__m2.get_year_values(start_year),

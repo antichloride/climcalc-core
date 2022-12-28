@@ -241,6 +241,20 @@ impl Calculator{
 }
 
 
+#[cfg(test)]
+mod integration_tests{
+    use super::*;
+    extern crate wasm_bindgen_test;
+    use wasm_bindgen_test::*;
+    wasm_bindgen_test_configure!(run_in_browser);
+
+    #[wasm_bindgen_test]
+    fn test_calculator(){
+        let mut calculator: Calculator = Calculator::new(2022, 2025);
+        calculator.set_input("buildings/inputs/n_inhabitants__k__/private", 10.0);
+        calculator.calculate_over_years();
+    }
+}
 
 // #[cfg(test)]
 // mod tests{
