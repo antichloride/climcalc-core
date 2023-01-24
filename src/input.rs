@@ -108,7 +108,7 @@ impl Measure{
         if year < self.start_year || year > self.end_year{
             return 0.0;
         }
-        return self.delta / (self.start_year - self.end_year + 1) as f32
+        return self.delta / (self.start_year as f32 - self.end_year as f32 - 1.0)
     }
 
     pub fn update(&mut self, start_year: u32, end_year: u32, delta: f32){
