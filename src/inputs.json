@@ -1,0 +1,166 @@
+{
+    "buildings": {
+        "base_data": {
+            "inhabitants[k]": {
+                "private": 80,
+                "industry": 40,
+                "schools": 8,
+                "public": 4
+            },
+            "n_buildings[]": {
+                "private": 5000,
+                "industry": 200,
+                "schools": 10,
+                "public": 20
+            },
+            "floor_area_per_building[qm]": {
+                "private": 720,
+                "industry": 3000,
+                "schools": 8000,
+                "public": 300
+            }
+        },
+        "demand": {
+            "heat[k*W*h/qm/a]": {
+                "private": 50,
+                "industry": 50,
+                "schools": 50,
+                "public": 50
+            },
+            "hot_water_per_capita[k*W*h/a]": {
+                "private": 10,
+                "industry": 10,
+                "schools": 10,
+                "public": 10
+            },
+            "electric_power_per_capita[k*W*h/a]": {
+                "private": 50,
+                "industry": 50,
+                "schools": 50,
+                "public": 50
+            }
+        },
+        "heat_types_areas": {
+            "oil_no_condensing[k*qm]": {
+                "private": 1080,
+                "industry": 180,
+                "schools": 24,
+                "public": 2
+            },
+            "oil_with_condensing[k*qm]": {
+                "private": 1800,
+                "industry": 300,
+                "schools": 40,
+                "public": 3
+            },
+            "gas[k*qm]": {
+                "private": 540,
+                "industry": 90,
+                "schools": 12,
+                "public": 1
+            },
+            "heat_pump[k*qm]": {
+                "private": 0,
+                "industry": 0,
+                "schools": 0,
+                "public": 0
+            },
+            "other[k*qm]": {
+                "private": 180,
+                "industry": 30,
+                "schools": 4,
+                "public": 0
+            }
+        }
+    },
+    "mobility": {
+        "cars": {
+            "n_pkw[k]": {
+                "private": 40,
+                "industry": 5,
+                "public": 0.5
+            },
+            "n_bev[k]": {
+                "private": 0,
+                "industry": 0,
+                "public": 0
+            },
+            "kilometers_traveled[k*k*m]": {
+                "private": 15,
+                "industry": 10,
+                "public": 10
+            }
+        },
+        "street_lightning": {
+            "street_lightning": {
+                "n_lanterns[k]": 9,
+                "power_consumption_per_latern[k*W*h/a]": 500,
+                "other_costs_per_lantern[eur/a]": 200
+            }
+        },
+        "modal_split": {
+            "traffic_performence": {
+                "traffic_performence[k*p*k*m/a]": 15
+            },
+            "shares": {
+                "pedestrians[]": 0.05,
+                "bicycle[]": 0.05,
+                "public_transport[]": 10,
+                "car[]": 20
+            }
+        }
+    },
+    "electric_power": {
+        "solar_roof": {
+            "roof_area[k*qm]": {
+                "private": 800,
+                "industry": 80,
+                "public": 20
+            },
+            "solar_suitable_portion_of_roof_area[]": {
+                "private": 0.35,
+                "industry": 0.35,
+                "public": 0.35
+            },
+            "installed_power[M*Wp]": {
+                "private": 4.7,
+                "industry": 0.5,
+                "public": 0.1
+            },
+            "self_consumption[]": {
+                "private": 0.7,
+                "industry": 0.7,
+                "public": 0.7
+            }
+        },
+        "solar_landscape": {
+            "potential_area[ha]": {
+                "industry": 150,
+                "public": 150
+            },
+            "solar_area[ha]": {
+                "industry": 10,
+                "public": 5
+            }
+        },
+        "direct_aquisition_renewable_energies": {
+            "power[G*W*h]": {
+                "private": 5,
+                "industry": 0,
+                "public": 0
+            },
+            "price[eur/k*W*h]": {
+                "private": 0.3,
+                "industry": 0.2,
+                "public": 0.15
+            }
+        },
+        "aquisition_power_mix": {
+            "aquisition_power_mix[eur/k*W*h]": {
+                "private": 0.3,
+                "industry": 0.2,
+                "public": 0.15
+            }
+        }
+    }
+}

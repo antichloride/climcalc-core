@@ -1,0 +1,184 @@
+{
+    "buildings": {
+        "heat_types": {
+            "oil_no_condensing": {
+                "efficency[]": 0.7,
+                "invest[eur*k*W*h/a]": 0.5,
+                "grant[]": 0
+            },
+            "oil_with_condensing": {
+                "efficency[]": 0.9,
+                "invest[eur*k*W*h/a]": 1.0,
+                "grant[]": 0.1
+            },
+            "gas": {
+                "efficency[]": 0.9,
+                "invest[eur*k*W*h/a]": 0.5,
+                "grant[]": 0.2
+            },
+            "heat_pump": {
+                "efficency[]": 3.0,
+                "invest[eur*k*W*h/a]": 2.0,
+                "grant[]": 0.3
+            },
+            "other": {
+                "invest[eur*k*W*h/a]": 0.5,
+                "grant[]":0.0
+            }
+        },
+        "energetic_restoration": {
+            "invest[eur*k*W*h/a]": 2.5,
+            "grant[]": 0.3
+        },
+        "energy_sources": {
+            "oil": {
+                "calories[k*W*h/L]": 10,
+                "price[eur/L]": 0.9,
+                "emission[kg/L]": 3.0
+            },
+            "gas": {
+                "calories[k*W*h/m^3]": 5,
+                "price[eur/m^3]": 0.9,
+                "emission[kg/m^3]": 2.0
+            },
+            "other": {
+                "price[eur/k*W*h]": 0.9
+            }
+        }
+    },
+    "mobility": {
+        "price_fuel[eur/L]": 1.7,
+        "cars": {
+            "bev": {
+                "price[k*eur]": 35,
+                "grant[k*eur]": 9,
+                "consumption[k*W*h/100*k*m]": 24,
+                "fuel_costs[eur/k*W*h]": 0.3,
+                "operation_costs[eur/k*m]": 0.05,
+                "taxes_and_checks[k*eur/a]": 1,
+                "lifecycle[]": 10
+            },
+            "combustor": {
+                "price[k*eur]": 30,
+                "grant[k*eur]": 0,
+                "consumption[k*W*h/100*k*m]": 70,
+                "fuel_costs[eur/k*W*h]": 0.17,
+                "operation_costs[eur/k*m]": 0.05,
+                "taxes_and_checks[k*eur/a]": 1,
+                "lifecycle[]": 10
+            }
+        }
+    },
+    "electric_power": {
+        "renewable_energies": {
+            "solar_roof": {
+                "invest[eur/k*Wp]": 1500,
+                "grant[eur/k*Wp]": 500,
+                "operation_costs[]": 0.02,
+                "lifecycle[]": 30,
+                "peak_power_to_mean_power[k*W*h/k*Wp/a]": 900,
+                "buyback_price[eur/k*W*h]": 0.07,
+                "power_per_area[M*Wp/k*qm]": 0.17,
+                "costs[eur/k*W*h]": 0.07
+            },
+            "solar_landscape": {
+                "invest[eur/k*Wp]": 1200,
+                "grant[eur/k*Wp]": 500,
+                "operation_costs[]": 0.02,
+                "lifecycle[]": 30,
+                "peak_power_to_mean_power[k*W*h/k*Wp/a]": 900,
+                "buyback_price[eur/k*W*h]": 0.07,
+                "power_per_area[M*Wp/k*qm]": 0.17,
+                "costs[eur/k*W*h]": 0.05
+            },
+            "wind_onshore": {
+                "invest[k*eur/k*W*h]": 2000,
+                "grant[k*eur]": 750,
+                "operation_costs[]": 0.02,
+                "lifecycle[]": 20,
+                "peak_power_to_mean_power[k*W*h/k*Wp/a]": 1300,
+                "costs[eur/k*W*h]": 0.08
+            }
+        },
+        "evu_power_mix": {
+            "coal": 0.297,
+            "gas": 0.105,
+            "atom": 0.133,
+            "pv": 0.099,
+            "wind": 0.230,
+            "other": 13.6
+        },
+        "evu_emissions[to/G*W*h]":{
+            "coal": 1000,
+            "gas": 600
+        },
+        "evu_discount_heat_pump[Eur/k*W*h]": 0.2
+    },
+    "economy": {
+        "material": {
+            "invest_local[]" : {
+                "heating/heatpump": 0.5,
+                "energetic_restoration": 0.3,
+                "fast_charging_stations": 0.65,
+                "solar_roof": 0.5,
+                "solar_landscape": 0.65
+            },
+            "invest_national[]" : {
+                "heating/heatpump": 0.5,
+                "energetic_restoration": 0.3,
+                "fast_charging_stations": 0.65,
+                "solar_roof": 0.5,
+                "solar_landscape": 0.65
+            }
+        },
+        "invest_work": {
+            "community_added_value[]" : {
+                "heating/heatpump": 0.3,
+                "energetic_restoration": 0.3,
+                "fast_charging_stations": 0.3,
+                "solar_roof": 0.3,
+                "solar_landscape": 0.15,
+                "community": 0.5
+            },
+            "national_added_value[]" : {
+                "heating/heatpump": 1.0,
+                "energetic_restoration": 1.0,
+                "fast_charging_stations": 1.0,
+                "solar_roof": 1.0,
+                "solar_landscape": 1.0,
+                "community": 1.0
+            }
+        },
+        "vzw_per_million_turnover": {
+            "material" : {
+                "heating/heatpump": 10,
+                "energetic_restoration": 10,
+                "fast_charging_stations": 10,
+                "solar_roof": 10,
+                "solar_landscape": 10
+            },
+            "work" : {
+                "heating/heatpump": 20,
+                "energetic_restoration": 20,
+                "fast_charging_stations": 20,
+                "solar_roof": 20,
+                "solar_landscape": 20,
+                "community": 20
+            }
+        },
+        "maintenance/community_costs": {
+            "community_added_value[]" : {
+                "fast_charging_stations": 0.3,
+                "solar_roof": 0.3,
+                "solar_landscape": 0.2,
+                "community": 0.3
+            },
+            "national_added_value[]" : {
+                "fast_charging_stations": 1.0,
+                "solar_roof": 1.0,
+                "solar_landscape": 1.0,
+                "community": 0.75
+            }
+        }
+    }
+}
