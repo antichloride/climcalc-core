@@ -503,14 +503,35 @@ mod tests{
         let end_year: u32 = 2025 as u32;
         let mut buildings = create_buildings(start_year, end_year);
 
+        buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.add_measure("heat_dmd_private", 2024, 2025, 20.0);
+        buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.apply_measures();
+
         buildings.calculate(start_year);
         buildings.calculate(start_year+1);
         buildings.calculate(start_year+2);
+
+        assert_relative_eq!(buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.get_year(2024), 104.0);
+        assert_relative_eq!(buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.get_year(2025), 94.0);
 
         assert(
             buildings.results.floor_A__k__m2.get_year_values(start_year),
             [3816111.0, 1463772.0, 104125.82, 43205.76],
         );
+    }
+
+
+    #[test]
+    fn test_buildings_get_results_by_id() {
+        let mut buildings: Buildings = Buildings::new(2022,2025);
+
+        assert!(!buildings.get_results_by_id("floor_A__k__m2/private").is_none());
+    }
+
+    #[test]
+    fn test_results_buildings_get_results_by_id() {
+        let mut results_buildings: ResultsBuildings = ResultsBuildings::new("buildings/results",2022,2025);
+
+        assert!(!results_buildings.get_results_by_id("floor_A__k__m2/private").is_none());
     }
 }
 
