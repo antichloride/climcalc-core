@@ -180,7 +180,7 @@ impl Calculator{
             Some(results) => {
                 return results.get_values().clone();
             },
-            None => Vec::from([]),
+            None => Vec::from([0.0,0.0]),
         }
 
     }
@@ -256,19 +256,14 @@ mod integration_tests{
     }
 }
 
-// #[cfg(test)]
-// mod tests{
-//     use super::*;
-//     extern crate wasm_bindgen_test;
-//     use wasm_bindgen_test::*;
-//     wasm_bindgen_test_configure!(run_in_browser);
+#[cfg(test)]
+mod unit_tests{
+    use super::*;
 
-//     #[wasm_bindgen_test]
-//     fn test_input_and_measure() {
-//         let start_year = 2022 as u32;
-//         let end_year = 2025 as u32;
-//         let input = Input::new(start_year, end_year);
+    #[test]
+    fn test_calculator_get_results_by_id() {
+        let mut calculator: Calculator = Calculator::new(2022, 2025);
 
-//         assert_eq!(input.values, Vec::from([0.0,0.0,0.0,0.0]));
-//     }
-// }
+        assert!(!calculator.get_results_by_id("buildings/results/floor_A__k__m2/private").is_none());
+    }
+}
