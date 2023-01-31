@@ -45,6 +45,13 @@ impl SectorsInputs{
         }
 
     }
+
+    pub fn apply_measures(&mut self){
+        self.private.apply_measures();
+        self.industry.apply_measures();
+        self.schools.apply_measures();
+        self.public.apply_measures();
+    }
 }
 
 pub struct SectorsRawValues {
@@ -353,6 +360,19 @@ impl SectorsResult{
 
 #[cfg(test)]
 impl SectorsResult{
+
+    pub fn get_year_values(&self, year: u32) -> [f32; 4]{
+        return [
+            self.private.get_year(year),
+            self.industry.get_year(year),
+            self.schools.get_year(year),
+            self.public.get_year(year),
+        ];
+    }
+}
+
+#[cfg(test)]
+impl SectorsInputs{
 
     pub fn get_year_values(&self, year: u32) -> [f32; 4]{
         return [
