@@ -488,50 +488,10 @@ mod tests{
     use wasm_bindgen_test::*;
     mod buildings_test_case;
     use buildings_test_case::create_buildings;
+    mod compare_with_excel;
 
 
-    fn assert(a: [f32; 4], b: [f32; 4]){
-        assert_relative_eq!(a[0], b[0]);
-        assert_relative_eq!(a[1], b[1]);
-        assert_relative_eq!(a[2], b[2]);
-        assert_relative_eq!(a[3], b[3]);
-    }
 
-    #[test]
-    fn test_buildings_calculate() {
-        let start_year: u32 = 2022 as u32;
-        let end_year: u32 = 2025 as u32;
-        let mut buildings = create_buildings(start_year, end_year);
-
-        buildings.calculate(start_year);
-        buildings.calculate(start_year+1);
-        buildings.calculate(start_year+2);
-
-        // Assert measures
-        assert(
-            buildings.inputs.heat_dmd__k__W_h_per_m2_a.get_year_values(2024),
-            [104.0, 40.0, 40.0, 40.0],
-        );
-
-        assert(
-            buildings.inputs.A_heat_oil__k__m2.get_year_values(2024),
-            [448012.0, 267228.0, 31230.0, 7876.0],
-        );
-
-        // Assert computed results
-        assert(
-            buildings.results.floor_A__k__m2.get_year_values(2024),
-            [3816111.0, 1463772.0, 104125.82, 43205.76],
-        );
-        assert(
-            buildings.results.total_heat_dmd__G__W_h_per_a.get_year_values(2024),
-            [499877.16, 58550.883, 4272.3833, 1728.2306],
-        );
-        assert(
-            buildings.results.elec_dmd__G__W_h_per_a.get_year_values(2024),
-            [104249.6, 2237.3, 536.75, 77.8],
-        );
-    }
 
 
     #[test]

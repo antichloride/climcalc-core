@@ -14,19 +14,23 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
 
     let mut buildings = Buildings::new(start_year, end_year);
 
-    buildings.inputs.n_inhabitants__k__.set(83200.0, 44746.0, 10735.0, 1556.0);
-    buildings.inputs.n_buildings.set(19273286.0, 1986122.0, 56498.0, 128207.0);
-    buildings.inputs.floor_A_building__m2.set(198.0, 737.0, 1843.0, 337.0);
+    //
+    // Define Inputs
+    //
 
-    buildings.inputs.heat_dmd__k__W_h_per_m2_a.set(114.0, 50.0, 50.0, 50.0);
-    buildings.inputs.hot_water_dmd__k__W_h_per_m2_a.set(1238.0, 0.0, 10.0, 0.0);
-    buildings.inputs.elec_dmd_capita__k_W_h_per_a.set(1253.0, 50.0, 50.0, 50.0);
+    buildings.inputs.n_inhabitants__k__.set(44000.0, 5180.149927884616, 147.35656250000002, 334.386045673077);
+    buildings.inputs.n_buildings.set(197.68294830471567, 1.9225230799595314, 4.807188524606554, 0.8788371689773329);
+    buildings.inputs.floor_A_building__m2.set(8698.049725407489, 9.958957794008876, 0.7083707762754685, 0.2938708857248521);
 
-    buildings.inputs.A_heat_oil__k__m2.set(448022.0, 267238.0, 31240.0, 7886.0);
-    buildings.inputs.A_heat_oil_condensing__k__m2.set(496858.0, 0.0, 52066.0, 0.0);
-    buildings.inputs.A_heat_gas__k__m2.set(1885950.0, 766857.0, 15620.0, 22629.0);
-    buildings.inputs.A_heat_heat_pump__k__m2.set(106680.0, 0.0, 0.0, 0.0);
-    buildings.inputs.A_heat_other__k__m2.set(335.280, 116190.0, 5207.0, 3429.0);
+    buildings.inputs.heat_dmd__k__W_h_per_m2_a.set(1237.9807692307693, 10.0, 10.0, 10.0);
+    buildings.inputs.hot_water_dmd__k__W_h_per_m2_a.set(1264.009197074695, 1.665001014700444, 0.31541496898204263, 0.055287150055473376);
+    buildings.inputs.elec_dmd_capita__k_W_h_per_a.set(271.94638221153843, 5.835265625, 1.3999821508413461, 0.20296802884615386);
+
+    buildings.inputs.A_heat_oil__k__m2.set(1295.8923033707865, 366.51404494382024, 26.069779981285112, 10.815168539325846);
+    buildings.inputs.A_heat_oil_condensing__k__m2.set(4918.884014423077, 2000.0961538461538, 142.26485285216347, 59.01923076923079);
+    buildings.inputs.A_heat_gas__k__m2.set(278.2399038461538, 0.0, 0.0, 0.0);
+    buildings.inputs.A_heat_heat_pump__k__m2.set(1401.136658653846, 818.221153846154, 58.199257984975965, 24.144230769230777);
+    buildings.inputs.A_heat_other__k__m2.set(1253.2091346153845, 50.0, 50.0, 50.0);
 
     //
     // Add measures
