@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["climcalc_core"] = [{"text":"impl <a class=\"trait\" href=\"https://docs.rs/wasm-bindgen/0.2/wasm_bindgen/convert/traits/trait.FromWasmAbi.html\" title=\"trait wasm_bindgen::convert::traits::FromWasmAbi\">FromWasmAbi</a> for <a class=\"struct\" href=\"climcalc_core/struct.Calculator.html\" title=\"struct climcalc_core::Calculator\">Calculator</a>","synthetic":false,"types":["climcalc_core::Calculator"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
