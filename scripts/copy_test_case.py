@@ -17,6 +17,7 @@ def convert_values(series):
     return ", ".join([str(float(val)) for val in series.values])
 
 inputs = pd.read_excel(sys.argv[1], sheet_name="Eingabe Ist")
+results = pd.read_excel(sys.argv[1], sheet_name="Rechenwerk")
 
 
 #
@@ -53,11 +54,38 @@ lines = find_and_replace_arguments(lines, "A_heat_heat_pump__k__m2", convert_val
 # Fläche mit anderer Wärmequelle (in 1.000 qm)
 lines = find_and_replace_arguments(lines, "A_heat_other__k__m2", convert_values(inputs.iloc[16, 1:5]))
 
-
-# Assert Measures
-
-
 with open("src/buildings/tests/buildings_test_case.rs", "w") as f:
+    for line in lines:
+        f.write(line)
+
+
+# Assert Inputs/Measures
+with open("src/buildings/tests/compare_with_excel.rs") as f:
+    lines = f.readlines()
+
+for i, line in enumerate(lines):
+    if "[start:assert_measures]" in line:
+        section_start = i
+    if "[end:assert_measures]" in line:
+        section_end = i
+
+assert_lines = ["\n"]
+
+for variable, i in [
+    ["n_inhabitants__k__", 1]
+]:
+    assert_lines.append(f"\t// {results.iloc[i,0]}\n")
+    for j, year in enumerate([2022,2023,2024,2025]):
+        sector_values = ", ".join([str(val) for val in results.iloc[i:i+4,j+2].values])
+        assert_lines.append("\tassert(\n")
+        assert_lines.append(f"\t\tbuildings.inputs.{variable}.get_year_values({year}),\n")
+        assert_lines.append(f"\t\t[{sector_values}],\n")
+        assert_lines.append("\t);\n")
+    assert_lines.append("\n")
+
+lines = lines[:section_start+1] + assert_lines + lines[section_end:]
+
+with open("src/buildings/tests/compare_with_excel.rs", "w") as f:
     for line in lines:
         f.write(line)
 
