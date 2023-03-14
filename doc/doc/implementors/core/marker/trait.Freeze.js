@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["climcalc_core"] = [{"text":"impl Freeze for <a class=\"struct\" href=\"climcalc_core/struct.Calculator.html\" title=\"struct climcalc_core::Calculator\">Calculator</a>","synthetic":true,"types":["climcalc_core::Calculator"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
