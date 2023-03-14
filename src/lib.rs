@@ -44,6 +44,7 @@ pub struct Calculator {
 /// 3. Add measures using "new_measure".
 /// 4. Trigger the calculation using "calculate_over_years".
 /// 5. Get result values (list with one value per year) using "get_results".
+///
 #[wasm_bindgen]
 impl Calculator{
     /// A calculator is initialized by defining the year range. Note that
