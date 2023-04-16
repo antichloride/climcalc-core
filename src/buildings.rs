@@ -263,12 +263,12 @@ impl Buildings{
                 inputs.heat_dmd__k__W_h_per_m2_a.get_year(year - 1);
 
             let invest_energetic_renovation__k__eur_per_a =
-                (&heat_dmd_this_year__k__W_h_per_m2_a
-                 - &heat_dmd_prev_year__k__W_h_per_m2_a)
-                * constants::energetic_restoration::invest__m__eur_per_W_h
-                * &floor_A__k__m2
-                * heat_dmd_this_year__k__W_h_per_m2_a
-                    .is_greater(&heat_dmd_prev_year__k__W_h_per_m2_a);
+                (&heat_dmd_prev_year__k__W_h_per_m2_a
+                 - &heat_dmd_this_year__k__W_h_per_m2_a)
+                * constants::energetic_restoration::invest__m__eur_per_W_h_m2
+                * &floor_A__k__m2 / 1000.0 // TODO: Check this factor of k, units don't fit
+                * heat_dmd_prev_year__k__W_h_per_m2_a
+                    .is_greater(&heat_dmd_this_year__k__W_h_per_m2_a);
             results.invest_energetic_renovation__M__eur_per_a
                 .set_year_values(
                     year,

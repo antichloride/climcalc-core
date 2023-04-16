@@ -8,17 +8,17 @@ pub mod buildings{
     }
 
     pub const oil_no_condensing: HeatType = HeatType {
-        efficency: 0.7,
+        efficency: 0.87,
         invest__m__eur_per_W_h: 0.5,
         grant: 0.0,
     };
     pub const oil_with_condensing: HeatType = HeatType {
-        efficency: 0.9,
+        efficency: 0.98,
         invest__m__eur_per_W_h: 1.0,
         grant: 0.1,
     };
     pub const gas: HeatType = HeatType {
-        efficency: 0.9,
+        efficency: 0.93,
         invest__m__eur_per_W_h: 0.5,
         grant: 0.2,
     };
@@ -36,27 +36,27 @@ pub mod buildings{
     pub mod EnergySource{
 
         pub mod oil{
-            pub const energy_density__k__W_h_per_L: f32 = 10.0;
-            pub const price__eur_per_L: f32 = 0.9;
+            pub const energy_density__k__W_h_per_L: f32 = 9.0;
+            pub const price__eur_per_L: f32 = 0.82;
             pub const emission__kg_coe_per_L: f32 = 3.0;
         }
 
         pub mod gas{
-            pub const energy_density__k__W_h_per_m3: f32 = 5.0;
-            pub const price__eur_per_m3: f32 = 0.9;
+            pub const energy_density__k__W_h_per_m3: f32 = 11.0;
+            pub const price__eur_per_m3: f32 = 0.73;
             pub const emission__kg_coe_per_m3: f32 = 2.0;
         }
 
         pub mod other{
             pub const energy_density: f32 = 0.0;
-            pub const price: f32 = 0.9;
+            pub const price: f32 = 0.82;
             pub const emission: f32 = 0.0;
         }
 
     }
 
     pub mod energetic_restoration{
-        pub const invest__m__eur_per_W_h: f32 = 2.5;
+        pub const invest__m__eur_per_W_h_m2: f32 = 2.5;
         pub const grant: f32 = 0.3;
     }
 

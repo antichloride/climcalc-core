@@ -51,6 +51,7 @@ impl Input{
             end_year: end_year,
             delta: delta,
         });
+        self.apply_measures();
     }
 
     fn get_measure_by_id(&mut self, measure_id: &str) -> Option<&mut Measure>{
@@ -70,6 +71,7 @@ impl Input{
             },
             None => (),
         }
+        self.apply_measures();
     }
 
     fn get_measure_index_by_id(&mut self, measure_id: &str) -> Option<usize>{
@@ -84,6 +86,7 @@ impl Input{
             },
             None => (),
         }
+        self.apply_measures();
     }
 
     pub fn list_measure_ids(&self) -> Vec<&String>{

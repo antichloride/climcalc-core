@@ -13,5 +13,5 @@ cargo test --tests [test_name]
 i.e.
 
 ```
-cargo test --tests test_buildings_calculate
+RUST_BACKTRACE=1 cargo test --tests test_buildings_calculate
 ```
