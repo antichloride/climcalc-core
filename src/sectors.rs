@@ -383,3 +383,13 @@ impl SectorsInputs{
         ];
     }
 }
+
+#[cfg(test)]
+impl SectorsRawValues{
+    pub fn set(&mut self, private: f32, industry:f32, schools: f32, public: f32){
+        self.private = private;
+        self.industry = industry;
+        self.schools = schools;
+        self.public = public;
+    }
+}

@@ -15,13 +15,190 @@ fn test_buildings_calculate() {
     let end_year: u32 = 2045 as u32;
     let mut buildings = create_buildings(start_year, end_year);
 
+    let mut nrg_own_mix_price__m__eur_per_W_h = SectorsResult::new(
+	    "nrg_own_mix_price__m__eur_per_W_h".to_owned(),
+	    start_year,
+	    end_year
+    );
+
+    let mut raw_vals: SectorsRawValues;
+
     // [start:declare_variables]
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31780241830274375,0.31780241830274375,0.31780241830274375,0.31780241830274375);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2022,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31780241830274375,0.31780241830274375,0.31780241830274375,0.31780241830274375);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2023,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177991644825993,0.3177991644825993,0.3177991644825993,0.3177991644825993);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2024,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31779590816965125,0.31779590816965125,0.31779590816965125,0.31779590816965125);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2025,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31779264936103385,0.31779264936103385,0.31779264936103385,0.31779264936103385);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2026,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31778938805387696,0.31778938805387696,0.31778938805387696,0.31778938805387696);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2027,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31778612424530595,0.31778612424530595,0.31778612424530595,0.31778612424530595);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2028,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177828579324419,0.3177828579324419,0.3177828579324419,0.3177828579324419);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2029,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31777958911240145,0.31777958911240145,0.31777958911240145,0.31777958911240145);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2030,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177763177822967,0.3177763177822967,0.3177763177822967,0.3177763177822967);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2031,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177730439392355,0.3177730439392355,0.3177730439392355,0.3177730439392355);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2032,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31776976758032105,0.31776976758032105,0.31776976758032105,0.31776976758032105);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2033,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177664887026522,0.3177664887026522,0.3177664887026522,0.3177664887026522);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2034,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177632073033234,0.3177632073033234,0.3177632073033234,0.3177632073033234);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2035,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31775992337942455,0.31775992337942455,0.31775992337942455,0.31775992337942455);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2036,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.317756636928041,0.317756636928041,0.317756636928041,0.317756636928041);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2037,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177533479462538,0.3177533479462538,0.3177533479462538,0.3177533479462538);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2038,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.3177500564311393,0.3177500564311393,0.3177500564311393,0.3177500564311393);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2039,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31774676237976957,0.31774676237976957,0.31774676237976957,0.31774676237976957);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2040,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31774676237976957,0.31774676237976957,0.31774676237976957,0.31774676237976957);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2041,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31774676237976957,0.31774676237976957,0.31774676237976957,0.31774676237976957);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2042,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31774676237976957,0.31774676237976957,0.31774676237976957,0.31774676237976957);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2043,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31774676237976957,0.31774676237976957,0.31774676237976957,0.31774676237976957);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2044,
+		&raw_vals,
+		);
+
+	raw_vals=SectorsRawValues::new();
+	raw_vals.set(0.31774676237976957,0.31774676237976957,0.31774676237976957,0.31774676237976957);
+	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
+		2045,
+		&raw_vals,
+		);
 
     // [end:declare_variables]
 
     for year in start_year..end_year+1{
 	buildings.calculate(year);
+	buildings.calculate_second_stage(year, &nrg_own_mix_price__m__eur_per_W_h);
     }
+
 
     // [start:assert_measures]
 
@@ -475,7 +652,7 @@ fn test_buildings_calculate() {
 		[29.22688065610885, 0.0, 0.0, 0.0],
 	);
 
-	// Invest Gesamt
+	// Zuschuss Heizung (in Mio. €)
 	assert(
 		buildings.results.grant_heat_sources__M__eur_per_a.get_year_values(2022),
 		[0.0, 0.0, 0.0, 0.0],
@@ -486,29 +663,47 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.grant_heat_sources__M__eur_per_a.get_year_values(2024),
-		[29.226880656108495, 0.0, 0.0, 0.0],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.grant_heat_sources__M__eur_per_a.get_year_values(2025),
-		[29.22688065610885, 0.0, 0.0, 0.0],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 
-	// Davon Zuschuss (in %)
+	// Zuschuss Wärmebedarf  (in Mio. €)
 	assert(
 		buildings.results.grant_energetic_renovation__M__eur_per_a.get_year_values(2022),
-		[0.0, 0.1, 0.2, 0.3],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.grant_energetic_renovation__M__eur_per_a.get_year_values(2023),
-		[0.0, 0.1, 0.2, 0.3],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.grant_energetic_renovation__M__eur_per_a.get_year_values(2024),
-		[0.0, 0.1, 0.2, 0.3],
+		[8.76806419683255, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.grant_energetic_renovation__M__eur_per_a.get_year_values(2025),
-		[0.0, 0.1, 0.2, 0.3],
+		[8.768064196832652, 0.0, 0.0, 0.0],
+	);
+
+	// Strom WP Kosten (in Mio €)
+	assert(
+		buildings.results.costs_heat_pump__M__eur.get_year_values(2022),
+		[3.0414384377548194, 0.0, 0.0, 3.0414384377548194],
+	);
+	assert(
+		buildings.results.costs_heat_pump__M__eur.get_year_values(2023),
+		[3.0414384377548194, 0.0, 0.0, 3.0414384377548194],
+	);
+	assert(
+		buildings.results.costs_heat_pump__M__eur.get_year_values(2024),
+		[3.0161147915905606, 0.0, 0.0, 3.0161147915905606],
+	);
+	assert(
+		buildings.results.costs_heat_pump__M__eur.get_year_values(2025),
+		[2.9907916398863845, 0.0, 0.0, 2.9907916398863845],
 	);
 
     // [end:assert_measures]

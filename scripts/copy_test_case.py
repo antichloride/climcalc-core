@@ -85,7 +85,19 @@ for i, line in enumerate(lines):
     if "[end:declare_variables]" in line:
         section_end = i
 
-content = ""
+content = []
+
+for year in results.columns[2:-4]:
+    year_values = ','.join(
+        [str(results.iloc[349][year]) for i in range(4)]
+    )
+    content.append(f"\traw_vals=SectorsRawValues::new();\n")
+    content.append(f"\traw_vals.set({year_values});\n")
+    content.append(f"\tnrg_own_mix_price__m__eur_per_W_h.set_year_values(\n")
+    content.append(f"\t\t{year},\n")
+    content.append(f"\t\t&raw_vals,\n")
+    content.append(f"\t\t);\n\n")
+
 
 lines = lines[:section_start+1] + content + lines[section_end:]
 
@@ -133,7 +145,7 @@ for variable, i, param_type in [
     ["invest_energetic_renovation__M__eur_per_a", 146, "results"],
     ["grant_heat_sources__M__eur_per_a", 162, "results"],
     ["grant_energetic_renovation__M__eur_per_a", 167, "results"],
-    ["costs_heat_pump__M__eur", 122, "results"],
+    ["costs_heat_pump__M__eur", 120, "results"],
 ]:
 
     name = str(results.iloc[i,0]).replace('\n',' ')
