@@ -34,37 +34,35 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
 
     // [start:measures]
 
-    buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.add_measure("heat_dmd_private", 2024, 2040, 20.0);
-    // buildings.inputs.heat_dmd__k__W_h_per_m2_a.industry.add_measure("heat_dmd_industry", 2024, 2025, 20.0);
-    // buildings.inputs.heat_dmd__k__W_h_per_m2_a.public.add_measure("heat_dmd_public", 2024, 2025, 20.0);
-    // buildings.inputs.heat_dmd__k__W_h_per_m2_a.schools.add_measure("heat_dmd_schools", 2024, 2025, 20.0);
-    // buildings.inputs.heat_dmd__k__W_h_per_m2_a.apply_measures();
+	//Private
+	buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
+	buildings.inputs.A_heat_oil__k__m2.private.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil_condensing__k__m2.private.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_gas__k__m2.private.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.private.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, 20.0);
 
-    // buildings.inputs.A_heat_oil__k__m2.private.add_measure("a_heat_oil_private", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil__k__m2.industry.add_measure("a_heat_oil_industry", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil__k__m2.public.add_measure("a_heat_oil_public", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil__k__m2.schools.add_measure("a_heat_oil_schools", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil__k__m2.apply_measures();
+	//Industry
+	//buildings.inputs.heat_dmd__k__W_h_per_m2_a.industry.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil__k__m2.industry.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil_condensing__k__m2.industry.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_gas__k__m2.industry.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.industry.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
 
-    // buildings.inputs.A_heat_oil_condensing__k__m2.private.add_measure("a_heat_oil_condensing_private", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil_condensing__k__m2.industry.add_measure("a_heat_oil_condensing_industry", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil_condensing__k__m2.public.add_measure("a_heat_oil_condensing_public", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil_condensing__k__m2.schools.add_measure("a_heat_oil_condensing_schools", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_oil_condensing__k__m2.apply_measures();
+	//Schools
+	//buildings.inputs.heat_dmd__k__W_h_per_m2_a.schools.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil__k__m2.schools.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil_condensing__k__m2.schools.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_gas__k__m2.schools.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.schools.add_measure("A_heat_heat_pump__k__m2", 2024, nan, -20.0);
 
-    // buildings.inputs.A_heat_gas__k__m2.private.add_measure("a_heat_gas_private", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_gas__k__m2.industry.add_measure("a_heat_gas_industry", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_gas__k__m2.public.add_measure("a_heat_gas_public", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_gas__k__m2.schools.add_measure("a_heat_gas_schools", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_gas__k__m2.apply_measures();
+	//Public
+	//buildings.inputs.heat_dmd__k__W_h_per_m2_a.public.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil__k__m2.public.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil_condensing__k__m2.public.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_gas__k__m2.public.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.public.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
 
-    // buildings.inputs.A_heat_heat_pump__k__m2.private.add_measure("a_heat_heat_pump_private", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_heat_pump__k__m2.industry.add_measure("a_heat_heat_pump_industry", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_heat_pump__k__m2.public.add_measure("a_heat_heat_pump_public", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_heat_pump__k__m2.schools.add_measure("a_heat_heat_pump_schools", 2024, 2025, 20.0);
-    // buildings.inputs.A_heat_heat_pump__k__m2.apply_measures();
-
-    // [end:inputs]
+    // [end:measures]
 
     return buildings;
 }

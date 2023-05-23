@@ -24,6 +24,7 @@ def convert_values(series):
 
 inputs = pd.read_excel(sys.argv[1], sheet_name="Eingabe Ist")
 results = pd.read_excel(sys.argv[1], sheet_name="Rechenwerk")
+measures = pd.read_excel(sys.argv[1], sheet_name="Ergebnisse")
 
 #
 # Buildings
@@ -70,6 +71,55 @@ lines = find_and_replace_arguments(
         - inputs.iloc[15+os, 1:5]
     ),
 )
+
+def measure_line(measures, row, varname, sector):
+    return f'\t{"//" if measures.iloc[row-2, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-1, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
+
+measures_input = []
+# Set Measures
+measures_input.append("\n")
+measures_input.append("\t//Private\n")
+measures_input.append(measure_line(measures, 14, "heat_dmd__k__W_h_per_m2_a", "private"))
+measures_input.append(measure_line(measures, 15, "A_heat_oil__k__m2", "private"))
+measures_input.append(measure_line(measures, 16, "A_heat_oil_condensing__k__m2", "private"))
+measures_input.append(measure_line(measures, 17, "A_heat_gas__k__m2", "private"))
+measures_input.append(measure_line(measures, 18, "A_heat_heat_pump__k__m2", "private"))
+measures_input.append("\n")
+
+measures_input.append("\t//Industry\n")
+measures_input.append(measure_line(measures, 24, "heat_dmd__k__W_h_per_m2_a", "industry"))
+measures_input.append(measure_line(measures, 25, "A_heat_oil__k__m2", "industry"))
+measures_input.append(measure_line(measures, 26, "A_heat_oil_condensing__k__m2", "industry"))
+measures_input.append(measure_line(measures, 27, "A_heat_gas__k__m2", "industry"))
+measures_input.append(measure_line(measures, 28, "A_heat_heat_pump__k__m2", "industry"))
+measures_input.append("\n")
+
+measures_input.append("\t//Schools\n")
+measures_input.append(measure_line(measures, 36, "heat_dmd__k__W_h_per_m2_a", "schools"))
+measures_input.append(measure_line(measures, 37, "A_heat_oil__k__m2", "schools"))
+measures_input.append(measure_line(measures, 38, "A_heat_oil_condensing__k__m2", "schools"))
+measures_input.append(measure_line(measures, 39, "A_heat_gas__k__m2", "schools"))
+measures_input.append(measure_line(measures, 40, "A_heat_heat_pump__k__m2", "schools"))
+measures_input.append("\n")
+
+measures_input.append("\t//Public\n")
+measures_input.append(measure_line(measures, 42, "heat_dmd__k__W_h_per_m2_a", "public"))
+measures_input.append(measure_line(measures, 43, "A_heat_oil__k__m2", "public"))
+measures_input.append(measure_line(measures, 44, "A_heat_oil_condensing__k__m2", "public"))
+measures_input.append(measure_line(measures, 45, "A_heat_gas__k__m2", "public"))
+measures_input.append(measure_line(measures, 46, "A_heat_heat_pump__k__m2", "public"))
+measures_input.append("\n")
+
+start_measures=0
+end_measures=0
+for i,line in enumerate(lines):
+    if "[start:measures]" in line:
+        start_measures=i
+    if "[end:measures]" in line:
+        end_measures=i
+
+lines = lines[:start_measures+1] + measures_input + lines[end_measures:]
+
 
 with open("src/buildings/tests/buildings_test_case.rs", "w") as f:
     for line in lines:
@@ -141,11 +191,11 @@ for variable, i, param_type in [
     ["cnsmp_other__G__W_h_per_a", 97, "results"],
     ["costs_oil__M__eur_per_a", 110, "results"],
     ["costs_gas__M__eur_per_a", 115, "results"],
+    ["costs_heat_pump__M__eur", 120, "results"],
     ["invest_heat_sources__M__eur_per_a", 141, "results"],
     ["invest_energetic_renovation__M__eur_per_a", 146, "results"],
     ["grant_heat_sources__M__eur_per_a", 162, "results"],
     ["grant_energetic_renovation__M__eur_per_a", 167, "results"],
-    ["costs_heat_pump__M__eur", 120, "results"],
 ]:
 
     name = str(results.iloc[i,0]).replace('\n',' ')
