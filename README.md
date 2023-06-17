@@ -15,3 +15,8 @@ i.e.
 ```
 RUST_BACKTRACE=1 cargo test --tests test_buildings_calculate
 ```
+
+Build the tool with
+```
+wasm-pack build
+```
