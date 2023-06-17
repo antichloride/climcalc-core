@@ -54,6 +54,7 @@ impl SectorsInputs{
     }
 }
 
+#[derive(Copy, Clone)]
 pub struct SectorsRawValues {
     pub private: f32,
     pub industry: f32,
@@ -82,6 +83,15 @@ impl SectorsRawValues{
 
     pub fn sum(&self) -> f32{
         return self.private + self.industry + self.schools + self.public;
+    }
+
+    pub fn copy(&self) -> SectorsRawValues{
+        return SectorsRawValues{
+            private: self.private,
+            industry: self.industry,
+            schools: self.schools,
+            public: self.public,
+        };
     }
 }
 
@@ -391,5 +401,25 @@ impl SectorsRawValues{
         self.industry = industry;
         self.schools = schools;
         self.public = public;
+    }
+
+}
+
+
+#[cfg(test)]
+mod tests{
+    use crate::sectors::SectorsRawValues;
+
+    #[test]
+    fn test_is_greater() {
+        let mut raw_a = SectorsRawValues::new();
+        raw_a.set(1.1, 2.2, 1.0, 2.0);
+        let mut raw_b = SectorsRawValues::new();
+        raw_b.set(1.0, 2.0, 1.1, 2.2);
+        let comp = raw_a.is_greater(&raw_b);
+        assert!(comp.private == 1.0);
+        assert!(comp.industry == 1.0);
+        assert!(comp.schools == 0.0);
+        assert!(comp.public == 0.0);
     }
 }

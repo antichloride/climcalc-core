@@ -1,5 +1,6 @@
 use crate::buildings::Buildings;
 use crate::sectors::SectorsInputs;
+use crate::sectors::SectorsRawValues;
 
 impl SectorsInputs{
     fn set(&mut self, private: f32, industry:f32, schools: f32, public: f32){
@@ -28,14 +29,17 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
     buildings.inputs.A_heat_oil_condensing__k__m2.set(1295.8923033707865, 366.51404494382024, 26.069779981285112, 10.815168539325846);
     buildings.inputs.A_heat_gas__k__m2.set(4918.884014423077, 2000.0961538461538, 142.26485285216347, 59.01923076923079);
     buildings.inputs.A_heat_heat_pump__k__m2.set(278.2399038461538, 0.0, 0.0, 0.0);
-    buildings.inputs.A_heat_other__k__m2.set(2275.6049278846153, -2687.14040118035, -191.13362776679344, -79.29266757581364);
 
     // [end:inputs]
+
+    // [start:set_others]
+
+    // [end:set_others]
 
     // [start:measures]
 
 	//Private
-	buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
+	buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2040, 20.0);
 	buildings.inputs.A_heat_oil__k__m2.private.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_oil_condensing__k__m2.private.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_gas__k__m2.private.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
@@ -53,7 +57,7 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
 	//buildings.inputs.A_heat_oil__k__m2.schools.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_oil_condensing__k__m2.schools.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_gas__k__m2.schools.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
-	//buildings.inputs.A_heat_heat_pump__k__m2.schools.add_measure("A_heat_heat_pump__k__m2", 2024, nan, -20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.schools.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
 
 	//Public
 	//buildings.inputs.heat_dmd__k__W_h_per_m2_a.public.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);

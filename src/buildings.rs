@@ -77,9 +77,22 @@ impl Buildings{
     }
 }
 
-
+fn compute_A_heat_other__k__m2(inputs: &InputsBuildings, year: u32) -> SectorsRawValues{
+    let floor_A_building__m2 = inputs.floor_A_building__m2.get_year(year);
+    let n_buildings = inputs.n_buildings.get_year(year);
+    let A_heart_oil__k__m2 = inputs.A_heat_oil__k__m2.get_year(year);
+    let A_heat_oil_condensing__k__m2 = inputs.A_heat_oil_condensing__k__m2.get_year(year);
+    let A_heat_gas__k__m2 = inputs.A_heat_gas__k__m2.get_year(year);
+    let A_heat_heat_pump__k__m2 = inputs.A_heat_heat_pump__k__m2.get_year(year);
+    return  ( floor_A_building__m2 * n_buildings * 1e-3 )
+        - (
+            A_heart_oil__k__m2 + A_heat_oil_condensing__k__m2
+            + A_heat_gas__k__m2 + A_heat_heat_pump__k__m2
+        ).copy();
+}
 
 impl Buildings{
+
 
     pub fn calculate(&mut self, year: u32){
         let inputs = &self.inputs;
@@ -130,6 +143,14 @@ impl Buildings{
                         results.$heat_type_cnsmp_in
                             .set_year_values(year,&$heat_type_cnsmp_in);
                      )*
+
+                    let A_heat_other__k__m2 =
+                        compute_A_heat_other__k__m2(&self.inputs, year);
+                    let cnsmp_other__G__W_h_per_a = &A_heat_other__k__m2
+                        * &total_heat_dmd__M__W_h_per_m2_a
+                        / constants::other.efficency;
+                    results.cnsmp_other__G__W_h_per_a
+                        .set_year_values(year,&cnsmp_other__G__W_h_per_a);
             }
         }
 
@@ -153,13 +174,14 @@ impl Buildings{
                 heat_pump,
                 A_heat_heat_pump__k__m2,
                 cnsmp_elec_heat_pump__G__W_h_per_a
-            ),
-            (
-                other,
-                A_heat_other__k__m2,
-                cnsmp_other__G__W_h_per_a
             )
+            // (
+            //     other,
+            //     A_heat_other__k__m2,
+            //     cnsmp_other__G__W_h_per_a
+            // )
         }
+
 
         let cnsmp_oil__M__L_per_a =
             (&cnsmp_oil__G__W_h_per_a + &cnsmp_oil_condensing__G__W_h_per_a)
@@ -209,6 +231,10 @@ impl Buildings{
                     let mut invest_heat_source__M__eur_per_a: SectorsRawValues;
                     let mut grant_heat_source__M__eur_per_a: SectorsRawValues;
 
+                    let total_heat_dmd_prev_year__G__W_h_per_m2_a =
+                        &results.total_heat_dmd__G__W_h_per_a.get_year(year-1)
+                        / &results.floor_A__k__m2.get_year(year-1);
+
                     $(
 
                         A_this_year__k__m2 =
@@ -219,9 +245,25 @@ impl Buildings{
                         invest_heat_source__M__eur_per_a =
                             (&A_this_year__k__m2 - &A_prev_year__k__m2)
                             * constants::$heat_type.invest__m__eur_per_W_h
-                            * &total_heat_dmd__M__W_h_per_m2_a
+                            * total_heat_dmd_prev_year__G__W_h_per_m2_a
+                            // Todo: check units here
                             * A_this_year__k__m2
                                 .is_greater(&A_prev_year__k__m2);
+
+                        if (invest_heat_source__M__eur_per_a.private != 0.0){
+
+
+                            println!(
+                                "year={0} heat_type={1:20} invest={2:.3} is_greater={3:.3} A_this_year={4:.3} A_prev_year={5:.3}",
+                                 year,
+                                 String::from(stringify!($heat_type)),
+                                 invest_heat_sources__M__eur_per_a.private,
+                                 A_this_year__k__m2
+                                    .is_greater(&A_prev_year__k__m2).private,
+                                 A_this_year__k__m2.private,
+                                 A_prev_year__k__m2.private,
+                            );
+                        }
 
                         grant_heat_source__M__eur_per_a =
                             &invest_heat_source__M__eur_per_a
@@ -238,6 +280,52 @@ impl Buildings{
 
                      )*
 
+                    A_this_year__k__m2 =
+                        compute_A_heat_other__k__m2(&self.inputs, year);
+                    A_prev_year__k__m2 =
+                        compute_A_heat_other__k__m2(&self.inputs, year-1);
+
+                    invest_heat_source__M__eur_per_a =
+                        (&A_this_year__k__m2 - &A_prev_year__k__m2)
+                        * constants::other.invest__m__eur_per_W_h
+                        * total_heat_dmd_prev_year__G__W_h_per_m2_a
+                        // Todo:and check units here
+                        * A_this_year__k__m2
+                            .is_greater(&A_prev_year__k__m2);
+
+                    if (invest_heat_source__M__eur_per_a.private != 0.0){
+                        println!(
+                            "year={0} heat_type={1:20} invest={2:.3} is_greater={3:.3} A_this_year={4:.3} A_prev_year={5:.3} total_head_dmd={6:.3}",
+                             year,
+                             String::from("other"),
+                             invest_heat_sources__M__eur_per_a.private,
+                             A_this_year__k__m2
+                                .is_greater(&A_prev_year__k__m2).private,
+                             A_this_year__k__m2.private,
+                             A_prev_year__k__m2.private,
+                             total_heat_dmd_prev_year__G__W_h_per_m2_a.private,
+                        );
+                    }
+
+
+                    grant_heat_source__M__eur_per_a =
+                        &invest_heat_source__M__eur_per_a
+                        * constants::other.grant;
+
+                    invest_heat_sources__M__eur_per_a =
+                        invest_heat_sources__M__eur_per_a +
+                        invest_heat_source__M__eur_per_a;
+
+                    grant_heat_sources__M__eur_per_a =
+                        grant_heat_sources__M__eur_per_a +
+                        grant_heat_source__M__eur_per_a;
+
+
+                    results.invest_heat_sources__M__eur_per_a
+                        .set_year_values(year, &invest_heat_sources__M__eur_per_a);
+                    results.grant_heat_sources__M__eur_per_a
+                        .set_year_values(year, &grant_heat_sources__M__eur_per_a);
+
                 }
             }
 
@@ -245,14 +333,9 @@ impl Buildings{
                 (oil_no_condensing, A_heat_oil__k__m2),
                 (oil_with_condensing, A_heat_oil_condensing__k__m2),
                 (gas, A_heat_gas__k__m2),
-                (heat_pump, A_heat_heat_pump__k__m2),
-                (other, A_heat_other__k__m2)
+                (heat_pump, A_heat_heat_pump__k__m2)
+                // (other, A_heat_other__k__m2)
             }
-
-            results.invest_heat_sources__M__eur_per_a
-                .set_year_values(year, &invest_heat_sources__M__eur_per_a);
-            results.grant_heat_sources__M__eur_per_a
-                .set_year_values(year, &grant_heat_sources__M__eur_per_a);
 
             // invest/grant energetic renovation
             // This calculation looks for the change of heat demand from one
@@ -395,8 +478,8 @@ implement_inputs_builidngs!{
     A_heat_oil__k__m2,
     A_heat_oil_condensing__k__m2,
     A_heat_gas__k__m2,
-    A_heat_heat_pump__k__m2,
-    A_heat_other__k__m2
+    A_heat_heat_pump__k__m2
+    // A_heat_other__k__m2
 }
 
 macro_rules! implement_results_builidngs{

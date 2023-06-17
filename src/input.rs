@@ -126,3 +126,25 @@ pub trait InputFields{
     fn get_inputs(& self) -> Vec<&Input>;
     fn get_input_by_id(&mut self, id: &str) -> Option<&mut Input>;
 }
+
+
+#[cfg(test)]
+mod tests{
+    use crate::input::Input;
+
+    #[test]
+    fn test_get_year() {
+        let mut input = Input::new("test".to_string(), 2023, 2025);
+        assert!(input.get_year(2023)==0.0);
+        assert!(input.get_year(2024)==0.0);
+        assert!(input.get_year(2025)==0.0);
+        input.set_values(10.0);
+        assert!(input.get_year(2023)==10.0);
+        assert!(input.get_year(2024)==10.0);
+        assert!(input.get_year(2025)==10.0);
+        input.add_measure(&"measure".to_string(), 2024, 2025, 10.0);
+        assert!(input.get_year(2023)==10.0);
+        assert!(input.get_year(2024)==5.0);
+        assert!(input.get_year(2025)==0.0);
+    }
+}

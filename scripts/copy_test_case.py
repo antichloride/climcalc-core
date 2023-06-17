@@ -59,21 +59,41 @@ lines = find_and_replace_arguments(lines, "A_heat_oil_condensing__k__m2", conver
 lines = find_and_replace_arguments(lines, "A_heat_gas__k__m2", convert_values(inputs.iloc[14+os, 1:5]))
 # Fläche mit Wärmepumpen-Heizung (in 1.000 qm)
 lines = find_and_replace_arguments(lines, "A_heat_heat_pump__k__m2", convert_values(inputs.iloc[15+os, 1:5]))
-# Fläche mit anderer Wärmequelle (in 1.000 qm)
-lines = find_and_replace_arguments(
-    lines,
-    "A_heat_other__k__m2",
-    convert_values(
-        inputs.iloc[7+os, 1:5] * inputs.iloc[6+os, 1:5] * 1e-3
-        - inputs.iloc[12+os, 1:5]
-        - inputs.iloc[13+os, 1:5]
-        - inputs.iloc[14+os, 1:5]
-        - inputs.iloc[15+os, 1:5]
-    ),
-)
+# # Fläche mit anderer Wärmequelle (in 1.000 qm)
+# lines = find_and_replace_arguments(
+#     lines,
+#     "A_heat_other__k__m2",
+#     convert_values(
+#         inputs.iloc[7+os, 1:5] * inputs.iloc[6+os, 1:5] * 1e-3
+#         - inputs.iloc[12+os, 1:5]
+#         - inputs.iloc[13+os, 1:5]
+#         - inputs.iloc[14+os, 1:5]
+#         - inputs.iloc[15+os, 1:5]
+#     ),
+# )
+# breakpoint()
+
+
+# # set other values for all years
+# others_input = []
+
+# for year in results.columns[2:-4]:
+#     others_input.append(f"\tlet mut raw_vals: SectorsRawValues;\n")
+#     others_input.append(f"\traw_vals.set({results[year][125]}, {results[year][126]}, {results[year][127]}, {results[year][128]});\n")
+#     others_input.append(f"\tbuildings.inputs.A_heat_other__k__m2.set_year_values({year}, &raw_vals);\n\n")
+
+# start_set_others=0
+# end_set_others=0
+# for i,line in enumerate(lines):
+#     if "[start:set_others]" in line:
+#         start_set_others=i
+#     if "[end:set_others]" in line:
+#         end_set_others=i
+
+# lines = lines[:start_set_others+1] + others_input + lines[end_set_others:]
 
 def measure_line(measures, row, varname, sector):
-    return f'\t{"//" if measures.iloc[row-2, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-1, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
+    return f'\t{"//" if measures.iloc[row-2, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-2, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
 
 measures_input = []
 # Set Measures
@@ -181,7 +201,7 @@ for variable, i, param_type in [
     ["A_heat_oil_condensing__k__m2", 47, "inputs"],
     ["A_heat_gas__k__m2", 52, "inputs"],
     ["A_heat_heat_pump__k__m2", 57, "inputs"],
-    ["A_heat_other__k__m2", 62, "inputs"],
+    #["A_heat_other__k__m2", 62, "inputs"],
     ["cnsmp_oil__G__W_h_per_a", 67, "results"],
     ["cnsmp_oil_condensing__G__W_h_per_a", 72, "results"],
     ["cnsmp_oil__M__L_per_a", 77, "results"],

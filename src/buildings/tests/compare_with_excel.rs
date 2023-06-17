@@ -436,24 +436,6 @@ fn test_buildings_calculate() {
 		[278.2399038461538, 0.0, 0.0, 0.0],
 	);
 
-	// Fläche mit anderer Wärmequelle (in 1.000 qm)
-	assert(
-		buildings.inputs.A_heat_other__k__m2.get_year_values(2022),
-		[2275.604927884616, -2687.14040118035, -191.13362776679344, -79.29266757581362],
-	);
-	assert(
-		buildings.inputs.A_heat_other__k__m2.get_year_values(2023),
-		[2275.604927884616, -2687.14040118035, -191.13362776679344, -79.29266757581362],
-	);
-	assert(
-		buildings.inputs.A_heat_other__k__m2.get_year_values(2024),
-		[2285.604927884616, -2687.14040118035, -191.13362776679344, -79.29266757581362],
-	);
-	assert(
-		buildings.inputs.A_heat_other__k__m2.get_year_values(2025),
-		[2295.604927884616, -2687.14040118035, -191.13362776679344, -79.29266757581362],
-	);
-
 	// Heizöl Verbrauch o. Brennwert/Niedertemperatur (in GWh)
 	assert(
 		buildings.results.cnsmp_oil__G__W_h_per_a.get_year_values(2022),
