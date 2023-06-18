@@ -242,11 +242,10 @@ impl Buildings{
                         A_prev_year__k__m2 =
                             self.inputs.$heat_type_A__k__m2.get_year(year-1);
 
-                        invest_heat_source__M__eur_per_a =
-                            (&A_this_year__k__m2 - &A_prev_year__k__m2)
+                        invest_heat_source__M__eur_per_a = 1e-3
+                            * (&A_this_year__k__m2 - &A_prev_year__k__m2)
                             * constants::$heat_type.invest__m__eur_per_W_h
-                            * total_heat_dmd_prev_year__G__W_h_per_m2_a
-                            // Todo: check units here
+                            * &heat_dmd__k__W_h_per_m2_a
                             * A_this_year__k__m2
                                 .is_greater(&A_prev_year__k__m2);
 
@@ -285,11 +284,10 @@ impl Buildings{
                     A_prev_year__k__m2 =
                         compute_A_heat_other__k__m2(&self.inputs, year-1);
 
-                    invest_heat_source__M__eur_per_a =
-                        (&A_this_year__k__m2 - &A_prev_year__k__m2)
+                    invest_heat_source__M__eur_per_a = 1e-3
+                        * (&A_this_year__k__m2 - &A_prev_year__k__m2)
                         * constants::other.invest__m__eur_per_W_h
-                        * total_heat_dmd_prev_year__G__W_h_per_m2_a
-                        // Todo:and check units here
+                        * &heat_dmd__k__W_h_per_m2_a
                         * A_this_year__k__m2
                             .is_greater(&A_prev_year__k__m2);
 
