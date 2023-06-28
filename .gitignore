@@ -3,3 +3,5 @@ target/*
 .git/*
 old/*
 Cargo.lock
+/tmp/**
+/test_javascript/**

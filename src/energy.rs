@@ -456,3 +456,16 @@ implement_results_energy!{
     prchsd_nrg_mix_ems__k__to_coe_per_a,
     nrg_own_mix_price__m__eur_per_W_h
 }
+
+
+
+#[cfg(test)]
+mod tests{
+    use super::*;
+    extern crate wasm_bindgen_test;
+    use wasm_bindgen_test::*;
+    mod energy_test_case;
+    use energy_test_case::create_energy;
+    mod compare_with_excel;
+
+}

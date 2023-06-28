@@ -21,6 +21,18 @@ def convert_values(series):
     """
     return ", ".join([str(float(val)) for val in series.values])
 
+def insert_in_section(lines, lines_to_insert, start_identyfier, end_identifiyer):
+    start_line=0
+    end_line=0
+    for i,line in enumerate(lines):
+        if start_identyfier in line:
+            start_line=i
+        if end_identifiyer in line:
+            end_line=i
+
+    return lines[:start_line+1] + lines_to_insert + lines[end_line:]
+
+
 
 inputs = pd.read_excel(sys.argv[1], sheet_name="Eingabe Ist")
 results = pd.read_excel(sys.argv[1], sheet_name="Rechenwerk")
