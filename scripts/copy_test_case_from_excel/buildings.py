@@ -1,11 +1,23 @@
-from .utils import find_and_replace_arguments
-from .utils import convert_values
-from .utils import insert_in_section
+from .utils import (
+    find_and_replace_arguments,
+    convert_values,
+    insert_in_section,
+)
 
 def write_test_case_buildings(inputs, measures):
 
     with open("src/buildings/tests/buildings_test_case.rs", "r") as f:
         lines = f.readlines()
+
+    lines = set_input_variables(inputs, lines)
+    lines = set_measures(measures, lines)
+
+    with open("src/buildings/tests/buildings_test_case.rs", "w") as f:
+        for line in lines:
+            f.write(line)
+
+
+def set_input_variables(inputs, lines):
 
     os = -2
 
@@ -31,6 +43,7 @@ def write_test_case_buildings(inputs, measures):
     lines = find_and_replace_arguments(lines, "A_heat_gas__k__m2", convert_values(inputs.iloc[14+os, 1:5]))
     # Fläche mit Wärmepumpen-Heizung (in 1.000 qm)
     lines = find_and_replace_arguments(lines, "A_heat_heat_pump__k__m2", convert_values(inputs.iloc[15+os, 1:5]))
+
     # # Fläche mit anderer Wärmequelle (in 1.000 qm)
     # lines = find_and_replace_arguments(
     #     lines,
@@ -63,6 +76,12 @@ def write_test_case_buildings(inputs, measures):
     #         end_set_others=i
 
     # lines = lines[:start_set_others+1] + others_input + lines[end_set_others:]
+
+
+    return lines
+
+
+def set_measures(measures, lines):
 
     def measure_line(measures, row, varname, sector):
         return f'\t{"//" if measures.iloc[row-2, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-2, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
@@ -104,7 +123,95 @@ def write_test_case_buildings(inputs, measures):
 
     lines = insert_in_section(lines, measures_input, "[start:measures]", "[end:measures]")
 
+    return lines
 
-    with open("src/buildings/tests/buildings_test_case.rs", "w") as f:
+
+def write_excel_comparison(results):
+
+    with open("src/buildings/tests/compare_with_excel.rs") as f:
+        lines = f.readlines()
+
+    lines = declare_variables(results, lines)
+    lines = write_assert_statements(results, lines)
+
+    with open("src/buildings/tests/compare_with_excel.rs", "w") as f:
         for line in lines:
             f.write(line)
+
+
+
+def declare_variables(results, lines):
+    """
+    This sets varibales like the price for electric energy, which is not calculated
+    in the buildings case and therefore need to be set from outside.
+    """
+
+    content = []
+
+    for year in results.columns[2:-4]:
+        year_values = ','.join(
+            [str(results.iloc[349][year]) for i in range(4)]
+        )
+        content.append(f"\traw_vals=SectorsRawValues::new();\n")
+        content.append(f"\traw_vals.set({year_values});\n")
+        content.append(f"\tnrg_own_mix_price__m__eur_per_W_h.set_year_values(\n")
+        content.append(f"\t\t{year},\n")
+        content.append(f"\t\t&raw_vals,\n")
+        content.append(f"\t\t);\n\n")
+
+    lines = insert_in_section(lines, content, "[start:declare_variables]", "[end:declare_variables]")
+
+    return lines
+
+
+def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
+    """
+    This adds the assert statements for the output variables.
+    """
+
+    assert_lines = ["\n"]
+
+    for variable, i, param_type in [
+        ["n_inhabitants__k__", 1, "inputs"],
+        ["n_buildings", 5, "inputs"],
+        ["floor_A_building__m2", 10, "inputs"],
+        ["floor_A__k__m2", 14, "results"],
+        ["heat_dmd__k__W_h_per_m2_a", 19, "inputs"],
+        ["hot_water_dmd__k__W_h_per_m2_a", 23, "inputs"],
+        ["total_heat_dmd__G__W_h_per_a", 27, "results"],
+        ["elec_dmd_capita__k_W_h_per_a", 32, "inputs"],
+        ["elec_dmd__G__W_h_per_a", 37, "results"],
+        ["A_heat_oil__k__m2", 42, "inputs"],
+        ["A_heat_oil_condensing__k__m2", 47, "inputs"],
+        ["A_heat_gas__k__m2", 52, "inputs"],
+        ["A_heat_heat_pump__k__m2", 57, "inputs"],
+        #["A_heat_other__k__m2", 62, "inputs"],
+        ["cnsmp_oil__G__W_h_per_a", 67, "results"],
+        ["cnsmp_oil_condensing__G__W_h_per_a", 72, "results"],
+        ["cnsmp_oil__M__L_per_a", 77, "results"],
+        ["cnsmp_gas__G__W_h_per_a", 82, "results"],
+        ["cnsmp_gas__M__m3_per_a", 87, "results"],
+        ["cnsmp_elec_heat_pump__G__W_h_per_a", 92, "results"],
+        ["cnsmp_other__G__W_h_per_a", 97, "results"],
+        ["costs_oil__M__eur_per_a", 110, "results"],
+        ["costs_gas__M__eur_per_a", 115, "results"],
+        ["costs_heat_pump__M__eur", 120, "results"],
+        ["invest_heat_sources__M__eur_per_a", 141, "results"],
+        ["invest_energetic_renovation__M__eur_per_a", 146, "results"],
+        ["grant_heat_sources__M__eur_per_a", 162, "results"],
+        ["grant_energetic_renovation__M__eur_per_a", 167, "results"],
+    ]:
+
+        name = str(results.iloc[i,0]).replace('\n',' ')
+        assert_lines.append(f"\t// {name}\n")
+        for j, year in enumerate([2022,2023,2024,2025]):
+            sector_values = ", ".join([str(val if not "nan" in str(val) else 0.0) for val in results.iloc[i:i+4,j+2].values])
+            assert_lines.append("\tassert(\n")
+            assert_lines.append(f"\t\tbuildings.{param_type}.{variable}.get_year_values({year}),\n")
+            assert_lines.append(f"\t\t[{sector_values}],\n")
+            assert_lines.append("\t);\n")
+        assert_lines.append("\n")
+
+    lines = insert_in_section(lines, assert_lines, "[start:assert_measures]", "[end:assert_measures]")
+
+    return lines

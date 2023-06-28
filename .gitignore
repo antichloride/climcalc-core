@@ -5,3 +5,5 @@ old/*
 Cargo.lock
 /tmp/**
 /test_javascript/**
+
+*.pyc
