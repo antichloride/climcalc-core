@@ -3,7 +3,7 @@ use crate::sectors::SectorsInputs;
 use crate::sectors::SectorsRawValues;
 
 impl SectorsInputs{
-    fn set(&mut self, private: f32, industry:f32, schools: f32, public: f32){
+    pub fn set(&mut self, private: f32, industry:f32, schools: f32, public: f32){
         self.private.set_values(private);
         self.industry.set_values(industry);
         self.schools.set_values(schools);

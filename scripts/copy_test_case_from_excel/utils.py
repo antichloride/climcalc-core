@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 
 def find_and_replace_arguments(lines, variable_name, new_arguments):
 
@@ -11,11 +12,24 @@ def find_and_replace_arguments(lines, variable_name, new_arguments):
                 lines[i] = re.sub('\(.+\)', f'({new_arguments})', line)
                 return lines
 
-def convert_values(series):
+def convert_values(series=None):
     """
     Converts a series object into a comma separated list.
     """
-    return ", ".join([str(float(val)) for val in series.values])
+    if type(series)==type(None):
+        values = [0.0, 0.0, 0.0, 0.0]
+    else:
+        values = series.values
+
+        if len(values) == 3:
+            values = [values[0], values[1], 0.0, values[2]]
+        if len(values) == 2:
+            values = [0.0, values[0], 0.0, values[1]]
+        if len(values) == 1:
+            values = [0.0, 0.0, 0.0, values[0]]
+        if len(values) == 0:
+            values = [0.0, 0.0, 0.0, 0.0]
+    return ", ".join([str(float(val)) for val in values])
 
 def insert_in_section(lines, lines_to_insert, start_identyfier, end_identifiyer):
     start_line=None

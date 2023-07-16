@@ -204,7 +204,7 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
 
         name = str(results.iloc[i,0]).replace('\n',' ')
         assert_lines.append(f"\t// {name}\n")
-        for j, year in enumerate([2022,2023,2024,2025]):
+        for j, year in enumerate(years):
             sector_values = ", ".join([str(val if not "nan" in str(val) else 0.0) for val in results.iloc[i:i+4,j+2].values])
             assert_lines.append("\tassert(\n")
             assert_lines.append(f"\t\tbuildings.{param_type}.{variable}.get_year_values({year}),\n")
