@@ -106,7 +106,7 @@ pub mod energy{
 
     pub const solar_roof: RenewableEnergy = RenewableEnergy{
         invest__m__eur_per_Wp: 1500.0,
-        grant__m__eur_per_Wp: 500.0,
+        grant__m__eur_per_Wp: 0.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
         Wp_to_W_h_per_a: 900.0,
@@ -117,8 +117,8 @@ pub mod energy{
     };
 
     pub const solar_landscape: RenewableEnergy = RenewableEnergy{
-        invest__m__eur_per_Wp: 1200.0,
-        grant__m__eur_per_Wp: 500.0,
+        invest__m__eur_per_Wp: 665.0,
+        grant__m__eur_per_Wp: 0.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
         Wp_to_W_h_per_a: 1105.0,

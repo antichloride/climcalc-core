@@ -55,16 +55,16 @@ def set_measures(measures, lines):
     measures_input.append("\n")
 
     measures_input.append("\t//Industry\n")
-    measures_input.append(measure_line(measures, 29, "n_cars__k__", "private"))
-    measures_input.append(measure_line(measures, 30, "n_bev__k__", "private"))
+    measures_input.append(measure_line(measures, 29, "n_cars__k__", "industry"))
+    measures_input.append(measure_line(measures, 30, "n_bev__k__", "industry"))
     measures_input.append("\n")
 
     measures_input.append("\t//Schools\n")
     measures_input.append("\n")
 
     measures_input.append("\t//Public\n")
-    measures_input.append(measure_line(measures, 47, "n_cars__k__", "private"))
-    measures_input.append(measure_line(measures, 48, "n_bev__k__", "private"))
+    measures_input.append(measure_line(measures, 47, "n_cars__k__", "public"))
+    measures_input.append(measure_line(measures, 48, "n_bev__k__", "public"))
     measures_input.append("\n")
 
     lines = insert_in_section(lines, measures_input, "[start:measures]", "[end:measures]")
