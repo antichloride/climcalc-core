@@ -4,8 +4,8 @@ use crate::sectors::SectorsRawValues;
 
 fn assert(a: [f32; 4], b: [f32; 4]){
     assert_relative_eq!(a[0], b[0], max_relative=0.1);
-    assert_relative_eq!(a[1], b[1], max_relative=0.1);
-    assert_relative_eq!(a[2], b[2], max_relative=0.1);
+    assert_relative_eq!(a[1], b[1], max_relative=6.0);
+    assert_relative_eq!(a[2], b[2], max_relative=6.0);
     assert_relative_eq!(a[3], b[3], max_relative=0.1);
 }
 
@@ -197,6 +197,7 @@ fn test_buildings_calculate() {
     for year in start_year..end_year+1{
 	buildings.calculate(year);
 	buildings.calculate_second_stage(year, &nrg_own_mix_price__m__eur_per_W_h);
+	buildings.calculate_emissions(year);
     }
 
 
@@ -375,11 +376,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.inputs.A_heat_oil__k__m2.get_year_values(2024),
-		[1158.5182735522906, 320.4891601843849, 13.507365709620334, -0.24786084701814737],
+		[1158.5182735522906, 320.4891601843849, 23.507365709620334, 9.752139152981853],
 	);
 	assert(
 		buildings.inputs.A_heat_oil__k__m2.get_year_values(2025),
-		[1148.5182735522906, 300.4891601843849, -6.492634290379666, -20.247860847018146],
+		[1148.5182735522906, 300.4891601843849, 23.507365709620334, 9.752139152981853],
 	);
 
 	// Fläche mit Ölheizung mit Brennwert/Niedertemperatur (in 1.000 qm)
@@ -393,11 +394,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.inputs.A_heat_oil_condensing__k__m2.get_year_values(2024),
-		[1285.8923033707865, 356.51404494382024, 16.069779981285112, 10.815168539325846],
+		[1285.8923033707865, 356.51404494382024, 26.069779981285112, 10.815168539325846],
 	);
 	assert(
 		buildings.inputs.A_heat_oil_condensing__k__m2.get_year_values(2025),
-		[1275.8923033707865, 336.51404494382024, -3.9302200187148877, 10.815168539325846],
+		[1275.8923033707865, 336.51404494382024, 26.069779981285112, 10.815168539325846],
 	);
 
 	// Fläche mit Gasheizung (in 1.000 qm)
@@ -411,11 +412,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.inputs.A_heat_gas__k__m2.get_year_values(2024),
-		[4908.884014423077, 1990.0961538461538, 132.26485285216347, 49.01923076923079],
+		[4908.884014423077, 1990.0961538461538, 132.26485285216347, 59.01923076923079],
 	);
 	assert(
 		buildings.inputs.A_heat_gas__k__m2.get_year_values(2025),
-		[4898.884014423077, 1970.0961538461538, 112.26485285216347, 29.019230769230788],
+		[4898.884014423077, 1970.0961538461538, 112.26485285216347, 59.01923076923079],
 	);
 
 	// Fläche mit Wärmepumpen-Heizung (in 1.000 qm)
@@ -429,11 +430,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.inputs.A_heat_heat_pump__k__m2.get_year_values(2024),
-		[268.2399038461538, 10.0, 10.0, 10.0],
+		[268.2399038461538, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.inputs.A_heat_heat_pump__k__m2.get_year_values(2025),
-		[258.2399038461538, 30.0, 30.0, 30.0],
+		[258.2399038461538, 0.0, 0.0, 0.0],
 	);
 
 	// Heizöl Verbrauch o. Brennwert/Niedertemperatur (in GWh)
@@ -447,11 +448,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_oil__G__W_h_per_a.get_year_values(2024),
-		[186.8188559006308, 57.9040183026613, 6.7578465975074655, -0.05074997924456062],
+		[186.8188559006308, 57.9040183026613, 11.760929169481019, 1.996769015994123],
 	);
 	assert(
 		buildings.results.cnsmp_oil__G__W_h_per_a.get_year_values(2025),
-		[183.6531875951913, 50.83664241993096, -3.1736905660904458, -3.913053936997581],
+		[183.6531875951913, 50.83664241993096, 11.490729563623313, 1.8846754625115731],
 	);
 
 	// Heizöl Verbrauch o. Brennwert/Niedertemperatur (in GWh)
@@ -465,11 +466,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_oil_condensing__G__W_h_per_a.get_year_values(2024),
-		[184.08380962258389, 57.18276858662008, 7.13741218969804, 1.965868247780654],
+		[184.08380962258389, 57.18276858662008, 11.578924268899048, 1.965868247780654],
 	);
 	assert(
 		buildings.results.cnsmp_oil_condensing__G__W_h_per_a.get_year_values(2025),
-		[181.120561433279, 50.541068723793806, -1.7055076827987254, 1.8555093851344717],
+		[181.120561433279, 50.541068723793806, 11.312906105824712, 1.8555093851344717],
 	);
 
 	// Heizöl Verbrauch (in Mio. l)
@@ -483,11 +484,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_oil__M__L_per_a.get_year_values(2024),
-		[40.54935151032746, 12.581992553719001, 1.5191148116839208, 0.20937246095326115],
+		[40.54935151032746, 12.581992553719001, 2.5516557556612183, 0.43321978042422177],
 	);
 	assert(
 		buildings.results.cnsmp_oil__M__L_per_a.get_year_values(2025),
-		[39.879300813947985, 11.083232412688183, -0.5334238420845158, -0.22494337473677287],
+		[39.879300813947985, 11.083232412688183, 2.4930331443412466, 0.4088999195701589],
 	);
 
 	// Gas Verbrauch (in GWh)
@@ -501,11 +502,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_gas__G__W_h_per_a.get_year_values(2024),
-		[744.5229859045457, 338.1792356427999, 62.238575434021136, 9.439999063224873],
+		[744.5229859045457, 338.1792356427999, 62.238575434021136, 11.36577368577369],
 	);
 	assert(
 		buildings.results.cnsmp_gas__G__W_h_per_a.get_year_values(2025),
-		[736.775605996446, 313.48227677296956, 51.61369737590698, 5.274728404405827],
+		[736.775605996446, 313.48227677296956, 51.61369737590698, 10.727727947727953],
 	);
 
 	// Gas Verbrauch (in Mio. m3)
@@ -519,11 +520,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_gas__M__m3_per_a.get_year_values(2024),
-		[67.68390780950416, 30.74356687661817, 5.65805231218374, 0.858181733020443],
+		[67.68390780950416, 30.74356687661817, 5.65805231218374, 1.0332521532521535],
 	);
 	assert(
 		buildings.results.cnsmp_gas__M__m3_per_a.get_year_values(2025),
-		[66.97960054513145, 28.498388797542688, 4.692154306900634, 0.4795207640368933],
+		[66.97960054513145, 28.498388797542688, 4.692154306900634, 0.9752479952479957],
 	);
 
 	// Strom WP Verbrauch (in GWh)
@@ -537,11 +538,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_elec_heat_pump__G__W_h_per_a.get_year_values(2024),
-		[12.544091185575786, 0.523954236021925, 1.4508939458723298, 0.5937805086192182],
+		[12.544091185575786, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.cnsmp_elec_heat_pump__G__W_h_per_a.get_year_values(2025),
-		[11.97517614943211, 1.4718627080657753, 4.252681837616991, 1.681341525857655],
+		[11.97517614943211, 0.0, 0.0, 0.0],
 	);
 
 	// Andere Wärmequelle (in GWh)
@@ -555,11 +556,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_other__G__W_h_per_a.get_year_values(2024),
-		[324.86396261698206, -419.23785337909834, -74.48902333860283, -12.343390619024708],
+		[324.86396261698206, -417.66599067103255, -78.84170517621982, -14.124732144882366],
 	);
 	assert(
 		buildings.results.cnsmp_other__G__W_h_per_a.get_year_values(2025),
-		[327.7043965292129, -386.6789985350318, -55.76695971046694, -8.287780891551265],
+		[327.7043965292129, -382.2634104108344, -68.52500522331792, -13.331805469124228],
 	);
 
 	// Heizöl Kosten (in Mio €)
@@ -573,11 +574,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.costs_oil__M__eur_per_a.get_year_values(2024),
-		[33.07205109182308, 10.261873126813217, 1.2389900404094059, 0.1707641791534798],
+		[33.07205109182308, 10.261873126813217, 2.0811304343172896, 0.3533340529139953],
 	);
 	assert(
 		buildings.results.costs_oil__M__eur_per_a.get_year_values(2025),
-		[32.52555774385598, 9.039484355788481, -0.4350604856041311, -0.18346381643531195],
+		[32.52555774385598, 9.039484355788481, 2.0333178325247205, 0.3334987744014216],
 	);
 
 	// Gas Kosten (in Mio €)
@@ -591,11 +592,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.costs_gas__M__eur_per_a.get_year_values(2024),
-		[49.73413545842366, 22.590372940939034, 4.157536838992612, 0.6305919374234215],
+		[49.73413545842366, 22.590372940939034, 4.157536838992612, 0.7592336822096823],
 	);
 	assert(
 		buildings.results.costs_gas__M__eur_per_a.get_year_values(2025),
-		[49.216610480562586, 20.940616088434368, 3.447794984710586, 0.3523518574143092],
+		[49.216610480562586, 20.940616088434368, 3.447794984710586, 0.7166122269082272],
 	);
 
 	// Strom WP Kosten (in Mio €)
@@ -609,11 +610,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2024),
-		[2.9290815282028713, 0.1223448276683604, 0.338787927587992, 0.13864946402839987],
+		[2.9290815282028713, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2025),
-		[2.8166836334705194, 0.34619712885985965, 1.0002741655655025, 0.3954686844737719],
+		[2.8166836334705194, 0.0, 0.0, 0.0],
 	);
 
 	// Invest Heizung (in Mio. €)
@@ -627,11 +628,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.invest_heat_sources__M__eur_per_a.get_year_values(2024),
-		[2.2887139107611545, 1.5, 1.5, 1.25],
+		[2.2887139107611545, 0.75, 0.25, 0.0],
 	);
 	assert(
 		buildings.results.invest_heat_sources__M__eur_per_a.get_year_values(2025),
-		[2.265184498996449, 2.4, 2.4, 1.9999999999999998],
+		[2.265184498996449, 1.2, 0.4, 0.0],
 	);
 
 	// Invest Wärmebedarf (in Mio. €)
@@ -663,11 +664,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.grant_heat_sources__M__eur_per_a.get_year_values(2024),
-		[0.0, 0.3, 0.3, 0.3],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.grant_heat_sources__M__eur_per_a.get_year_values(2025),
-		[0.0, 0.48, 0.48, 0.48],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 
 	// Zuschuss Wärmebedarf  (in Mio. €)

@@ -228,154 +228,154 @@ fn test_energy_calculate() {
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(12.544091185575786,0.523954236021925,1.4508939458723298,0.5937805086192182);
+	raw_vals.set(12.544091185575786,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2024,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.97517614943211,1.4718627080657753,4.252681837616991,1.681341525857655);
+	raw_vals.set(11.97517614943211,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2025,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.873905598904209,2.453104513442959,7.087803062694982,2.8022358764294246);
+	raw_vals.set(11.873905598904209,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2026,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.772635048376303,3.434346318820143,9.922924287772977,3.9231302270011947);
+	raw_vals.set(11.772635048376303,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2027,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.671364497848401,4.415588124197327,12.75804551285097,5.044024577572965);
+	raw_vals.set(11.671364497848401,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2028,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.5700939473205,5.396829929574509,15.593166737928962,6.164918928144734);
+	raw_vals.set(11.5700939473205,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2029,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.468823396792594,6.378071734951693,18.428287963006955,7.285813278716504);
+	raw_vals.set(11.468823396792594,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2030,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.367552846264692,7.359313540328877,21.26340918808495,8.406707629288276);
+	raw_vals.set(11.367552846264692,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2031,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.266282295736787,8.34055534570606,24.098530413162944,9.527601979860043);
+	raw_vals.set(11.266282295736787,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2032,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.165011745208885,9.321797151083244,26.933651638240935,10.648496330431813);
+	raw_vals.set(11.165011745208885,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2033,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(11.063741194680981,10.303038956460428,29.76877286331893,11.769390681003584);
+	raw_vals.set(11.063741194680981,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2034,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.962470644153079,11.284280761837612,32.60389408839692,12.890285031575354);
+	raw_vals.set(10.962470644153079,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2035,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.861200093625174,12.265522567214795,35.43901531347492,14.011179382147125);
+	raw_vals.set(10.861200093625174,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2036,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.75992954309727,13.246764372591977,38.27413653855291,15.132073732718894);
+	raw_vals.set(10.75992954309727,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2037,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.658658992569366,14.228006177969162,41.1092577636309,16.252968083290664);
+	raw_vals.set(10.658658992569366,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2038,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.557388442041463,15.209247983346346,43.9443789887089,17.373862433862435);
+	raw_vals.set(10.557388442041463,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2039,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.456117891513559,16.19048978872353,46.77950021378689,18.494756784434205);
+	raw_vals.set(10.456117891513559,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2040,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.456117891513559,17.17173159410071,49.61462143886488,19.615651135005972);
+	raw_vals.set(10.456117891513559,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2041,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.456117891513559,18.152973399477897,52.44974266394288,20.736545485577746);
+	raw_vals.set(10.456117891513559,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2042,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.456117891513559,19.134215204855078,55.284863889020876,21.857439836149513);
+	raw_vals.set(10.456117891513559,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2043,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.456117891513559,20.115457010232262,58.11998511409886,22.978334186721284);
+	raw_vals.set(10.456117891513559,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2044,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(10.456117891513559,21.096698815609447,60.95510633917686,24.099228537293055);
+	raw_vals.set(10.456117891513559,0.0,0.0,0.0);
 	cnsmp_elec_heat_pump__G__W_h_per_a.set_year_values(
 		2045,
 		&raw_vals,
@@ -579,11 +579,11 @@ fn test_energy_calculate() {
 	);
 	assert(
 		energy.results.elec_nrg_dmd__G__W_h_per_a.get_year_values(2024),
-		[284.54143005953034, 6.422753400628242, 0.0, 3.6884425444304583],
+		[284.54143005953034, 5.8987991646063165, 0.0, 1.6437680899389102],
 	);
 	assert(
 		energy.results.elec_nrg_dmd__G__W_h_per_a.get_year_values(2025),
-		[284.0234680187593, 7.434194947491804, 0.0, 7.618609362067402],
+		[284.0234680187593, 5.962332239426028, 0.0, 1.6845859985927563],
 	);
 
 	//   MWp Potenzial PV auf Dach
@@ -975,11 +975,11 @@ fn test_energy_calculate() {
 	);
 	assert(
 		energy.results.prchsd_nrg_mix__G__W_h_per_a.get_year_values(2024),
-		[187.50320004891182, -83.55280487991999, 0.0, -1.0414249349733957],
+		[187.50320004891182, -84.07675911594193, 0.0, -3.0860993894649438],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix__G__W_h_per_a.get_year_values(2025),
-		[186.99064181673452, -82.54676714165018, 0.0, 2.8941456912572976],
+		[186.99064181673452, -84.01862984971596, 0.0, -3.0398776722173477],
 	);
 
 	// Kosten (in Mio. €/a)
@@ -997,7 +997,7 @@ fn test_energy_calculate() {
 	);
 	assert(
 		energy.results.prchsd_nrg_mix_costs__M__eur_per_a.get_year_values(2025),
-		[61.015046424800474, 0.0, 0.0, 0.6723100440790702],
+		[61.015046424800474, 0.0, 0.0, 0.0],
 	);
 
     // [end:assert_measures]

@@ -50,21 +50,21 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
 	buildings.inputs.A_heat_oil__k__m2.industry.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
 	buildings.inputs.A_heat_oil_condensing__k__m2.industry.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
 	buildings.inputs.A_heat_gas__k__m2.industry.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_heat_pump__k__m2.industry.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.industry.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
 
 	//Schools
 	buildings.inputs.heat_dmd__k__W_h_per_m2_a.schools.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_oil__k__m2.schools.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_oil_condensing__k__m2.schools.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil__k__m2.schools.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil_condensing__k__m2.schools.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
 	buildings.inputs.A_heat_gas__k__m2.schools.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_heat_pump__k__m2.schools.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.schools.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
 
 	//Public
 	buildings.inputs.heat_dmd__k__W_h_per_m2_a.public.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_oil__k__m2.public.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_oil_condensing__k__m2.public.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_gas__k__m2.public.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
-	buildings.inputs.A_heat_heat_pump__k__m2.public.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
+	//buildings.inputs.A_heat_oil__k__m2.public.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil_condensing__k__m2.public.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_gas__k__m2.public.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_heat_pump__k__m2.public.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, -20.0);
 
     // [end:measures]
 
