@@ -1,7 +1,7 @@
 import pandas as pd
 import sys
-from copy_test_case_from_excel.buildings import write_test_case_buildings, write_excel_comparison
-from copy_test_case_from_excel.energy import write_test_case_energy
+from copy_test_case_from_excel.buildings import write_test_case_buildings, write_excel_comparison_buildings
+from copy_test_case_from_excel.energy import write_test_case_energy, write_excel_comparison_energy
 
 
 if __name__ == "__main__":
@@ -11,10 +11,11 @@ if __name__ == "__main__":
 
     #buildings
     # write_test_case_buildings(inputs, measures)
-    # write_excel_comparison(results)
+    # write_excel_comparison_buildings(results)
 
     #energy
     write_test_case_energy(inputs, measures)
+    write_excel_comparison_energy(results)
 
 
 

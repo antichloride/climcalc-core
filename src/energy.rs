@@ -217,14 +217,23 @@ impl Energy{
                 .set_year_values(year, &sol_os_om__M__eur_per_a)
         }
 
-        let sol_os_revenue__M__eur_per_a =
-            (&sol_os_nrg__G__W_h_per_a
-                - &sol_os_self_cnsmp__G__W_h_per_a
-            )
+        let sol_os_turnover_buyback__M__eur_per_a =
+            &sol_os_nrg__G__W_h_per_a
             * constants::solar_landscape.buyback_price__m__eur_per_W_h;
+        self.results.sol_os_turnover_buyback__M__eur_per_a
+            .set_year_values(year, &sol_os_turnover_buyback__M__eur_per_a);
+
+        let sol_os_prod_costs__M__eur_per_a =
+            sol_os_nrg__G__W_h_per_a
+            * constants::solar_roof.invest_and_om_costs__m__eur_per_W_h; //TODO: Use solar landscape
+        self.results.sol_os_prod_costs__M__eur_per_a
+            .set_year_values(year, &sol_os_prod_costs__M__eur_per_a);
+
+        let sol_os_revenue__M__eur_per_a =
+            &sol_os_turnover_buyback__M__eur_per_a
+            - &sol_os_prod_costs__M__eur_per_a;
         self.results.sol_os_revenue__M__eur_per_a
             .set_year_values(year, &sol_os_revenue__M__eur_per_a);
-
 
         // Purchase of renewable energy
 
@@ -250,10 +259,13 @@ impl Energy{
         sl_nrg_dmd__G__W_h_per_a: f32,
         ){
 
-        let mut elec_nrg_dmd__G__W_h_per_a = &electric_power_demand_buildings
-            + &energy_heating_heat_pump + bev_electric_power_demand;
+        let mut elec_nrg_dmd__G__W_h_per_a =
+            &electric_power_demand_buildings
+            + &energy_heating_heat_pump
+            + bev_electric_power_demand;
         elec_nrg_dmd__G__W_h_per_a.public +=
             elec_nrg_dmd__G__W_h_per_a.schools + sl_nrg_dmd__G__W_h_per_a;
+        elec_nrg_dmd__G__W_h_per_a.schools = 0.0;
         self.results.elec_nrg_dmd__G__W_h_per_a
             .set_year_values(year, &elec_nrg_dmd__G__W_h_per_a);
 
@@ -264,7 +276,8 @@ impl Energy{
         let prchsd_renewable_nrg__G__W_h_per_a =
             self.inputs.prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
 
-        let prchsd_nrg_mix__G__W_h_per_a = &elec_nrg_dmd__G__W_h_per_a
+        let prchsd_nrg_mix__G__W_h_per_a =
+            &elec_nrg_dmd__G__W_h_per_a
             - &sol_rf_self_cnsmp__G__W_h_per_a
             - &sol_os_self_cnsmp__G__W_h_per_a
             - &prchsd_renewable_nrg__G__W_h_per_a;
@@ -447,6 +460,7 @@ implement_results_energy!{
     sol_os_invest__M__eur_per_a,
     sol_os_grant__M__eur_per_a,
     sol_os_om__M__eur_per_a,
+    sol_os_turnover_buyback__M__eur_per_a,
     sol_os_revenue__M__eur_per_a,
     sol_os_prod_costs__M__eur_per_a,
     prchsd_renewable_nrg__M__eur_per_a,

@@ -50,3 +50,47 @@ def insert_in_section(lines, lines_to_insert, start_identyfier, end_identifiyer)
 
     return lines[:start_line+1] + lines_to_insert + lines[end_line:]
 
+def declare_year_value(
+    content,
+    results,
+    varname,
+    start_row,
+    end_row,
+    start_year_column,
+    end_year_column,
+    raw_varname="raw_vals"
+):
+
+    for year in results.columns[start_year_column:end_year_column]:
+        n_rows = end_row-start_row
+
+        if n_rows == 3:
+            year_values = ','.join(
+                [
+                    str(results.iloc[start_row][year]),
+                    str(results.iloc[start_row+1][year]),
+                    "0.0",
+                    str(results.iloc[start_row+2][year]),
+                ]
+            )
+        else:
+            year_values = ','.join(
+                [str(results.iloc[i][year]) for i in range(start_row, end_row)]
+            )
+
+        content.append(f"\t{raw_varname}=SectorsRawValues::new();\n")
+        content.append(f"\t{raw_varname}.set({year_values});\n")
+        content.append(f"\t{varname}.set_year_values(\n")
+        content.append(f"\t\t{year},\n")
+        content.append(f"\t\t&{raw_varname},\n")
+        content.append(f"\t\t);\n\n")
+
+    return content
+
+def sector_values_padding(values):
+    if len(values)==3:
+        return [values[0], values[1], "0.0", values[2]]
+    elif len(values)==2:
+        return ["0.0", values[0], "0.0", values[1]]
+    else:
+        return values

@@ -375,11 +375,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.inputs.A_heat_oil__k__m2.get_year_values(2024),
-		[1158.5182735522906, 330.4891601843849, 23.507365709620334, 9.752139152981853],
+		[1168.5182735522906, 330.4891601843849, 23.507365709620334, 9.752139152981853],
 	);
 	assert(
 		buildings.inputs.A_heat_oil__k__m2.get_year_values(2025),
-		[1148.5182735522906, 330.4891601843849, 23.507365709620334, 9.752139152981853],
+		[1168.5182735522906, 330.4891601843849, 23.507365709620334, 9.752139152981853],
 	);
 
 	// Fläche mit Ölheizung mit Brennwert/Niedertemperatur (in 1.000 qm)
@@ -447,11 +447,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_oil__G__W_h_per_a.get_year_values(2024),
-		[186.8188559006308, 63.50948302669535, 12.031128775338722, 2.108862569476673],
+		[188.43142309240932, 63.50948302669535, 12.031128775338722, 2.108862569476673],
 	);
 	assert(
 		buildings.results.cnsmp_oil__G__W_h_per_a.get_year_values(2025),
-		[183.6531875951913, 63.50948302669535, 12.031128775338722, 2.108862569476673],
+		[186.85127667786935, 63.50948302669535, 12.031128775338722, 2.108862569476673],
 	);
 
 	// Heizöl Verbrauch o. Brennwert/Niedertemperatur (in GWh)
@@ -483,11 +483,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_oil__M__L_per_a.get_year_values(2024),
-		[40.70585893863644, 13.779042078125762, 2.61027836698119, 0.4575396412782846],
+		[40.882154662478726, 13.779042078125762, 2.61027836698119, 0.4575396412782846],
 	);
 	assert(
 		buildings.results.cnsmp_oil__M__L_per_a.get_year_values(2025),
-		[40.18969079359336, 13.779042078125762, 2.61027836698119, 0.4575396412782846],
+		[40.539325483308836, 13.779042078125762, 2.61027836698119, 0.4575396412782846],
 	);
 
 	// Gas Verbrauch (in GWh)
@@ -555,11 +555,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.cnsmp_other__G__W_h_per_a.get_year_values(2024),
-		[320.65516224644017, -449.2529828070334, -85.10572329150475, -14.9176588206405],
+		[319.2522287895929, -449.2529828070334, -85.10572329150475, -14.9176588206405],
 	);
 	assert(
 		buildings.results.cnsmp_other__G__W_h_per_a.get_year_values(2025),
-		[319.35738402342315, -449.2529828070334, -85.10572329150475, -14.9176588206405],
+		[316.5750465214933, -449.2529828070334, -85.10572329150475, -14.9176588206405],
 	);
 
 	// Heizöl Kosten (in Mio €)
@@ -573,11 +573,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.costs_oil__M__eur_per_a.get_year_values(2024),
-		[33.199698550351876, 11.238186718919371, 2.1289430361098587, 0.37316933142656894],
+		[33.34348534271765, 11.238186718919371, 2.1289430361098587, 0.37316933142656894],
 	);
 	assert(
 		buildings.results.costs_oil__M__eur_per_a.get_year_values(2025),
-		[32.778711811254745, 11.238186718919371, 2.1289430361098587, 0.37316933142656894],
+		[33.06387386418669, 11.238186718919371, 2.1289430361098587, 0.37316933142656894],
 	);
 
 	// Gas Kosten (in Mio €)
@@ -601,19 +601,19 @@ fn test_buildings_calculate() {
 	// Strom WP Kosten (in Mio €)
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2022),
-		[3.0414384377548194, 0.0, 0.0, 0.0],
+		[3.0414384377548194, 0.0, 0.0, 3.0414384377548194],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2023),
-		[3.0414384377548194, 0.0, 0.0, 0.0],
+		[3.0414384377548194, 0.0, 0.0, 3.0414384377548194],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2024),
-		[3.0161147915905606, 0.0, 0.0, 0.0],
+		[3.0161147915905606, 0.0, 0.0, 3.0161147915905606],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2025),
-		[2.9907916398863845, 0.0, 0.0, 0.0],
+		[2.9907916398863845, 0.0, 0.0, 2.9907916398863845],
 	);
 
 	// Invest Heizung (in Mio. €)
@@ -627,11 +627,11 @@ fn test_buildings_calculate() {
 	);
 	assert(
 		buildings.results.invest_heat_sources__M__eur_per_a.get_year_values(2024),
-		[0.5721784776902886, 0.0, 0.0, 0.0],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.invest_heat_sources__M__eur_per_a.get_year_values(2025),
-		[0.5662961247491123, 0.0, 0.0, 0.0],
+		[0.0, 0.0, 0.0, 0.0],
 	);
 
 	// Invest Wärmebedarf (in Mio. €)

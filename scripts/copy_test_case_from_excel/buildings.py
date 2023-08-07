@@ -126,7 +126,7 @@ def set_measures(measures, lines):
     return lines
 
 
-def write_excel_comparison(results):
+def write_excel_comparison_buildings(results):
 
     with open("src/buildings/tests/compare_with_excel.rs") as f:
         lines = f.readlines()

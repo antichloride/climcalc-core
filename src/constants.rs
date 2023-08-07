@@ -101,6 +101,7 @@ pub mod energy{
         pub buyback_price__m__eur_per_W_h: f32,
         pub power_per_area__k__Wp_per_m2: f32,
         pub costs: f32,
+        pub invest_and_om_costs__m__eur_per_W_h: f32,
     }
 
     pub const solar_roof: RenewableEnergy = RenewableEnergy{
@@ -110,8 +111,9 @@ pub mod energy{
         lifecycle: 30.0,
         Wp_to_W_h_per_a: 900.0,
         buyback_price__m__eur_per_W_h: 0.07,
-        power_per_area__k__Wp_per_m2: 0.17,
+        power_per_area__k__Wp_per_m2: 0.2,
         costs: 0.07,
+        invest_and_om_costs__m__eur_per_W_h: 0.08,
     };
 
     pub const solar_landscape: RenewableEnergy = RenewableEnergy{
@@ -119,10 +121,11 @@ pub mod energy{
         grant__m__eur_per_Wp: 500.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
-        Wp_to_W_h_per_a: 900.0,
-        buyback_price__m__eur_per_W_h: 0.07,
-        power_per_area__k__Wp_per_m2: 0.17,
+        Wp_to_W_h_per_a: 1105.0,
+        buyback_price__m__eur_per_W_h: 0.06,
+        power_per_area__k__Wp_per_m2: 0.08,
         costs: 0.05,
+        invest_and_om_costs__m__eur_per_W_h: 0.03,
     };
 
     pub const wind_onshore: RenewableEnergy = RenewableEnergy{
@@ -134,6 +137,7 @@ pub mod energy{
         buyback_price__m__eur_per_W_h: 0.0,
         power_per_area__k__Wp_per_m2: 0.0,
         costs: 0.08,
+        invest_and_om_costs__m__eur_per_W_h: 0.05,
     };
 
     pub mod evu_power_mix{

@@ -3,6 +3,8 @@ from .utils import (
     find_and_replace_arguments,
     convert_values,
     insert_in_section,
+    declare_year_value,
+    sector_values_padding,
 )
 
 def write_test_case_energy(inputs, measures):
@@ -76,17 +78,72 @@ def set_measures(measures, lines):
     return lines
 
 
-def write_excel_comparison(results):
+def write_excel_comparison_energy(results):
 
     with open("src/energy/tests/compare_with_excel.rs") as f:
         lines = f.readlines()
 
-    # lines = declare_variables(results, lines)
-    # lines = write_assert_statements(results, lines)
+    lines = declare_variables(results, lines)
+    lines = write_assert_statements(results, lines)
 
     with open("src/energy/tests/compare_with_excel.rs", "w") as f:
         for line in lines:
             f.write(line)
+
+
+def declare_variables(results, lines):
+    """
+    This sets varibales like the price for electric energy, which is not calculated
+    in the buildings case and therefore need to be set from outside.
+    """
+
+    content = []
+
+    # set power demand buildings except heat pumps
+    content = declare_year_value(
+        content,
+        results,
+        'buildings_elec_dmd__G__W_h_per_a',
+        37,
+        41,
+        2,
+        -4,
+    )
+    content.append("\n")
+    content.append("\n")
+
+    # set power consumed by heat pumps
+    content = declare_year_value(
+        content,
+        results,
+        'cnsmp_elec_heat_pump__G__W_h_per_a',
+        92,
+        96,
+        2,
+        -4,
+    )
+    content.append("\n")
+    content.append("\n")
+
+    # set power consumed by bev's
+    content = declare_year_value(
+        content,
+        results,
+        'bev_elec_nrg_dmd__G__W_h_per_a',
+        207,
+        210,
+        2,
+        -4,
+    )
+    content.append("\n")
+    content.append("\n")
+
+    # set power consumed by street lights
+    # this is ignored right now as it is missing in excel
+
+    lines = insert_in_section(lines, content, "[start:declare_variables]", "[end:declare_variables]")
+
+    return lines
 
 
 def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
@@ -96,14 +153,41 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
 
     assert_lines = ["\n"]
 
-    for variable, i, param_type in [
-        ["n_inhabitants__k__", 1, "inputs"],
+    for variable, i, param_type, n_sectors in [
+        ["elec_nrg_dmd__G__W_h_per_a", 233, "results", 3],
+        ["sol_rf_potential__M__Wp", 239, "results", 3],
+        ["sol_rf_installed__M__Wp", 243, "inputs", 3],
+        ["sol_rf_nrg__G__W_h_per_a", 247, "results", 3],
+        ["sol_rf_self_cnsmp_part", 251, "inputs", 3],
+        ["sol_rf_self_cnsmp__G__W_h_per_a", 255, "results", 3],
+        ["sol_rf_invest__M__eur_per_a", 261, "results", 3],
+        ["sol_rf_grant__M__eur_per_a", 265, "results", 3],
+        ["sol_rf_om__M__eur_per_a", 269, "results", 3],
+        ["sol_rf_revenue__M__eur_per_a", 274, "results", 3],
+        ["sol_os_installed_A__ha", 287, "inputs", 2],
+        ["sol_os_installed__M__Wp", 291, "results", 2],
+        ["sol_os_nrg__G__W_h_per_a", 294, "results", 2],
+        ["sol_os_invest__M__eur_per_a", 299, "results", 2],
+        ["sol_os_grant__M__eur_per_a", 302, "results", 2],
+        ["sol_os_om__M__eur_per_a", 305, "results", 2],
+        ["sol_os_prod_costs__M__eur_per_a", 308, "results", 2],
+        ["sol_os_turnover_buyback__M__eur_per_a", 312, "results", 2],
+        ["sol_os_revenue__M__eur_per_a", 315, "results", 2],
+        ["prchsd_renewable_nrg__G__W_h_per_a", 319, "inputs", 3],
+        ["renewable_nrg_price__m__eur_per_W_h", 323, "inputs", 3],
+        ["prchsd_renewable_nrg__M__eur_per_a", 326, "results", 3],
+        ["prchsd_nrg_mix__G__W_h_per_a", 331, "results", 3],
+        ["prchsd_nrg_mix_costs__M__eur_per_a", 338, "results", 3],
     ]:
 
         name = str(results.iloc[i,0]).replace('\n',' ')
         assert_lines.append(f"\t// {name}\n")
         for j, year in enumerate(years):
-            sector_values = ", ".join([str(val if not "nan" in str(val) else 0.0) for val in results.iloc[i:i+4,j+2].values])
+            sector_values = ", ".join(
+                sector_values_padding(
+                    [str(val if not "nan" in str(val) else 0.0) for val in results.iloc[i:i+n_sectors,j+2].values]
+                )
+            )
             assert_lines.append("\tassert(\n")
             assert_lines.append(f"\t\tenergy.{param_type}.{variable}.get_year_values({year}),\n")
             assert_lines.append(f"\t\t[{sector_values}],\n")
