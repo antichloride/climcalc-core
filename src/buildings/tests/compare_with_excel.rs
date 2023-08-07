@@ -601,19 +601,19 @@ fn test_buildings_calculate() {
 	// Strom WP Kosten (in Mio €)
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2022),
-		[3.0414384377548194, 0.0, 0.0, 3.0414384377548194],
+		[3.0414384377548194, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2023),
-		[3.0414384377548194, 0.0, 0.0, 3.0414384377548194],
+		[3.0414384377548194, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2024),
-		[3.0161147915905606, 0.0, 0.0, 3.0161147915905606],
+		[3.0161147915905606, 0.0, 0.0, 0.0],
 	);
 	assert(
 		buildings.results.costs_heat_pump__M__eur.get_year_values(2025),
-		[2.9907916398863845, 0.0, 0.0, 2.9907916398863845],
+		[2.9907916398863845, 0.0, 0.0, 0.0],
 	);
 
 	// Invest Heizung (in Mio. €)

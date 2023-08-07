@@ -100,10 +100,10 @@ impl Mobility{
         self.results.cars_fuel_dmd__M__L_per_a
             .set_year_values(year, &cars_fuel_dmd__M__L_per_a);
 
-        let cars_fuel_dmd__M__L_per_a =
+        let cars_fuel_costs__M__eur_per_a =
             &cars_fuel_dmd__M__L_per_a * constants::price_fuel;
-        self.results.cars_fuel_dmd__M__L_per_a
-            .set_year_values(year, &cars_fuel_dmd__M__L_per_a);
+        self.results.cars_fuel_costs__M__eur_per_a
+            .set_year_values(year, &cars_fuel_costs__M__eur_per_a);
 
         // Street lightning
         let n_sl__k__ = self.inputs.n_sl__k__.get_year(year);
@@ -355,4 +355,15 @@ implement_results_mobility!{
     cars_fuel_costs__M__eur_per_a,
     bev_nrg_costs__M__eur_per_a,
     cars_ems__k__to_coe_per_a
+}
+
+
+#[cfg(test)]
+mod tests{
+    use super::*;
+    extern crate wasm_bindgen_test;
+    use wasm_bindgen_test::*;
+    mod mobility_test_case;
+    use mobility_test_case::create_mobility;
+    mod compare_with_excel;
 }

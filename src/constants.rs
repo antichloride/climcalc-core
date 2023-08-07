@@ -81,7 +81,7 @@ pub mod mobility{
         pub mod combustor{
             pub const price: f32 = 30.0;
             pub const grant_per_car__k__eur: f32 = 0.0;
-            pub const nrg_cnsmp__1em2__W_h_per_m: f32 = 70.0;
+            pub const nrg_cnsmp__1em2__W_h_per_m: f32 = 52.1;
             pub const fuel_costs: f32 = 0.07;
             pub const om_costs: f32 = 0.05;
             pub const taxes_and_checks: f32 = 1.0;

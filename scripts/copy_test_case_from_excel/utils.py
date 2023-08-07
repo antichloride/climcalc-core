@@ -58,7 +58,7 @@ def declare_year_value(
     end_row,
     start_year_column,
     end_year_column,
-    raw_varname="raw_vals"
+    raw_varname="raw_vals",
 ):
 
     for year in results.columns[start_year_column:end_year_column]:
@@ -72,6 +72,10 @@ def declare_year_value(
                     "0.0",
                     str(results.iloc[start_row+2][year]),
                 ]
+            )
+        elif n_rows == 1:
+            year_values = ','.join(
+                [str(results.iloc[start_row][year]) for i in range(4)]
             )
         else:
             year_values = ','.join(

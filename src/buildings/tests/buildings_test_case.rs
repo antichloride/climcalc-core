@@ -40,7 +40,7 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
 
 	//Private
 	buildings.inputs.heat_dmd__k__W_h_per_m2_a.private.add_measure("heat_dmd__k__W_h_per_m2_a", 2024, 2040, 20.0);
-	buildings.inputs.A_heat_oil__k__m2.private.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
+	//buildings.inputs.A_heat_oil__k__m2.private.add_measure("A_heat_oil__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_oil_condensing__k__m2.private.add_measure("A_heat_oil_condensing__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_gas__k__m2.private.add_measure("A_heat_gas__k__m2", 2024, 2025, 20.0);
 	//buildings.inputs.A_heat_heat_pump__k__m2.private.add_measure("A_heat_heat_pump__k__m2", 2024, 2025, 20.0);
