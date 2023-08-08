@@ -2,6 +2,7 @@ from .utils import (
     find_and_replace_arguments,
     convert_values,
     insert_in_section,
+    sector_values_padding,
 )
 
 def write_test_case_buildings(inputs, measures):
@@ -171,41 +172,47 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
 
     assert_lines = ["\n"]
 
-    for variable, i, param_type in [
-        ["n_inhabitants__k__", 1, "inputs"],
-        ["n_buildings", 5, "inputs"],
-        ["floor_A_building__m2", 10, "inputs"],
-        ["floor_A__k__m2", 14, "results"],
-        ["heat_dmd__k__W_h_per_m2_a", 19, "inputs"],
-        ["hot_water_dmd__k__W_h_per_m2_a", 23, "inputs"],
-        ["total_heat_dmd__G__W_h_per_a", 27, "results"],
-        ["elec_dmd_capita__k_W_h_per_a", 32, "inputs"],
-        ["elec_dmd__G__W_h_per_a", 37, "results"],
-        ["A_heat_oil__k__m2", 42, "inputs"],
-        ["A_heat_oil_condensing__k__m2", 47, "inputs"],
-        ["A_heat_gas__k__m2", 52, "inputs"],
-        ["A_heat_heat_pump__k__m2", 57, "inputs"],
-        #["A_heat_other__k__m2", 62, "inputs"],
-        ["cnsmp_oil__G__W_h_per_a", 67, "results"],
-        ["cnsmp_oil_condensing__G__W_h_per_a", 72, "results"],
-        ["cnsmp_oil__M__L_per_a", 77, "results"],
-        ["cnsmp_gas__G__W_h_per_a", 82, "results"],
-        ["cnsmp_gas__M__m3_per_a", 87, "results"],
-        ["cnsmp_elec_heat_pump__G__W_h_per_a", 92, "results"],
-        ["cnsmp_other__G__W_h_per_a", 97, "results"],
-        ["costs_oil__M__eur_per_a", 110, "results"],
-        ["costs_gas__M__eur_per_a", 115, "results"],
-        ["costs_heat_pump__M__eur", 120, "results"],
-        ["invest_heat_sources__M__eur_per_a", 141, "results"],
-        ["invest_energetic_renovation__M__eur_per_a", 146, "results"],
-        ["grant_heat_sources__M__eur_per_a", 162, "results"],
-        ["grant_energetic_renovation__M__eur_per_a", 167, "results"],
+    for variable, i, param_type, n_sectors in [
+        ["n_inhabitants__k__", 1, "inputs", 4],
+        ["n_buildings", 5, "inputs", 4],
+        ["floor_A_building__m2", 10, "inputs", 4],
+        ["floor_A__k__m2", 14, "results", 4],
+        ["heat_dmd__k__W_h_per_m2_a", 19, "inputs", 4],
+        ["hot_water_dmd__k__W_h_per_m2_a", 23, "inputs", 4],
+        ["total_heat_dmd__G__W_h_per_a", 27, "results", 4],
+        ["elec_dmd_capita__k_W_h_per_a", 32, "inputs", 4],
+        ["elec_dmd__G__W_h_per_a", 37, "results", 4],
+        ["A_heat_oil__k__m2", 42, "inputs", 4],
+        ["A_heat_oil_condensing__k__m2", 47, "inputs", 4],
+        ["A_heat_gas__k__m2", 52, "inputs", 4],
+        ["A_heat_heat_pump__k__m2", 57, "inputs", 4],
+        #["A_heat_other__k__m2", 62, "inputs", 4],
+        ["cnsmp_oil__G__W_h_per_a", 67, "results", 4],
+        ["cnsmp_oil_condensing__G__W_h_per_a", 72, "results", 4],
+        ["cnsmp_oil__M__L_per_a", 77, "results", 4],
+        ["cnsmp_gas__G__W_h_per_a", 82, "results", 4],
+        ["cnsmp_gas__M__m3_per_a", 87, "results", 4],
+        ["cnsmp_elec_heat_pump__G__W_h_per_a", 92, "results", 4],
+        ["cnsmp_other__G__W_h_per_a", 97, "results", 4],
+        ["costs_oil__M__eur_per_a", 110, "results", 4],
+        ["costs_gas__M__eur_per_a", 115, "results", 4],
+        ["costs_heat_pump__M__eur", 120, "results", 4],
+        ["invest_heat_sources__M__eur_per_a", 141, "results", 4],
+        ["invest_energetic_renovation__M__eur_per_a", 146, "results", 4],
+        ["grant_heat_sources__M__eur_per_a", 162, "results", 4],
+        ["grant_energetic_renovation__M__eur_per_a", 167, "results", 4],
+        #["ems_oil__k__to_coe_per_a", 354, "results", 3],
+        #["ems_gas__k__to_coe_per_a", 358, "results", 3],
     ]:
 
         name = str(results.iloc[i,0]).replace('\n',' ')
         assert_lines.append(f"\t// {name}\n")
         for j, year in enumerate(years):
-            sector_values = ", ".join([str(val if not "nan" in str(val) else 0.0) for val in results.iloc[i:i+4,j+2].values])
+            sector_values = ", ".join(
+                sector_values_padding(
+                    [str(val if not "nan" in str(val) else 0.0) for val in results.iloc[i:i+n_sectors,j+2].values]
+                )
+            )
             assert_lines.append("\tassert(\n")
             assert_lines.append(f"\t\tbuildings.{param_type}.{variable}.get_year_values({year}),\n")
             assert_lines.append(f"\t\t[{sector_values}],\n")
