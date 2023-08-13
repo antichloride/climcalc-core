@@ -256,7 +256,7 @@ impl Energy{
         electric_power_demand_buildings: SectorsRawValues,
         energy_heating_heat_pump: SectorsRawValues,
         bev_electric_power_demand: SectorsRawValues,
-        sl_nrg_dmd__G__W_h_per_a: f32,
+        sl_nrg_dmd__G__W_h_per_a: f64,
         ){
 
         let mut elec_nrg_dmd__G__W_h_per_a =

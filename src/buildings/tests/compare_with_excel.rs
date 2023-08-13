@@ -2,10 +2,10 @@ use crate::buildings::tests::buildings_test_case::create_buildings;
 use crate::sectors::SectorsResult;
 use crate::sectors::SectorsRawValues;
 
-fn assert(a: [f32; 4], b: [f32; 4]){
+fn assert(a: [f64; 4], b: [f64; 4]){
     assert_relative_eq!(a[0], b[0], max_relative=0.1);
-    assert_relative_eq!(a[1], b[1], max_relative=6.0);
-    assert_relative_eq!(a[2], b[2], max_relative=6.0);
+    assert_relative_eq!(a[1], b[1], max_relative=0.7);
+    assert_relative_eq!(a[2], b[2], max_relative=0.7);
     assert_relative_eq!(a[3], b[3], max_relative=0.1);
 }
 

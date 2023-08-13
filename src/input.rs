@@ -2,7 +2,7 @@ use std::ptr;
 
 pub struct Input{
     pub id: String,
-    values: Vec<f32>,
+    values: Vec<f64>,
     measures: Vec<Measure>,
     start_year: u32,
     end_year: u32,
@@ -20,7 +20,7 @@ impl Input{
         }
     }
 
-    pub fn get_year(&self, year: u32) -> f32{
+    pub fn get_year(&self, year: u32) -> f64{
         return self.values[(year-self.start_year) as usize];
     }
 
@@ -35,16 +35,16 @@ impl Input{
         }
     }
 
-    pub fn set_values(&mut self, value: f32){
+    pub fn set_values(&mut self, value: f64){
         self.values = vec![value; (self.end_year-self.start_year+1) as usize];
         self.apply_measures();
     }
 
-    pub fn get_value(& self) -> f32{
+    pub fn get_value(& self) -> f64{
         return self.values[0];
     }
 
-    pub fn add_measure(&mut self, id: &str, start_year: u32, end_year: u32, delta: f32){
+    pub fn add_measure(&mut self, id: &str, start_year: u32, end_year: u32, delta: f64){
         self.measures.push(Measure{
             id: (self.id.to_owned()+"/"+id).to_string(),
             start_year: start_year,
@@ -63,7 +63,7 @@ impl Input{
         return None;
     }
 
-    pub fn update_measure(&mut self, measure_id: &str, start_year: u32, end_year: u32, delta: f32){
+    pub fn update_measure(&mut self, measure_id: &str, start_year: u32, end_year: u32, delta: f64){
         let res = self.get_measure_by_id(measure_id);
         match res{
             Some(measure) => {
@@ -99,22 +99,22 @@ pub struct Measure {
     id: String,
     start_year: u32,
     end_year: u32,
-    delta: f32,
+    delta: f64,
 }
 
 impl Measure{
 
-    pub fn delta_per_year(&self, year: u32) -> f32{
+    pub fn delta_per_year(&self, year: u32) -> f64{
         // start_yaer is the first yaer in which the measure is applied
         // end year is the last year in which the measures is applied
         // the target delta is reached at the end of the end_year
         if year < self.start_year || year > self.end_year{
             return 0.0;
         }
-        return self.delta / (self.start_year as f32 - self.end_year as f32 - 1.0)
+        return self.delta / (self.start_year as f64 - self.end_year as f64 - 1.0)
     }
 
-    pub fn update(&mut self, start_year: u32, end_year: u32, delta: f32){
+    pub fn update(&mut self, start_year: u32, end_year: u32, delta: f64){
         self.start_year = start_year;
         self.end_year = end_year;
         self.delta = delta;

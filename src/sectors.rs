@@ -56,10 +56,10 @@ impl SectorsInputs{
 
 #[derive(Copy, Clone)]
 pub struct SectorsRawValues {
-    pub private: f32,
-    pub industry: f32,
-    pub schools: f32,
-    pub public: f32,
+    pub private: f64,
+    pub industry: f64,
+    pub schools: f64,
+    pub public: f64,
 }
 
 impl SectorsRawValues{
@@ -74,14 +74,14 @@ impl SectorsRawValues{
 
     pub fn is_greater(&self, other: &SectorsRawValues) -> SectorsRawValues{
         return SectorsRawValues{
-            private: (self.private > other.private) as usize as f32,
-            industry: (self.industry > other.industry) as usize as f32,
-            schools: (self.schools > other.schools) as usize as f32,
-            public: (self.public > other.public) as usize as f32,
+            private: (self.private > other.private) as usize as f64,
+            industry: (self.industry > other.industry) as usize as f64,
+            schools: (self.schools > other.schools) as usize as f64,
+            public: (self.public > other.public) as usize as f64,
         };
     }
 
-    pub fn sum(&self) -> f32{
+    pub fn sum(&self) -> f64{
         return self.private + self.industry + self.schools + self.public;
     }
 
@@ -222,10 +222,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn mul(self, _rhs: SectorsRawValues) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self * _rhs.private as f32,
-                        industry: self * _rhs.industry as f32,
-                        schools: self * _rhs.schools as f32,
-                        public: self * _rhs.public as f32,
+                        private: self * _rhs.private as f64,
+                        industry: self * _rhs.industry as f64,
+                        schools: self * _rhs.schools as f64,
+                        public: self * _rhs.public as f64,
                     }
                 }
             }
@@ -233,10 +233,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn mul(self, _rhs: $t) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self.private * _rhs as f32,
-                        industry: self.industry * _rhs as f32,
-                        schools: self.schools * _rhs as f32,
-                        public: self.public * _rhs as f32,
+                        private: self.private * _rhs as f64,
+                        industry: self.industry * _rhs as f64,
+                        schools: self.schools * _rhs as f64,
+                        public: self.public * _rhs as f64,
                     }
                 }
             }
@@ -244,10 +244,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn div(self, _rhs: $t) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self.private / _rhs as f32,
-                        industry: self.industry / _rhs as f32,
-                        schools: self.schools / _rhs as f32,
-                        public: self.public / _rhs as f32,
+                        private: self.private / _rhs as f64,
+                        industry: self.industry / _rhs as f64,
+                        schools: self.schools / _rhs as f64,
+                        public: self.public / _rhs as f64,
                     }
                 }
             }
@@ -255,10 +255,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn mul(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self * _rhs.private as f32,
-                        industry: self * _rhs.industry as f32,
-                        schools: self * _rhs.schools as f32,
-                        public: self * _rhs.public as f32,
+                        private: self * _rhs.private as f64,
+                        industry: self * _rhs.industry as f64,
+                        schools: self * _rhs.schools as f64,
+                        public: self * _rhs.public as f64,
                     }
                 }
             }
@@ -266,10 +266,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn sub(self, _rhs: &SectorsRawValues) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self - _rhs.private as f32,
-                        industry: self - _rhs.industry as f32,
-                        schools: self - _rhs.schools as f32,
-                        public: self - _rhs.public as f32,
+                        private: self - _rhs.private as f64,
+                        industry: self - _rhs.industry as f64,
+                        schools: self - _rhs.schools as f64,
+                        public: self - _rhs.public as f64,
                     }
                 }
             }
@@ -277,10 +277,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn mul(self, _rhs: $t) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self.private * _rhs as f32,
-                        industry: self.industry * _rhs as f32,
-                        schools: self.schools * _rhs as f32,
-                        public: self.public * _rhs as f32,
+                        private: self.private * _rhs as f64,
+                        industry: self.industry * _rhs as f64,
+                        schools: self.schools * _rhs as f64,
+                        public: self.public * _rhs as f64,
                     }
                 }
             }
@@ -288,10 +288,10 @@ macro_rules! impl_math_ops_for_sector {
                 type Output = SectorsRawValues;
                 fn div(self, _rhs: $t) -> SectorsRawValues {
                     SectorsRawValues {
-                        private: self.private / _rhs as f32,
-                        industry: self.industry / _rhs as f32,
-                        schools: self.schools / _rhs as f32,
-                        public: self.public / _rhs as f32,
+                        private: self.private / _rhs as f64,
+                        industry: self.industry / _rhs as f64,
+                        schools: self.schools / _rhs as f64,
+                        public: self.public / _rhs as f64,
                     }
                 }
             }
@@ -299,7 +299,7 @@ macro_rules! impl_math_ops_for_sector {
     }
 }
 
-impl_math_ops_for_sector!{f32}
+impl_math_ops_for_sector!{f64}
 
 pub struct SectorsResult{
     private: Results,
@@ -371,7 +371,7 @@ impl SectorsResult{
 #[cfg(test)]
 impl SectorsResult{
 
-    pub fn get_year_values(&self, year: u32) -> [f32; 4]{
+    pub fn get_year_values(&self, year: u32) -> [f64; 4]{
         return [
             self.private.get_year(year),
             self.industry.get_year(year),
@@ -384,7 +384,7 @@ impl SectorsResult{
 #[cfg(test)]
 impl SectorsInputs{
 
-    pub fn get_year_values(&self, year: u32) -> [f32; 4]{
+    pub fn get_year_values(&self, year: u32) -> [f64; 4]{
         return [
             self.private.get_year(year),
             self.industry.get_year(year),
@@ -396,7 +396,7 @@ impl SectorsInputs{
 
 #[cfg(test)]
 impl SectorsRawValues{
-    pub fn set(&mut self, private: f32, industry:f32, schools: f32, public: f32){
+    pub fn set(&mut self, private: f64, industry:f64, schools: f64, public: f64){
         self.private = private;
         self.industry = industry;
         self.schools = schools;

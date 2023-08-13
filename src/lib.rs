@@ -141,7 +141,7 @@ impl Calculator{
     /// This function serves to populate the input parameters.
     ///
     /// Note that "set input" means the start year value of an input parameter.
-    pub fn set_input(&mut self, id: &str, value: f32){
+    pub fn set_input(&mut self, id: &str, value: f64){
         let res = self.get_input_by_id(id);
         match res{
             Some(input) => {
@@ -153,7 +153,7 @@ impl Calculator{
     }
 
     /// This function returns the start year value of an input parameter.
-    pub fn get_input(&mut self, id: &str) -> Option<f32>{
+    pub fn get_input(&mut self, id: &str) -> Option<f64>{
         let res = self.get_input_by_id(id);
         match res{
             Some(input) => {
@@ -195,7 +195,7 @@ impl Calculator{
     }
 
     /// Get a list of values (for each year) in a result.
-    pub fn get_results(&mut self, id: &str) -> Vec<f32>{
+    pub fn get_results(&mut self, id: &str) -> Vec<f64>{
         let res = self.get_results_by_id(id);
         match res{
             Some(results) => {
@@ -225,7 +225,7 @@ impl Calculator{
         input_id: &str,
         start_year: u32,
         end_year: u32,
-        delta: f32,
+        delta: f64,
         ){
         let res = self.get_input_by_id(input_id);
         match res{
@@ -244,7 +244,7 @@ impl Calculator{
         input_id: &str,
         start_year: u32,
         end_year: u32,
-        delta: f32,
+        delta: f64,
         ){
         let res = self.get_input_by_id(input_id);
         match res{
