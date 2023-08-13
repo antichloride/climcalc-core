@@ -359,11 +359,11 @@ implement_results_mobility!{
 
 
 #[cfg(test)]
-mod tests{
+pub mod tests{
     use super::*;
     extern crate wasm_bindgen_test;
     use wasm_bindgen_test::*;
-    mod mobility_test_case;
+    pub mod mobility_test_case;
     use mobility_test_case::create_mobility;
     mod compare_with_excel;
 }

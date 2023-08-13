@@ -474,11 +474,11 @@ implement_results_energy!{
 
 
 #[cfg(test)]
-mod tests{
+pub mod tests{
     use super::*;
     extern crate wasm_bindgen_test;
     use wasm_bindgen_test::*;
-    mod energy_test_case;
+    pub mod energy_test_case;
     use energy_test_case::create_energy;
     mod compare_with_excel;
 

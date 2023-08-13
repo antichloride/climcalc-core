@@ -361,3 +361,11 @@ impl Economy{
 
     }
 }
+
+#[cfg(test)]
+mod tests{
+    use super::*;
+    extern crate wasm_bindgen_test;
+    use wasm_bindgen_test::*;
+    mod compare_with_excel;
+}

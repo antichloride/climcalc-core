@@ -576,11 +576,11 @@ implement_results_builidngs!{
 
 
 #[cfg(test)]
-mod tests{
+pub mod tests{
     use super::*;
     extern crate wasm_bindgen_test;
     use wasm_bindgen_test::*;
-    mod buildings_test_case;
+    pub mod buildings_test_case;
     use buildings_test_case::create_buildings;
     mod compare_with_excel;
 
