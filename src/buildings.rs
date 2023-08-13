@@ -387,6 +387,7 @@ impl Buildings{
             * &nrg_own_mix_price__m__eur_per_W_h * (1.0 - evu_discount_heat_pump);
         self.results.costs_heat_pump__M__eur
             .set_year_values(year, &costs_heat_pump__M__eur);
+        // println!("Year:{0} energy_consumption:{1} energy_price:{2} evu:{3}", year, &cnsmp_elec_heat_pump__G__W_h_per_a.private, &nrg_own_mix_price__m__eur_per_W_h.private, evu_discount_heat_pump)
     }
 
     pub fn calculate_emissions(&mut self, year: u32){
@@ -395,13 +396,22 @@ impl Buildings{
         let cnsmp_gas__M__m3_per_a = self.results.cnsmp_gas__M__m3_per_a
             .get_year(year);
 
-        let ems_oil__k__to_coe_per_a = cnsmp_oil__M__L_per_a
+        let mut ems_oil__k__to_coe_per_a = cnsmp_oil__M__L_per_a
             * constants::EnergySource::oil::emission__kg_coe_per_L;
+        // TODO: This is not done in excel. Check if whis is on purpose.
+        ems_oil__k__to_coe_per_a.public = &ems_oil__k__to_coe_per_a.schools
+            + ems_oil__k__to_coe_per_a.public;
+        ems_oil__k__to_coe_per_a.schools = 0.0;
+
         self.results.ems_oil__k__to_coe_per_a
             .set_year_values(year, &ems_oil__k__to_coe_per_a);
 
-        let ems_gas__k__to_coe_per_a = cnsmp_gas__M__m3_per_a
+        let mut ems_gas__k__to_coe_per_a = cnsmp_gas__M__m3_per_a
             * constants::EnergySource::gas::emission__kg_coe_per_m3;
+        ems_gas__k__to_coe_per_a.public = &ems_gas__k__to_coe_per_a.schools
+            + ems_gas__k__to_coe_per_a.public;
+        ems_gas__k__to_coe_per_a.schools = 0.0;
+
         self.results.ems_gas__k__to_coe_per_a
             .set_year_values(year, &ems_gas__k__to_coe_per_a);
 

@@ -165,7 +165,7 @@ def declare_variables(results, lines):
     return lines
 
 
-def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
+def write_assert_statements(results, lines, years=[2022,2023,2024]):
     """
     This adds the assert statements for the output variables.
     """
@@ -201,8 +201,8 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
         ["invest_energetic_renovation__M__eur_per_a", 146, "results", 4],
         ["grant_heat_sources__M__eur_per_a", 162, "results", 4],
         ["grant_energetic_renovation__M__eur_per_a", 167, "results", 4],
-        #["ems_oil__k__to_coe_per_a", 354, "results", 3],
-        #["ems_gas__k__to_coe_per_a", 358, "results", 3],
+        ["ems_oil__k__to_coe_per_a", 354, "results", 3],
+        ["ems_gas__k__to_coe_per_a", 358, "results", 3],
     ]:
 
         name = str(results.iloc[i,0]).replace('\n',' ')

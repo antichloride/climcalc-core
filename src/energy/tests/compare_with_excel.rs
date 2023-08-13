@@ -571,19 +571,19 @@ fn test_energy_calculate() {
 	// Strombedarf (in GWh/a)
 	assert(
 		energy.results.elec_nrg_dmd__G__W_h_per_a.get_year_values(2022),
-		[285.0672352375563, 5.835266089786605, 0.0, 1.6029501812850642],
+		[285.0672352375563, 5.835266089786605, 0.0, 12.03564248897737],
 	);
 	assert(
 		energy.results.elec_nrg_dmd__G__W_h_per_a.get_year_values(2023),
-		[285.0672352375563, 5.835266089786605, 0.0, 1.6029501812850642],
+		[285.0672352375563, 5.835266089786605, 0.0, 12.03564248897737],
 	);
 	assert(
 		energy.results.elec_nrg_dmd__G__W_h_per_a.get_year_values(2024),
-		[284.54143005953034, 5.8987991646063165, 0.0, 1.6437680899389102],
+		[284.54143005953034, 5.8987991646063165, 0.0, 12.076460397631216],
 	);
 	assert(
 		energy.results.elec_nrg_dmd__G__W_h_per_a.get_year_values(2025),
-		[284.0234680187593, 5.962332239426028, 0.0, 1.6845859985927563],
+		[284.0234680187593, 5.962332239426028, 0.0, 12.117278306285062],
 	);
 
 	//   MWp Potenzial PV auf Dach
@@ -967,37 +967,37 @@ fn test_energy_calculate() {
 	// Menge (GWh)
 	assert(
 		energy.results.prchsd_nrg_mix__G__W_h_per_a.get_year_values(2022),
-		[188.02360141834401, -84.13488838216789, 0.0, -3.13232110671254],
+		[188.02360141834401, -84.13488838216789, 0.0, 7.300371200979765],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix__G__W_h_per_a.get_year_values(2023),
-		[188.02360141834401, -84.13488838216789, 0.0, -3.13232110671254],
+		[188.02360141834401, -84.13488838216789, 0.0, 7.300371200979765],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix__G__W_h_per_a.get_year_values(2024),
-		[187.50320004891182, -84.07675911594193, 0.0, -3.0860993894649438],
+		[187.50320004891182, -84.07675911594193, 0.0, 7.346592918227361],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix__G__W_h_per_a.get_year_values(2025),
-		[186.99064181673452, -84.01862984971596, 0.0, -3.0398776722173477],
+		[186.99064181673452, -84.01862984971596, 0.0, 7.392814635474958],
 	);
 
 	// Kosten (in Mio. €/a)
 	assert(
 		energy.results.prchsd_nrg_mix_costs__M__eur_per_a.get_year_values(2022),
-		[61.35210114280565, 0.0, 0.0, 0.0],
+		[61.35210114280565, 0.0, 0.0, 1.6958762299875996],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix_costs__M__eur_per_a.get_year_values(2023),
-		[61.35210114280565, 0.0, 0.0, 0.0],
+		[61.35210114280565, 0.0, 0.0, 1.6958762299875996],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix_costs__M__eur_per_a.get_year_values(2024),
-		[61.182294175959925, 0.0, 0.0, 0.0],
+		[61.182294175959925, 0.0, 0.0, 1.706613534904216],
 	);
 	assert(
 		energy.results.prchsd_nrg_mix_costs__M__eur_per_a.get_year_values(2025),
-		[61.015046424800474, 0.0, 0.0, 0.0],
+		[61.015046424800474, 0.0, 0.0, 1.7173508398208328],
 	);
 
     // [end:assert_measures]

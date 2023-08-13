@@ -38,7 +38,7 @@ pub mod buildings{
         pub mod oil{
             pub const energy_density__k__W_h_per_L: f64 = 9.0;
             pub const price__eur_per_L: f64 = 0.82;
-            pub const emission__kg_coe_per_L: f64 = 3.0;
+            pub const emission__kg_coe_per_L: f64 = 2.8;
         }
 
         pub mod gas{
@@ -154,7 +154,7 @@ pub mod energy{
         pub const gas: f64 = 600.0;
     }
 
-    pub const evu_discount_heat_pump: f64 = 0.2;
+    pub const evu_discount_heat_pump: f64 = 0.27;
 
 }
 
