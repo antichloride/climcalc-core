@@ -221,6 +221,8 @@ impl Buildings{
             // water.
             let mut invest_heat_sources__M__eur_per_a = SectorsRawValues::new();
             let mut grant_heat_sources__M__eur_per_a = SectorsRawValues::new();
+            let heat_dmd_prev_year__k__W_h_per_m2_a =
+                self.inputs.heat_dmd__k__W_h_per_m2_a.get_year(year-1);
 
             macro_rules! implement_invest_calculation_heating{
                 ($(($heat_type: ident, $heat_type_A__k__m2: ident)),*) => {
@@ -245,7 +247,7 @@ impl Buildings{
                         invest_heat_source__M__eur_per_a = 1e-3
                             * (&A_this_year__k__m2 - &A_prev_year__k__m2)
                             * constants::$heat_type.invest__m__eur_per_W_h
-                            * &heat_dmd__k__W_h_per_m2_a
+                            * &heat_dmd_prev_year__k__W_h_per_m2_a
                             * A_this_year__k__m2
                                 .is_greater(&A_prev_year__k__m2);
 
@@ -287,21 +289,22 @@ impl Buildings{
                     invest_heat_source__M__eur_per_a = 1e-3
                         * (&A_this_year__k__m2 - &A_prev_year__k__m2)
                         * constants::other.invest__m__eur_per_W_h
-                        * &heat_dmd__k__W_h_per_m2_a
+                        * &heat_dmd_prev_year__k__W_h_per_m2_a
                         * A_this_year__k__m2
                             .is_greater(&A_prev_year__k__m2);
 
-                    if (invest_heat_source__M__eur_per_a.private != 0.0){
+                    if (invest_heat_source__M__eur_per_a.industry != 0.0){
                         println!(
-                            "year={0} heat_type={1:20} invest={2:.3} is_greater={3:.3} A_this_year={4:.3} A_prev_year={5:.3} total_head_dmd={6:.3}",
+                            "year={0} heat_type={1:20} invest={2:.3} is_greater={3:.3} A_this_year={4:.3} A_prev_year={5:.3} total_head_dmd={6:.3}  invest_costs_const={7}",
                              year,
                              String::from("other"),
-                             invest_heat_sources__M__eur_per_a.private,
+                             invest_heat_source__M__eur_per_a.industry,
                              A_this_year__k__m2
-                                .is_greater(&A_prev_year__k__m2).private,
-                             A_this_year__k__m2.private,
-                             A_prev_year__k__m2.private,
-                             total_heat_dmd_prev_year__G__W_h_per_m2_a.private,
+                                .is_greater(&A_prev_year__k__m2).industry,
+                             A_this_year__k__m2.industry,
+                             A_prev_year__k__m2.industry,
+                             heat_dmd__k__W_h_per_m2_a.industry,
+                             constants::other.invest__m__eur_per_W_h,
                         );
                     }
 
