@@ -4,10 +4,10 @@ use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 
 fn assert(a: [f64; 4], b: [f64; 4]){
-    assert_relative_eq!(a[0], b[0], max_relative=0.3);
-    assert_relative_eq!(a[1], b[1], max_relative=0.3);
-    assert_relative_eq!(a[2], b[2], max_relative=0.3);
-    assert_relative_eq!(a[3], b[3], max_relative=0.3);
+    assert_relative_eq!(a[0], b[0], max_relative=0.03);
+    assert_relative_eq!(a[1], b[1], max_relative=0.03);
+    assert_relative_eq!(a[2], b[2], max_relative=0.03);
+    assert_relative_eq!(a[3], b[3], max_relative=0.03);
 }
 
 #[test]
@@ -553,6 +553,30 @@ fn test_energy_calculate() {
 
 
 
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2022,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2023,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2024,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2025,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2026,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2027,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2028,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2029,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2030,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2031,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2032,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2033,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2034,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2035,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2036,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2037,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2038,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2039,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2040,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2041,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2042,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2043,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2044,10.432692307692307);
+	sl_nrg_dmd__G__W_h_per_a.set_year_value(2045,10.432692307692307);
     // [end:declare_variables]
 
     for year in start_year..end_year+1{
@@ -564,6 +588,7 @@ fn test_energy_calculate() {
 	    bev_elec_nrg_dmd__G__W_h_per_a.get_year(year),
 	    sl_nrg_dmd__G__W_h_per_a.get_year(year),
 	);
+	energy.calculate_emissions(year);
     }
 
     // [start:assert_measures]
@@ -998,6 +1023,24 @@ fn test_energy_calculate() {
 	assert(
 		energy.results.prchsd_nrg_mix_costs__M__eur_per_a.get_year_values(2025),
 		[61.015046424800474, 0.0, 0.0, 1.7173508398208328],
+	);
+
+	// CO2-Emissionen Strom (in 1.000 to )
+	assert(
+		energy.results.prchsd_nrg_mix_ems__k__to_coe_per_a.get_year_values(2022),
+		[63.404968630252114, -28.37181033838375, 0.0, 2.4618175776637283],
+	);
+	assert(
+		energy.results.prchsd_nrg_mix_ems__k__to_coe_per_a.get_year_values(2023),
+		[63.404968630252114, -28.37181033838375, 0.0, 2.4618175776637283],
+	);
+	assert(
+		energy.results.prchsd_nrg_mix_ems__k__to_coe_per_a.get_year_values(2024),
+		[63.22947984982729, -28.352208095507038, 0.0, 2.4774043790546854],
+	);
+	assert(
+		energy.results.prchsd_nrg_mix_ems__k__to_coe_per_a.get_year_values(2025),
+		[63.0566359175378, -28.332605852630323, 0.0, 2.492991180445643],
 	);
 
     // [end:assert_measures]

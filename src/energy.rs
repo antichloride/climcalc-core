@@ -161,7 +161,7 @@ impl Energy{
         let sol_os_self_cnsmp_part = self.inputs
             .sol_os_self_cnsmp_part.get_year(year);
 
-        let sol_os_installed__M__Wp = 1e1 // TODO: Should be 1e-1
+        let sol_os_installed__M__Wp = 1e1
             * &sol_os_installed_A__ha
             * constants::solar_landscape.power_per_area__k__Wp_per_m2;
         self.results.sol_os_installed__M__Wp
@@ -323,7 +323,7 @@ impl Energy{
             * constants::evu_emissions::gas;
 
         let prchsd_nrg_mix_ems__k__to_coe_per_a = &prchsd_nrg_mix__G__W_h_per_a
-            * nrg_mix_ems__k__to_coe_per_a;
+            * nrg_mix_ems__k__to_coe_per_a * 1e-3;
 
         self.results.prchsd_nrg_mix_ems__k__to_coe_per_a
             .set_year_values(year, &prchsd_nrg_mix_ems__k__to_coe_per_a);
@@ -382,7 +382,7 @@ macro_rules! implement_inputs_energy{
 
 
 implement_inputs_energy!{
-    rf_A__k__m2,
+    rf_A__k__m2, //TODO: change to hektar
     sol_rf_suitable_A_part,
     sol_rf_installed__M__Wp,
     sol_rf_self_cnsmp_part,

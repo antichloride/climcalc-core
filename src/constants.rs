@@ -105,15 +105,15 @@ pub mod energy{
     }
 
     pub const solar_roof: RenewableEnergy = RenewableEnergy{
-        invest__m__eur_per_Wp: 1500.0,
+        invest__m__eur_per_Wp: 1300.0,
         grant__m__eur_per_Wp: 0.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
-        Wp_to_W_h_per_a: 900.0,
-        buyback_price__m__eur_per_W_h: 0.07,
+        Wp_to_W_h_per_a: 829.0,
+        buyback_price__m__eur_per_W_h: 0.08,
         power_per_area__k__Wp_per_m2: 0.2,
         costs: 0.07,
-        invest_and_om_costs__m__eur_per_W_h: 0.08,
+        invest_and_om_costs__m__eur_per_W_h: 0.08366013,
     };
 
     pub const solar_landscape: RenewableEnergy = RenewableEnergy{
@@ -122,18 +122,18 @@ pub mod energy{
         operation_costs: 0.02,
         lifecycle: 30.0,
         Wp_to_W_h_per_a: 1105.0,
-        buyback_price__m__eur_per_W_h: 0.06,
-        power_per_area__k__Wp_per_m2: 0.08,
+        buyback_price__m__eur_per_W_h: 0.0565,
+        power_per_area__k__Wp_per_m2: 0.08333333333,
         costs: 0.05,
         invest_and_om_costs__m__eur_per_W_h: 0.03,
     };
 
     pub const wind_onshore: RenewableEnergy = RenewableEnergy{
-        invest__m__eur_per_Wp: 2000.0,
+        invest__m__eur_per_Wp: 1700.0,
         grant__m__eur_per_Wp: 750.0,
         operation_costs: 0.02,
         lifecycle: 20.0,
-        Wp_to_W_h_per_a: 1300.0,
+        Wp_to_W_h_per_a: 1800.0,
         buyback_price__m__eur_per_W_h: 0.0,
         power_per_area__k__Wp_per_m2: 0.0,
         costs: 0.08,
@@ -141,17 +141,17 @@ pub mod energy{
     };
 
     pub mod evu_power_mix{
-        pub const coal: f64 = 0.297;
-        pub const gas: f64 = 0.105;
+        pub const coal: f64 = 0.296;
+        pub const gas: f64 = 0.104;
         pub const atom: f64 = 0.133;
         pub const pv: f64 = 0.099;
-        pub const wind: f64 = 0.230;
+        pub const wind: f64 = 0.232;
         pub const other: f64 = 13.6;
     }
 
     pub mod evu_emissions{
-        pub const coal: f64 = 1000.0;
-        pub const gas: f64 = 600.0;
+        pub const coal: f64 = 999.0;
+        pub const gas: f64 = 397.0;
     }
 
     pub const evu_discount_heat_pump: f64 = 0.27;

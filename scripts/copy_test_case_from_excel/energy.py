@@ -139,7 +139,11 @@ def declare_variables(results, lines):
     content.append("\n")
 
     # set power consumed by street lights
-    # this is ignored right now as it is missing in excel
+    for year in results.columns[2:-4]:
+        value = str(float(results.iloc[223][year])*float(results.iloc[224][year])/1000)
+
+        content.append(f"\tsl_nrg_dmd__G__W_h_per_a.set_year_value({year},{value});\n")
+
 
     lines = insert_in_section(lines, content, "[start:declare_variables]", "[end:declare_variables]")
 
@@ -178,6 +182,7 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
         ["prchsd_renewable_nrg__M__eur_per_a", 326, "results", 3],
         ["prchsd_nrg_mix__G__W_h_per_a", 331, "results", 3],
         ["prchsd_nrg_mix_costs__M__eur_per_a", 338, "results", 3],
+        ["prchsd_nrg_mix_ems__k__to_coe_per_a", 362, "results", 3],
     ]:
 
         name = str(results.iloc[i,0]).replace('\n',' ')
