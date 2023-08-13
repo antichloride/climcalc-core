@@ -130,6 +130,7 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
         ["cars_fuel_dmd__M__L_per_a", 211, "results", 3],
         ["bev_elec_nrg_price__G__W_h_per_a", 215, "results", 3],
         ["cars_fuel_costs__M__eur_per_a", 219, "results", 3],
+        ["cars_ems__k__to_coe_per_a", 366, "results", 3],
     ]:
 
         name = str(results.iloc[i,0]).replace('\n',' ')

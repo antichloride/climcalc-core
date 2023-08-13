@@ -66,7 +66,7 @@ pub mod buildings{
 
 pub mod mobility{
 
-        pub const price_fuel: f64 = 1.7;
+        pub const price_fuel: f64 = 1.87;
 
         pub mod bev{
             pub const price: f64 = 35.0;

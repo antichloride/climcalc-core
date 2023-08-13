@@ -4,10 +4,10 @@ use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 
 fn assert(a: [f64; 4], b: [f64; 4]){
-    assert_relative_eq!(a[0], b[0], max_relative=0.1);
-    assert_relative_eq!(a[1], b[1], max_relative=0.1);
-    assert_relative_eq!(a[2], b[2], max_relative=0.1);
-    assert_relative_eq!(a[3], b[3], max_relative=0.1);
+    assert_relative_eq!(a[0], b[0], max_relative=0.03);
+    assert_relative_eq!(a[1], b[1], max_relative=0.03);
+    assert_relative_eq!(a[2], b[2], max_relative=0.03);
+    assert_relative_eq!(a[3], b[3], max_relative=0.03);
 }
 
 #[test]
@@ -204,6 +204,7 @@ fn test_mobility_calculate() {
             year,
             nrg_own_mix_price__m__eur_per_W_h.get_year(year),
         );
+	mobility.calculate_emissions(year);
     }
 
     // [start:assert_measures]
@@ -350,6 +351,24 @@ fn test_mobility_calculate() {
 	assert(
 	mobility.results.cars_fuel_costs__M__eur_per_a.get_year_values(2025),
 		[0.32013764922998006, -0.03115077051129479, 0.0, -0.0536576786916593],
+	);
+
+	// CO2-Emissionen Benzin (in 1.000 to )
+	assert(
+	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2022),
+		[0.5839157393884314, 0.08287790975749817, 0.0, 0.002802454342332434],
+	);
+	assert(
+	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2023),
+		[0.5839157393884314, 0.08287790975749817, 0.0, 0.002802454342332434],
+	);
+	assert(
+	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2024),
+		[0.5319534514557391, 0.018086352305575103, 0.0, -0.03882398796535987],
+	);
+	assert(
+	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2025),
+		[0.4799911635230469, -0.04670520514634796, 0.0, -0.08045043027305218],
 	);
 
 	// Straßenbeleuchtung
