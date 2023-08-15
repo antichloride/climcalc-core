@@ -302,10 +302,10 @@ macro_rules! impl_math_ops_for_sector {
 impl_math_ops_for_sector!{f64}
 
 pub struct SectorsResult{
-    private: Results,
-    industry: Results,
-    schools: Results,
-    public: Results,
+    pub private: Results,
+    pub industry: Results,
+    pub schools: Results,
+    pub public: Results,
 }
 
 impl SectorsResult{

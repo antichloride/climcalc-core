@@ -1,7 +1,7 @@
 
 pub struct Results{
     pub id: String,
-    values: Vec<f64>,
+    pub values: Vec<f64>,
     start_year: u32,
 }
 

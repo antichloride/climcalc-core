@@ -184,6 +184,8 @@ impl Calculator{
         let splitted_id: Vec<&str> = binding.split("/").collect();
         let binding_b = &splitted_id[2..].join("/");
         let remaining_id = binding_b.as_str();
+        println!("FIrst:{0}, Second:{1}", splitted_id[0], remaining_id);
+        println!("{0}", id);
 
         match splitted_id[0]{
             "buildings" => self.buildings.get_results_by_id(&remaining_id),
@@ -201,7 +203,7 @@ impl Calculator{
             Some(results) => {
                 return results.get_values().clone();
             },
-            None => Vec::from([0.0,0.0]),
+            None => Vec::from([0.0,0.0,3.1415, 42.0]),
         }
 
     }
@@ -286,12 +288,28 @@ mod integration_tests{
     extern crate wasm_bindgen_test;
     use wasm_bindgen_test::*;
     wasm_bindgen_test_configure!(run_in_browser);
+    use crate::buildings::tests::buildings_test_case::create_buildings;
+    use crate::energy::tests::energy_test_case::create_energy;
+    use crate::mobility::tests::mobility_test_case::create_mobility;
+    use web_sys::console;
 
     #[wasm_bindgen_test]
     fn test_calculator(){
-        let mut calculator: Calculator = Calculator::new(2022, 2025);
-        calculator.set_input("buildings/inputs/n_inhabitants__k__/private", 10.0);
+        let start_year: u32 = 2022 as u32;
+        let end_year: u32 = 2045 as u32;
+        let mut buildings = create_buildings(start_year, end_year);
+        let mut energy = create_energy(start_year, end_year);
+        let mut mobility = create_mobility(start_year, end_year);
+        let mut calculator = Calculator::new(start_year, end_year);
+        calculator.buildings = buildings;
+        calculator.energy = energy;
+        calculator.mobility = mobility;
         calculator.calculate_over_years();
+        console::log_1(&calculator.list_result_ids());
+        console::log_1(&to_value(&calculator.get_results("economy/results/invest_heating_material")).unwrap());
+        console::log_1(&to_value(&calculator.economy.invest_heating_material.values).unwrap());
+        console::log_1(&to_value(&calculator.get_results("buildings/results/floor_A__k__m2/private")).unwrap());
+        console::log_1(&to_value(&calculator.buildings.results.floor_A__k__m2.private.values).unwrap());
     }
 }
 
@@ -302,7 +320,7 @@ mod unit_tests{
     #[test]
     fn test_calculator_get_results_by_id() {
         let mut calculator: Calculator = Calculator::new(2022, 2025);
-
         assert!(!calculator.get_results_by_id("buildings/results/floor_A__k__m2/private").is_none());
+        assert!(!calculator.get_results_by_id("economy/results/invest_heating_material").is_none());
     }
 }

@@ -16,7 +16,7 @@ macro_rules! implement_economy{
         pub struct Economy{
             start_year: u32,
             $(
-                $field: Results,
+                pub $field: Results,
              )*
         }
 
@@ -25,7 +25,7 @@ macro_rules! implement_economy{
                 return Economy{
                     start_year: start_year,
                     $(
-                        $field: Results::new("economy/".to_owned()+stringify!($field), start_year, end_year),
+                        $field: Results::new("economy/results/".to_owned()+stringify!($field), start_year, end_year),
                      )*
                 }
             }
