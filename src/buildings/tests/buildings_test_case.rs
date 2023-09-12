@@ -30,6 +30,9 @@ pub fn create_buildings(start_year: u32, end_year: u32) -> Buildings{
     buildings.inputs.A_heat_gas__k__m2.set(4918.884014423077, 2000.0961538461538, 142.26485285216347, 59.01923076923079);
     buildings.inputs.A_heat_heat_pump__k__m2.set(278.2399038461538, 0.0, 0.0, 0.0);
 
+    buildings.inputs.price_oil__eur_per_L.set_values(0.82);
+    buildings.inputs.price_gas__eur_per_m3.set_values(0.73);
+
     // [end:inputs]
 
     // [start:set_others]

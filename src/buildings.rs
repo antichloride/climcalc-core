@@ -196,13 +196,18 @@ impl Buildings{
 
 
         // Costs
+        let price_oil__eur_per_L =
+            self.inputs.price_oil__eur_per_L.get_year(year);
+        let price_gas__eur_per_m3 =
+            self.inputs.price_gas__eur_per_m3.get_year(year);
+
         let costs_oil__M__eur_per_a = &cnsmp_oil__M__L_per_a
-            * constants::EnergySource::oil::price__eur_per_L;
+            * price_oil__eur_per_L;
         results.costs_oil__M__eur_per_a
             .set_year_values(year, &costs_oil__M__eur_per_a);
 
         let costs_gas__M__eur_per_a = &cnsmp_gas__M__m3_per_a
-            * constants::EnergySource::gas::price__eur_per_m3;
+            * price_gas__eur_per_m3;
         results.costs_gas__M__eur_per_a
             .set_year_values(year, &costs_gas__M__eur_per_a);
 
@@ -429,6 +434,8 @@ macro_rules! implement_inputs_builidngs{
             $(
                 $field: SectorsInputs,
              )*
+            price_oil__eur_per_L: Input,
+            price_gas__eur_per_m3: Input,
         }
 
         impl InputsBuildings{
@@ -445,6 +452,16 @@ macro_rules! implement_inputs_builidngs{
                             end_year
                         ),
                      )*
+                        price_oil__eur_per_L: Input::new(
+                            id.to_owned()+"/price_oil__eur_per_L",
+                            start_year,
+                            end_year,
+                        ),
+                        price_gas__eur_per_m3: Input::new(
+                            id.to_owned()+"/price_gas__eur_per_m3",
+                            start_year,
+                            end_year,
+                        ),
                 }
             }
         }
@@ -456,6 +473,8 @@ macro_rules! implement_inputs_builidngs{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
+                inputs.push(&self.price_oil__eur_per_L);
+                inputs.push(&self.price_gas__eur_per_m3);
                 return inputs
             }
 
@@ -470,10 +489,12 @@ macro_rules! implement_inputs_builidngs{
                         stringify!($field)
                             => self.$field.get_input_by_id(remaining_id),
                      )*
+                    "price_oil__eur_per_L"=> Some(
+                        &mut self.price_oil__eur_per_L),
+                    "price_gas__eur_per_m3"=> Some(
+                        &mut self.price_gas__eur_per_m3),
                     _ => None,
-
                 }
-
             }
         }
     }
