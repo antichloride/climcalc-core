@@ -100,8 +100,10 @@ impl Mobility{
         self.results.cars_fuel_dmd__M__L_per_a
             .set_year_values(year, &cars_fuel_dmd__M__L_per_a);
 
+        let price_fuel__eur_per_L =
+            self.inputs.price_fuel__eur_per_L.get_year(year);
         let cars_fuel_costs__M__eur_per_a =
-            &cars_fuel_dmd__M__L_per_a * constants::price_fuel;
+            &cars_fuel_dmd__M__L_per_a * price_fuel__eur_per_L;
         self.results.cars_fuel_costs__M__eur_per_a
             .set_year_values(year, &cars_fuel_costs__M__eur_per_a);
 
@@ -178,6 +180,7 @@ macro_rules! implement_inputs_mobility{
             n_sl__k__: Input,
             nrg_cnsmp_per_sl__k__W_h_per_a: Input,
             om_costs_per_sl__eur_per_a: Input,
+            price_fuel__eur_per_L: Input,
         }
 
         impl InputsMobility{
@@ -205,6 +208,11 @@ macro_rules! implement_inputs_mobility{
                             start_year,
                             end_year,
                         ),
+                        price_fuel__eur_per_L: Input::new(
+                            id.to_owned()+"/price_fuel__eur_per_L",
+                            start_year,
+                            end_year,
+                        ),
                 }
             }
         }
@@ -219,6 +227,7 @@ macro_rules! implement_inputs_mobility{
                 inputs.push(&self.n_sl__k__);
                 inputs.push(&self.nrg_cnsmp_per_sl__k__W_h_per_a);
                 inputs.push(&self.om_costs_per_sl__eur_per_a);
+                inputs.push(&self.price_fuel__eur_per_L);
                 return inputs
             }
 
@@ -238,6 +247,8 @@ macro_rules! implement_inputs_mobility{
                         &mut self.nrg_cnsmp_per_sl__k__W_h_per_a),
                     "om_costs_per_sl__eur_per_a"=> Some(
                         &mut self.om_costs_per_sl__eur_per_a),
+                    "price_fuel__eur_per_L"=> Some(
+                        &mut self.price_fuel__eur_per_L),
                     _ => None,
 
                 }

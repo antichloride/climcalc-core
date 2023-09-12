@@ -13,6 +13,7 @@ pub fn create_mobility(start_year: u32, end_year: u32) -> Mobility{
     mobility.inputs.n_sl__k__.set_values(24.12560096153846);
     mobility.inputs.nrg_cnsmp_per_sl__k__W_h_per_a.set_values(432.43243243243245);
     mobility.inputs.om_costs_per_sl__eur_per_a.set_values(119.54032432432432);
+    mobility.inputs.price_fuel__eur_per_L.set_values(1.87);
     // [end:inputs]
 
 
