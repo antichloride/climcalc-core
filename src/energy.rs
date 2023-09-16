@@ -71,6 +71,9 @@ impl Energy{
     pub fn sol_os_revenue__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.sol_rf_revenue__M__eur_per_a;
     }
+    pub fn wind_revenue__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.wind_revenue__M__eur_per_a;
+    }
     pub fn prchsd_renewable_nrg__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.prchsd_renewable_nrg__M__eur_per_a;
     }
@@ -238,6 +241,8 @@ impl Energy{
 
         // Wind
 
+        let mut wind_om__M__eur_per_a = SectorsRawValues::new();
+
         let wind_installed_A__ha = self.inputs
             .wind_installed_A__ha.get_year(year);
 
@@ -258,18 +263,41 @@ impl Energy{
 
             let wind_invest__M__eur_per_a = 1e-3
                 * (&wind_installed__M__WP - &wind_installed__M__WP_prev_year)
-                * constants::wind_onshore.invest__m__eur_per_Wp;
+                * constants::wind_onshore.invest__m__eur_per_Wp
+                * wind_installed__M__WP
+                    .is_greater(&wind_installed__M__WP_prev_year);
             self.results.wind_invest__M__eur_per_a
                 .set_year_values(year, &wind_invest__M__eur_per_a);
 
             let wind_grant__M__eur_per_a = 1e-3
                 * (&wind_installed__M__WP - &wind_installed__M__WP_prev_year)
-                * constants::wind_onshore.grant__m__eur_per_Wp;
+                * constants::wind_onshore.grant__m__eur_per_Wp
+                * wind_installed__M__WP
+                    .is_greater(&wind_installed__M__WP_prev_year);
             self.results.wind_grant__M__eur_per_a
                 .set_year_values(year, &wind_grant__M__eur_per_a);
 
 
+            let wind_om__M__eur_per_a_last_year =
+                self.results.wind_om__M__eur_per_a.get_year(year-1);
+            wind_om__M__eur_per_a = &wind_om__M__eur_per_a_last_year
+                + &(
+                    &wind_invest__M__eur_per_a
+                    * constants::wind_onshore.operation_costs
+                    );
+            self.results.wind_om__M__eur_per_a
+                .set_year_values(year, &wind_om__M__eur_per_a);
         }
+
+        let wind_turnover_buyback__M__eur_per_a = &wind_nrg__G__W_h_per_a
+            * constants::wind_onshore.buyback_price__m__eur_per_W_h;
+        self.results.wind_turnover_buyback__M__eur_per_a
+            .set_year_values(year, &wind_turnover_buyback__M__eur_per_a);
+
+        let wind_revenue__M__eur_per_a = &wind_turnover_buyback__M__eur_per_a
+            - &wind_om__M__eur_per_a;
+        self.results.wind_revenue__M__eur_per_a
+            .set_year_values(year, &wind_revenue__M__eur_per_a);
 
 
         // Purchase of renewable energy

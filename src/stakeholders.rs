@@ -134,6 +134,9 @@ impl Steakholders{
             let solar_landscape_revenue_diff =
                 &energy.sol_os_revenue__M__eur_per_a().get_year(year)
                 - &energy.sol_os_revenue__M__eur_per_a().get_year(year-1);
+            let wind_revenue_diff =
+                &energy.wind_revenue__M__eur_per_a().get_year(year)
+                - &energy.wind_revenue__M__eur_per_a().get_year(year-1);
             let direct_aquisition_renable_energies_costs_diff =
                 &energy.prchsd_renewable_nrg__M__eur_per_a().get_year(year)
                 - &energy.prchsd_renewable_nrg__M__eur_per_a().get_year(year-1);
@@ -147,6 +150,7 @@ impl Steakholders{
                 + solar_roof_om_diff + solar_landscape_om_diff
                 - &solar_roof_revenue_diff
                 - &solar_landscape_revenue_diff
+                + wind_revenue_diff
                 + direct_aquisition_renable_energies_costs_diff
                 + purchased_energy_mix_costs_diff;
 
