@@ -1,7 +1,6 @@
 use crate::mobility::tests::mobility_test_case::create_mobility;
 use crate::sectors::SectorsResult;
 use crate::sectors::SectorsRawValues;
-use crate::result::Results;
 
 fn assert(a: [f64; 4], b: [f64; 4]){
     assert_relative_eq!(a[0], b[0], max_relative=0.03);

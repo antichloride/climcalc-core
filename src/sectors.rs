@@ -46,12 +46,6 @@ impl SectorsInputs{
 
     }
 
-    pub fn apply_measures(&mut self){
-        self.private.apply_measures();
-        self.industry.apply_measures();
-        self.schools.apply_measures();
-        self.public.apply_measures();
-    }
 }
 
 #[derive(Copy, Clone)]

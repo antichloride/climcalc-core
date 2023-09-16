@@ -238,9 +238,6 @@ impl Buildings{
                     let mut invest_heat_source__M__eur_per_a: SectorsRawValues;
                     let mut grant_heat_source__M__eur_per_a: SectorsRawValues;
 
-                    let total_heat_dmd_prev_year__G__W_h_per_m2_a =
-                        &results.total_heat_dmd__G__W_h_per_a.get_year(year-1)
-                        / &results.floor_A__k__m2.get_year(year-1);
 
                     $(
 
@@ -600,9 +597,7 @@ implement_results_builidngs!{
 pub mod tests{
     use super::*;
     extern crate wasm_bindgen_test;
-    use wasm_bindgen_test::*;
     pub mod buildings_test_case;
-    use buildings_test_case::create_buildings;
     mod compare_with_excel;
 
 

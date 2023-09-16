@@ -1,6 +1,5 @@
 use crate::buildings::Buildings;
 use crate::sectors::SectorsInputs;
-use crate::sectors::SectorsRawValues;
 
 impl SectorsInputs{
     pub fn set(&mut self, private: f64, industry:f64, schools: f64, public: f64){

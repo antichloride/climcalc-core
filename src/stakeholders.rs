@@ -1,9 +1,13 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+
 use crate::result::Results;
 use crate::buildings::Buildings;
 use crate::energy::Energy;
 use crate::mobility::Mobility;
 use crate::economy::Economy;
 use crate::constants;
+
 
 macro_rules! implement_stakeholders{
     ($($field:ident),*) => {
@@ -40,8 +44,8 @@ macro_rules! implement_stakeholders{
             fn get_results_by_id(&mut self, id: &str) -> Option<&mut Results>{
                 let binding = id.to_string();
                 let splitted_id: Vec<&str> = binding.split("/").collect();
-                let binding_b = &splitted_id[1..].join("/");
-                let remaining_id = binding_b.as_str();
+                //let binding_b = &splitted_id[1..].join("/");
+                //let remaining_id = binding_b.as_str();
 
                 match splitted_id[0]{
                     $(

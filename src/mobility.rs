@@ -60,9 +60,6 @@ impl Mobility{
     pub fn cars_fuel_costs__M__eur_per_a(&self) -> &SectorsResult {
         return &self.results.cars_fuel_costs__M__eur_per_a;
     }
-    pub fn cars_grant__M__eur_per_a(&self) -> &SectorsResult {
-        return &self.results.cars_grant__M__eur_per_a;
-    }
 }
 
 impl Mobility{
@@ -371,10 +368,7 @@ implement_results_mobility!{
 
 #[cfg(test)]
 pub mod tests{
-    use super::*;
     extern crate wasm_bindgen_test;
-    use wasm_bindgen_test::*;
     pub mod mobility_test_case;
-    use mobility_test_case::create_mobility;
     mod compare_with_excel;
 }

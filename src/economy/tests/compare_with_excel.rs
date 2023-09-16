@@ -8,9 +8,9 @@ fn test_economy_calculate() {
 
     let start_year: u32 = 2022 as u32;
     let end_year: u32 = 2045 as u32;
-    let mut buildings = create_buildings(start_year, end_year);
-    let mut energy = create_energy(start_year, end_year);
-    let mut mobility = create_mobility(start_year, end_year);
+    let buildings = create_buildings(start_year, end_year);
+    let energy = create_energy(start_year, end_year);
+    let mobility = create_mobility(start_year, end_year);
     let mut calculator = Calculator::new(start_year, end_year);
     calculator.buildings = buildings;
     calculator.energy = energy;

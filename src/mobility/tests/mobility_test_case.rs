@@ -1,6 +1,4 @@
 use crate::mobility::Mobility;
-use crate::sectors::SectorsInputs;
-use crate::sectors::SectorsRawValues;
 
 pub fn create_mobility(start_year: u32, end_year: u32) -> Mobility{
 

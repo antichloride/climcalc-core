@@ -5,7 +5,6 @@ use crate::result::Results;
 // use crate::energy::ResultsEnergy;
 // use crate::mobility::ResultsMobility;
 use crate::constants::economy as constants;
-use crate::constants::energy as constants_energy;
 //use crate::sectors::SectorsResult;
 use crate::energy::Energy;
 use crate::buildings::Buildings;
@@ -364,8 +363,6 @@ impl Economy{
 
 #[cfg(test)]
 mod tests{
-    use super::*;
     extern crate wasm_bindgen_test;
-    use wasm_bindgen_test::*;
     mod compare_with_excel;
 }
