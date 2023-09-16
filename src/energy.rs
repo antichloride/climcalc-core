@@ -235,6 +235,43 @@ impl Energy{
         self.results.sol_os_revenue__M__eur_per_a
             .set_year_values(year, &sol_os_revenue__M__eur_per_a);
 
+
+        // Wind
+
+        let wind_installed_A__ha = self.inputs
+            .wind_installed_A__ha.get_year(year);
+
+        let wind_installed__M__WP = 1e-1 * &wind_installed_A__ha
+            * constants::wind_onshore.power_per_area__k__Wp_per_m2;
+        self.results.wind_installed__M__WP
+            .set_year_values(year, &wind_installed__M__WP);
+
+        let wind_nrg__G__W_h_per_a = 1e-3 * &wind_installed__M__WP
+            * constants::wind_onshore.Wp_to_W_h_per_a;
+        self.results.wind_nrg__G__W_h_per_a
+            .set_year_values(year, &wind_nrg__G__W_h_per_a);
+
+        if year != self.start_year{
+
+            let wind_installed__M__WP_prev_year =
+                self.results.wind_installed__M__WP.get_year(year-1);
+
+            let wind_invest__M__eur_per_a = 1e-3
+                * (&wind_installed__M__WP - &wind_installed__M__WP_prev_year)
+                * constants::wind_onshore.invest__m__eur_per_Wp;
+            self.results.wind_invest__M__eur_per_a
+                .set_year_values(year, &wind_invest__M__eur_per_a);
+
+            let wind_grant__M__eur_per_a = 1e-3
+                * (&wind_installed__M__WP - &wind_installed__M__WP_prev_year)
+                * constants::wind_onshore.grant__m__eur_per_Wp;
+            self.results.wind_grant__M__eur_per_a
+                .set_year_values(year, &wind_grant__M__eur_per_a);
+
+
+        }
+
+
         // Purchase of renewable energy
 
         let prchsd_renewable_nrg__G__W_h_per_a = self.inputs.
@@ -388,6 +425,8 @@ implement_inputs_energy!{
     sol_rf_self_cnsmp_part,
     sol_os_installed_A__ha,
     sol_os_self_cnsmp_part,
+    wind_suitable_A__ha,
+    wind_installed_A__ha,
     prchsd_renewable_nrg__G__W_h_per_a,
     renewable_nrg_price__m__eur_per_W_h,
     nrg_mix_price__m__eur_per_W_h
@@ -463,6 +502,13 @@ implement_results_energy!{
     sol_os_turnover_buyback__M__eur_per_a,
     sol_os_revenue__M__eur_per_a,
     sol_os_prod_costs__M__eur_per_a,
+    wind_installed__M__WP,
+    wind_nrg__G__W_h_per_a,
+    wind_invest__M__eur_per_a,
+    wind_grant__M__eur_per_a,
+    wind_om__M__eur_per_a,
+    wind_turnover_buyback__M__eur_per_a,
+    wind_revenue__M__eur_per_a,
     prchsd_renewable_nrg__M__eur_per_a,
     elec_nrg_dmd__G__W_h_per_a,
     prchsd_nrg_mix__G__W_h_per_a,
