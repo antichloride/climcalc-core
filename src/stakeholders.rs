@@ -5,7 +5,7 @@ use crate::mobility::Mobility;
 use crate::economy::Economy;
 use crate::constants;
 
-macro_rules! implement_steakholders{
+macro_rules! implement_stakeholders{
     ($($field:ident),*) => {
 
         pub struct Steakholders{
@@ -21,7 +21,7 @@ macro_rules! implement_steakholders{
                     start_year: start_year,
                     $(
                         $field: Results::new(
-                            "steakholders/".to_owned()+stringify!($field),
+                            "stakeholders/".to_owned()+stringify!($field),
                             start_year,
                             end_year
                             ),
@@ -54,7 +54,7 @@ macro_rules! implement_steakholders{
     }
 }
 
-implement_steakholders!{
+implement_stakeholders!{
     private_invest,
     private_effect_of_measures,
     private_cash_flow_netto,
