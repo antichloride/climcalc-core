@@ -25,7 +25,7 @@ macro_rules! implement_stakeholders{
                     start_year: start_year,
                     $(
                         $field: Results::new(
-                            "stakeholders/".to_owned()+stringify!($field),
+                            "stakeholders/results/".to_owned()+stringify!($field),
                             start_year,
                             end_year
                             ),
