@@ -228,7 +228,7 @@ impl Energy{
 
         let sol_os_prod_costs__M__eur_per_a =
             sol_os_nrg__G__W_h_per_a
-            * constants::solar_roof.invest_and_om_costs__m__eur_per_W_h; //TODO: Use solar landscape
+            * constants::solar_landscape.invest_and_om_costs__m__eur_per_W_h;
         self.results.sol_os_prod_costs__M__eur_per_a
             .set_year_values(year, &sol_os_prod_costs__M__eur_per_a);
 
