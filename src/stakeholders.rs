@@ -41,13 +41,8 @@ macro_rules! implement_stakeholders{
                 return results;
             }
 
-            fn get_results_by_id(&mut self, id: &str) -> Option<&mut Results>{
-                let binding = id.to_string();
-                let splitted_id: Vec<&str> = binding.split("/").collect();
-                //let binding_b = &splitted_id[1..].join("/");
-                //let remaining_id = binding_b.as_str();
-
-                match splitted_id[0]{
+            pub fn get_results_by_id(&mut self, id: &str) -> Option<&mut Results>{
+                match id{
                     $(
                         stringify!($field)=> Some(&mut self.$field),
                      )*

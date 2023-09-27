@@ -193,6 +193,7 @@ impl Calculator{
             "mobility" => self.mobility.get_results_by_id(&remaining_id),
             "energy" => self.energy.get_results_by_id(&remaining_id),
             "economy" => self.economy.get_results_by_id(&remaining_id),
+            "stakeholders" => self.stakeholders.get_results_by_id(&remaining_id),
             _ => None,
         }
     }
