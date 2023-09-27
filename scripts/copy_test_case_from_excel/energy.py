@@ -24,7 +24,7 @@ def set_input_variables(inputs, lines):
     os = -2
 
     # Dachfläche (1.000 qm)
-    lines = find_and_replace_arguments(lines, "rf_A__k__m2", convert_values(inputs.iloc[38+os, 1:4]))
+    lines = find_and_replace_arguments(lines, "rf_A__ha", convert_values(inputs.iloc[38+os, 1:4]))
     # % davon PV-tauglich
     lines = find_and_replace_arguments(lines, "sol_rf_suitable_A_part", convert_values(inputs.iloc[39+os, 1:4]))
     # PV lokal auf Dach (MWp)

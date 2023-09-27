@@ -95,7 +95,7 @@ Buildings:
 
 Energy:
     Inputs:
-        rf_A__k__m2,
+        rf_A__ha,
         sol_rf_suitable_A_part,
         sol_rf_installed__M__Wp,
         sol_rf_self_cnsmp_part,

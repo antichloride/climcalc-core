@@ -87,7 +87,7 @@ impl Energy{
     pub fn calculate(&mut self, year: u32){
 
         // Solar Roof
-        let rf_A__k__m2 = self.inputs.rf_A__k__m2.get_year(year);
+        let rf_A__ha = self.inputs.rf_A__ha.get_year(year);
         let sol_rf_suitable_A_part = self.inputs.sol_rf_suitable_A_part
             .get_year(year);
         let sol_rf_installed__M__Wp = self.inputs
@@ -95,7 +95,7 @@ impl Energy{
         let sol_rf_self_cnsmp_part = self.inputs
             .sol_rf_self_cnsmp_part.get_year(year);
 
-        let sol_rf_potential__M__Wp = &rf_A__k__m2 * &sol_rf_suitable_A_part
+        let sol_rf_potential__M__Wp = &rf_A__ha * &sol_rf_suitable_A_part
             * constants::solar_roof.power_per_area__k__Wp_per_m2;
         self.results.sol_rf_potential__M__Wp
             .set_year_values(year, &sol_rf_potential__M__Wp);
@@ -447,7 +447,7 @@ macro_rules! implement_inputs_energy{
 
 
 implement_inputs_energy!{
-    rf_A__k__m2, //TODO: change to hektar
+    rf_A__ha,
     sol_rf_suitable_A_part,
     sol_rf_installed__M__Wp,
     sol_rf_self_cnsmp_part,
