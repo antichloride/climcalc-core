@@ -170,6 +170,7 @@ impl Calculator{
         list.extend(self.mobility.get_results());
         list.extend(self.energy.get_results());
         list.extend(self.economy.get_results());
+        list.extend(self.stakeholders.get_results());
         return list;
     }
 
