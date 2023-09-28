@@ -22,6 +22,11 @@ pub mod buildings{
         invest__m__eur_per_W_h: 0.5,
         grant: 0.2,
     };
+    pub const district_heating: HeatType = HeatType {
+        efficency: 0.88,
+        invest__m__eur_per_W_h: 0.4,
+        grant: 0.2,
+    };
     pub const heat_pump: HeatType = HeatType {
         efficency: 3.0,
         invest__m__eur_per_W_h: 2.0,

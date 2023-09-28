@@ -83,11 +83,13 @@ fn compute_A_heat_other__k__m2(inputs: &InputsBuildings, year: u32) -> SectorsRa
     let A_heart_oil__k__m2 = inputs.A_heat_oil__k__m2.get_year(year);
     let A_heat_oil_condensing__k__m2 = inputs.A_heat_oil_condensing__k__m2.get_year(year);
     let A_heat_gas__k__m2 = inputs.A_heat_gas__k__m2.get_year(year);
+    let A_heat_district_heating__k__m2 = inputs.A_heat_district_heating__k__m2.get_year(year);
     let A_heat_heat_pump__k__m2 = inputs.A_heat_heat_pump__k__m2.get_year(year);
     return  ( floor_A_building__m2 * n_buildings * 1e-3 )
         - (
             A_heart_oil__k__m2 + A_heat_oil_condensing__k__m2
             + A_heat_gas__k__m2 + A_heat_heat_pump__k__m2
+            + A_heat_district_heating__k__m2
         ).copy();
 }
 
@@ -151,6 +153,13 @@ impl Buildings{
                         / constants::other.efficency;
                     results.cnsmp_other__G__W_h_per_a
                         .set_year_values(year,&cnsmp_other__G__W_h_per_a);
+
+                    let price_other_output_nrg__m__eur_per_W_h =
+                        self.inputs.price_other_output_nrg__m__eur_per_W_h.get_year(year);
+                    let costs_other__M__eur_per_a = &cnsmp_other__G__W_h_per_a
+                        * price_other_output_nrg__m__eur_per_W_h;
+                    results.costs_other__M__eur_per_a
+                        .set_year_values(year, &costs_other__M__eur_per_a);
             }
         }
 
@@ -169,6 +178,11 @@ impl Buildings{
                 gas,
                 A_heat_gas__k__m2,
                 cnsmp_gas__G__W_h_per_a
+            ),
+            (
+                district_heating,
+                A_heat_district_heating__k__m2,
+                cnsmp_district_heating__G__W_h_per_a
             ),
             (
                 heat_pump,
@@ -194,12 +208,23 @@ impl Buildings{
         results.cnsmp_gas__M__m3_per_a
             .set_year_values(year, &cnsmp_gas__M__m3_per_a);
 
+        let district_heating_renewable_part =
+            self.inputs.district_heating_renewable_part.get_year(year);
+        let cnsmp_gas_district_heating__M__m3_per_a =
+            (1.0 - &district_heating_renewable_part)
+            * &cnsmp_district_heating__G__W_h_per_a
+            / constants::EnergySource::gas::energy_density__k__W_h_per_m3;
+        results.cnsmp_gas_district_heating__M__m3_per_a
+            .set_year_values(year, &cnsmp_gas_district_heating__M__m3_per_a);
+
 
         // Costs
         let price_oil__eur_per_L =
             self.inputs.price_oil__eur_per_L.get_year(year);
         let price_gas__eur_per_m3 =
             self.inputs.price_gas__eur_per_m3.get_year(year);
+        let price_district_heating__m__eur_per_W_h =
+            self.inputs.price_district_heating__m__eur_per_W_h.get_year(year);
 
         let costs_oil__M__eur_per_a = &cnsmp_oil__M__L_per_a
             * price_oil__eur_per_L;
@@ -210,6 +235,14 @@ impl Buildings{
             * price_gas__eur_per_m3;
         results.costs_gas__M__eur_per_a
             .set_year_values(year, &costs_gas__M__eur_per_a);
+
+        let costs_client_district_heating__M__eur_per_a =
+            &cnsmp_district_heating__G__W_h_per_a
+            * price_district_heating__m__eur_per_W_h;
+        results.costs_client_district_heating__M__eur_per_a.set_year_values(
+                year, &costs_client_district_heating__M__eur_per_a);
+
+
 
 
         // Invests and Grants
@@ -336,6 +369,7 @@ impl Buildings{
                 (oil_no_condensing, A_heat_oil__k__m2),
                 (oil_with_condensing, A_heat_oil_condensing__k__m2),
                 (gas, A_heat_gas__k__m2),
+                (district_heating, A_heat_district_heating__k__m2),
                 (heat_pump, A_heat_heat_pump__k__m2)
                 // (other, A_heat_other__k__m2)
             }
@@ -390,6 +424,22 @@ impl Buildings{
         self.results.costs_heat_pump__M__eur
             .set_year_values(year, &costs_heat_pump__M__eur);
         // println!("Year:{0} energy_consumption:{1} energy_price:{2} evu:{3}", year, &cnsmp_elec_heat_pump__G__W_h_per_a.private, &nrg_own_mix_price__m__eur_per_W_h.private, evu_discount_heat_pump)
+
+        let costs_oil__M__eur_per_a =
+            self.results.costs_oil__M__eur_per_a.get_year(year);
+        let costs_gas__M__eur_per_a =
+            self.results.costs_gas__M__eur_per_a.get_year(year);
+        let costs_client_district_heating__M__eur_per_a = self.results
+            .costs_client_district_heating__M__eur_per_a.get_year(year);
+        let costs_other__M__eur_per_a = self.results
+            .costs_other__M__eur_per_a.get_year(year);
+        let costs_total__M__eur = costs_oil__M__eur_per_a
+            + costs_gas__M__eur_per_a
+            + costs_client_district_heating__M__eur_per_a
+            + costs_heat_pump__M__eur
+            + costs_other__M__eur_per_a;
+        self.results.costs_total__M__eur
+            .set_year_values(year, &costs_total__M__eur);
     }
 
     pub fn calculate_emissions(&mut self, year: u32){
@@ -433,6 +483,9 @@ macro_rules! implement_inputs_builidngs{
              )*
             price_oil__eur_per_L: Input,
             price_gas__eur_per_m3: Input,
+            price_district_heating__m__eur_per_W_h: Input,
+            price_other_output_nrg__m__eur_per_W_h: Input,
+            district_heating_renewable_part: Input,
         }
 
         impl InputsBuildings{
@@ -459,6 +512,21 @@ macro_rules! implement_inputs_builidngs{
                             start_year,
                             end_year,
                         ),
+                        price_district_heating__m__eur_per_W_h: Input::new(
+                            id.to_owned()+"/price_district_heating__m__eur_per_W_h",
+                            start_year,
+                            end_year,
+                        ),
+                        price_other_output_nrg__m__eur_per_W_h: Input::new(
+                            id.to_owned()+"/price_other_output_nrg__m__eur_per_W_h",
+                            start_year,
+                            end_year,
+                        ),
+                        district_heating_renewable_part: Input::new(
+                            id.to_owned()+"/district_heating_renewable_part",
+                            start_year,
+                            end_year,
+                        ),
                 }
             }
         }
@@ -472,6 +540,9 @@ macro_rules! implement_inputs_builidngs{
                  )*
                 inputs.push(&self.price_oil__eur_per_L);
                 inputs.push(&self.price_gas__eur_per_m3);
+                inputs.push(&self.price_district_heating__m__eur_per_W_h);
+                inputs.push(&self.price_other_output_nrg__m__eur_per_W_h);
+                inputs.push(&self.district_heating_renewable_part);
                 return inputs
             }
 
@@ -490,6 +561,12 @@ macro_rules! implement_inputs_builidngs{
                         &mut self.price_oil__eur_per_L),
                     "price_gas__eur_per_m3"=> Some(
                         &mut self.price_gas__eur_per_m3),
+                    "price_district_heating__m__eur_per_W_h"=> Some(
+                        &mut self.price_district_heating__m__eur_per_W_h),
+                    "price_other_output_nrg__m__eur_per_W_h"=> Some(
+                        &mut self.price_other_output_nrg__m__eur_per_W_h),
+                    "district_heating_renewable_part"=> Some(
+                        &mut self.district_heating_renewable_part),
                     _ => None,
                 }
             }
@@ -507,8 +584,8 @@ implement_inputs_builidngs!{
     A_heat_oil__k__m2,
     A_heat_oil_condensing__k__m2,
     A_heat_gas__k__m2,
+    A_heat_district_heating__k__m2,
     A_heat_heat_pump__k__m2
-    // A_heat_other__k__m2
 }
 
 macro_rules! implement_results_builidngs{
@@ -574,17 +651,22 @@ implement_results_builidngs!{
     cnsmp_oil__G__W_h_per_a,
     cnsmp_oil_condensing__G__W_h_per_a,
     cnsmp_gas__G__W_h_per_a,
+    cnsmp_district_heating__G__W_h_per_a,
     cnsmp_elec_heat_pump__G__W_h_per_a,
     cnsmp_other__G__W_h_per_a,
     cnsmp_oil__M__L_per_a,
     cnsmp_gas__M__m3_per_a,
+    cnsmp_gas_district_heating__M__m3_per_a,
     costs_oil__M__eur_per_a,
     costs_gas__M__eur_per_a,
+    costs_client_district_heating__M__eur_per_a,
     invest_heat_sources__M__eur_per_a,
     invest_energetic_renovation__M__eur_per_a,
     grant_heat_sources__M__eur_per_a,
     grant_energetic_renovation__M__eur_per_a,
     costs_heat_pump__M__eur,
+    costs_other__M__eur_per_a,
+    costs_total__M__eur,
     ems_oil__k__to_coe_per_a,
     ems_gas__k__to_coe_per_a
 }
