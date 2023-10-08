@@ -65,10 +65,23 @@ impl Mobility{
 impl Mobility{
     pub fn calculate(&mut self, year: u32){
 
+        let n_inhabitants__k__ = self.inputs.n_inhabitants__k__.get_year(year);
         let n_bev__k__ = self.inputs.n_bev__k__.get_year(year);
         let n_cars__k__ = self.inputs.n_cars__k__.get_year(year);
-        let traveld_dist_car__M__m_per_a =
-            self.inputs.traveld_dist_car__M__m_per_a.get_year(year);
+        let traveld_dist_per_person__m__m_per_a =
+            self.inputs.traveld_dist_per_person__m__m_per_a.get_year(year);
+        let mean_persons_per_car =
+            self.inputs.mean_persons_per_car.get_year(year);
+        let modal_split_car =
+            self.inputs.modal_split_car.get_year(year);
+
+        let traveld_dist_car__M__m_per_a = n_inhabitants__k__
+            * traveld_dist_per_person__m__m_per_a
+            * modal_split_car
+            / mean_persons_per_car;
+            // n_bev__k__;
+        self.results.traveld_dist_car__M__m_per_a
+            .set_year_values(year, &traveld_dist_car__M__m_per_a);
 
         if year != self.start_year{
             let n_bev__k___this_year =
@@ -174,6 +187,9 @@ macro_rules! implement_inputs_mobility{
             $(
                 $field: SectorsInputs,
              )*
+            traveld_dist_per_person__m__m_per_a: Input,
+            mean_persons_per_car: Input,
+            modal_split_car: Input,
             n_sl__k__: Input,
             nrg_cnsmp_per_sl__k__W_h_per_a: Input,
             om_costs_per_sl__eur_per_a: Input,
@@ -190,6 +206,21 @@ macro_rules! implement_inputs_mobility{
                             end_year
                         ),
                      )*
+                        traveld_dist_per_person__m__m_per_a: Input::new(
+                            id.to_owned()+"/traveld_dist_per_person__m__m_per_a",
+                            start_year,
+                            end_year,
+                        ),
+                        mean_persons_per_car: Input::new(
+                            id.to_owned()+"/n_sl__k__",
+                            start_year,
+                            end_year,
+                        ),
+                        modal_split_car: Input::new(
+                            id.to_owned()+"/n_sl__k__",
+                            start_year,
+                            end_year,
+                        ),
                         n_sl__k__: Input::new(
                             id.to_owned()+"/n_sl__k__",
                             start_year,
@@ -221,6 +252,9 @@ macro_rules! implement_inputs_mobility{
                 $(
                     inputs.extend(self.$field.get_inputs());
                  )*
+                inputs.push(&self.traveld_dist_per_person__m__m_per_a);
+                inputs.push(&self.mean_persons_per_car);
+                inputs.push(&self.modal_split_car);
                 inputs.push(&self.n_sl__k__);
                 inputs.push(&self.nrg_cnsmp_per_sl__k__W_h_per_a);
                 inputs.push(&self.om_costs_per_sl__eur_per_a);
@@ -239,6 +273,9 @@ macro_rules! implement_inputs_mobility{
                         stringify!($field) =>
                             self.$field.get_input_by_id(remaining_id),
                      )*
+                    "traveld_dist_per_person__m__m_per_a"=> Some(&mut self.traveld_dist_per_person__m__m_per_a),
+                    "mean_persons_per_car"=> Some(&mut self.mean_persons_per_car),
+                    "modal_split_car"=> Some(&mut self.modal_split_car),
                     "n_sl__k__"=> Some(&mut self.n_sl__k__),
                     "nrg_cnsmp_per_sl__k__W_h_per_a"=> Some(
                         &mut self.nrg_cnsmp_per_sl__k__W_h_per_a),
@@ -257,9 +294,9 @@ macro_rules! implement_inputs_mobility{
 
 
 implement_inputs_mobility!{
+    n_inhabitants__k__,
     n_cars__k__,
-    n_bev__k__,
-    traveld_dist_car__M__m_per_a
+    n_bev__k__
 }
 
 
@@ -356,6 +393,7 @@ macro_rules! implement_results_mobility{
 }
 
 implement_results_mobility!{
+    traveld_dist_car__M__m_per_a,
     cars_grant__M__eur_per_a,
     bev_elec_nrg_dmd__G__W_h_per_a,
     bev_elec_nrg_price__G__W_h_per_a,
