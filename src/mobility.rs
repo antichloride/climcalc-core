@@ -79,7 +79,7 @@ impl Mobility{
             * traveld_dist_per_person__m__m_per_a
             * modal_split_car
             / mean_persons_per_car;
-            // n_bev__k__;
+            / n_bev__k__;
         self.results.traveld_dist_car__M__m_per_a
             .set_year_values(year, &traveld_dist_car__M__m_per_a);
 
@@ -212,12 +212,12 @@ macro_rules! implement_inputs_mobility{
                             end_year,
                         ),
                         mean_persons_per_car: Input::new(
-                            id.to_owned()+"/n_sl__k__",
+                            id.to_owned()+"/mean_persons_per_car",
                             start_year,
                             end_year,
                         ),
                         modal_split_car: Input::new(
-                            id.to_owned()+"/n_sl__k__",
+                            id.to_owned()+"/modal_split_car",
                             start_year,
                             end_year,
                         ),
