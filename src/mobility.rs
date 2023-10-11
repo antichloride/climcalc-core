@@ -75,11 +75,21 @@ impl Mobility{
         let modal_split_car =
             self.inputs.modal_split_car.get_year(year);
 
-        let traveld_dist_car__M__m_per_a =
+        let mut traveld_dist_car__M__m_per_a =
             &n_inhabitants__k__ / &n_bev__k__
             * traveld_dist_per_person__m__m_per_a
             * modal_split_car
             / mean_persons_per_car;
+        traveld_dist_car__M__m_per_a.private = 0.0;
+        if(n_bev__k__.industry==0.0){
+            traveld_dist_car__M__m_per_a.industry = 0.0;
+        }
+        if(n_bev__k__.schools==0.0){
+            traveld_dist_car__M__m_per_a.schools = 0.0;
+        }
+        if(n_bev__k__.public==0.0){
+            traveld_dist_car__M__m_per_a.public = 0.0;
+        }
         self.results.traveld_dist_car__M__m_per_a
             .set_year_values(year, &traveld_dist_car__M__m_per_a);
 
