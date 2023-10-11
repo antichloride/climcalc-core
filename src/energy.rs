@@ -341,6 +341,8 @@ impl Energy{
         let prchsd_renewable_nrg__G__W_h_per_a =
             self.inputs.prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
 
+        // TODO: the energy demand of schhols is integrated into the demand of public sector
+        // Should not the same happen for the self consumption.
         let prchsd_nrg_mix__G__W_h_per_a =
             &elec_nrg_dmd__G__W_h_per_a
             - &sol_rf_self_cnsmp__G__W_h_per_a
@@ -370,8 +372,11 @@ impl Energy{
             + &prchsd_nrg_mix_costs__M__eur_per_a + sol_rf_om__M__eur_per_a
             - &sol_rf_revenue__M__eur_per_a;
 
-        let nrg_own_mix_price__m__eur_per_W_h = &total_nrg_costs__M__eur_per_a
+        let mut nrg_own_mix_price__m__eur_per_W_h = &total_nrg_costs__M__eur_per_a
             / &elec_nrg_dmd__G__W_h_per_a;
+        // the energy costs of schools are calc by those for public.
+        nrg_own_mix_price__m__eur_per_W_h.schools =
+            nrg_own_mix_price__m__eur_per_W_h.public;
         self.results.nrg_own_mix_price__m__eur_per_W_h
             .set_year_values(year, &nrg_own_mix_price__m__eur_per_W_h)
 
