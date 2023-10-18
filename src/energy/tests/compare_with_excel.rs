@@ -884,19 +884,19 @@ fn test_energy_calculate() {
 	// Kosten Erzeugung (in Mio. €/a)
 	assert(
 		energy.results.sol_os_prod_costs__M__eur_per_a.get_year_values(2022),
-		[0.0, 6.027777777777778, 0.0, 0.0],
+		[0.0, 2.3125801282051284, 0.0, 0.0],
 	);
 	assert(
 		energy.results.sol_os_prod_costs__M__eur_per_a.get_year_values(2023),
-		[0.0, 6.027777777777778, 0.0, 0.0],
+		[0.0, 2.3125801282051284, 0.0, 0.0],
 	);
 	assert(
 		energy.results.sol_os_prod_costs__M__eur_per_a.get_year_values(2024),
-		[0.0, 6.798148148148148, 0.0, 0.7703703703703705],
+		[0.0, 2.608135683760684, 0.0, 0.2955555555555556],
 	);
 	assert(
 		energy.results.sol_os_prod_costs__M__eur_per_a.get_year_values(2025),
-		[0.0, 7.568518518518518, 0.0, 1.540740740740741],
+		[0.0, 2.9036912393162395, 0.0, 0.5911111111111113],
 	);
 
 	// Einspeisevergütung (in Mio. €/a)
@@ -920,19 +920,19 @@ fn test_energy_calculate() {
 	// Gewinn GHD bzw. Kommune
 	assert(
 		energy.results.sol_os_revenue__M__eur_per_a.get_year_values(2022),
-		[0.0, -1.956908637152778, 0.0, 0.0],
+		[0.0, 1.7582890124198713, 0.0, 0.0],
 	);
 	assert(
 		energy.results.sol_os_revenue__M__eur_per_a.get_year_values(2023),
-		[0.0, -1.956908637152778, 0.0, 0.0],
+		[0.0, 1.7582890124198713, 0.0, 0.0],
 	);
 	assert(
 		energy.results.sol_os_revenue__M__eur_per_a.get_year_values(2024),
-		[0.0, -2.2070081741898147, 0.0, -0.250099537037037],
+		[0.0, 1.9830042901976497, 0.0, 0.22471527777777783],
 	);
 	assert(
 		energy.results.sol_os_revenue__M__eur_per_a.get_year_values(2025),
-		[0.0, -2.4571077112268513, 0.0, -0.500199074074074],
+		[0.0, 2.207719567975427, 0.0, 0.44943055555555567],
 	);
 
 	// Menge (GWh)
