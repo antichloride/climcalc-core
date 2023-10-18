@@ -130,7 +130,7 @@ pub mod energy{
         buyback_price__m__eur_per_W_h: 0.0565,
         power_per_area__k__Wp_per_m2: 0.08333333333,
         costs: 0.05,
-        invest_and_om_costs__m__eur_per_W_h: 0.03,
+        invest_and_om_costs__m__eur_per_W_h: 0.0320956,
     };
 
     pub const wind_onshore: RenewableEnergy = RenewableEnergy{
