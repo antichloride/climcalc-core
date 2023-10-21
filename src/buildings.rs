@@ -450,7 +450,7 @@ impl Buildings{
 
         let mut ems_oil__k__to_coe_per_a = cnsmp_oil__M__L_per_a
             * constants::EnergySource::oil::emission__kg_coe_per_L;
-        // TODO: This is not done in excel. Check if whis is on purpose.
+        // TODO: oil emissions of public sector are missing in excel.
         ems_oil__k__to_coe_per_a.public = &ems_oil__k__to_coe_per_a.schools
             + ems_oil__k__to_coe_per_a.public;
         ems_oil__k__to_coe_per_a.schools = 0.0;

@@ -18,7 +18,8 @@ pub mod buildings{
         grant: 0.1,
     };
     pub const gas: HeatType = HeatType {
-        efficency: 0.93,
+        efficency: (0.87+0.98)/2.0, // TODO: This is the mean from oil condensing and not condensing (how
+                                 // make this sense?)
         invest__m__eur_per_W_h: 0.5,
         grant: 0.2,
     };
@@ -41,14 +42,14 @@ pub mod buildings{
     pub mod EnergySource{
 
         pub mod oil{
-            pub const energy_density__k__W_h_per_L: f64 = 9.0;
-            pub const price__eur_per_L: f64 = 0.82;
+            pub const energy_density__k__W_h_per_L: f64 = (40000000.0*0.833/3600.0/1000.0+43500000.0*0.748/3600.0/1000.0)/2.0;
+            pub const pric0e__eur_per_L: f64 = 0.82;
             pub const emission__kg_coe_per_L: f64 = 2.8;
         }
 
         pub mod gas{
             pub const energy_density__k__W_h_per_m3: f64 = 11.0;
-            pub const price__eur_per_m3: f64 = 0.73;
+            pub const price__eur_per_m3: f64 = 11.0*0.0668;
             pub const emission__kg_coe_per_m3: f64 = 2.0;
         }
 
@@ -159,7 +160,7 @@ pub mod energy{
         pub const gas: f64 = 397.0;
     }
 
-    pub const evu_discount_heat_pump: f64 = 0.27;
+    pub const evu_discount_heat_pump: f64 = 1.0-0.238/0.3263;
 
 }
 

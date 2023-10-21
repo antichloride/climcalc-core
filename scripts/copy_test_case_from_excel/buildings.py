@@ -85,7 +85,7 @@ def set_input_variables(inputs, lines):
 def set_measures(measures, lines):
 
     def measure_line(measures, row, varname, sector):
-        return f'\t{"//" if measures.iloc[row-2, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-2, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
+        return f'\t{"//" if measures.iloc[row-3, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-2, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
 
     measures_input = []
     # Set Measures
