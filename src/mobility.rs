@@ -80,14 +80,16 @@ impl Mobility{
             * traveld_dist_per_person__m__m_per_a
             * modal_split_car
             / mean_persons_per_car;
-        traveld_dist_car__M__m_per_a.private = 0.0;
-        if(n_bev__k__.industry==0.0){
+        if n_bev__k__.private==0.0{
+            traveld_dist_car__M__m_per_a.private = 0.0;
+        }
+        if n_bev__k__.industry==0.0{
             traveld_dist_car__M__m_per_a.industry = 0.0;
         }
-        if(n_bev__k__.schools==0.0){
+        if n_bev__k__.schools==0.0{
             traveld_dist_car__M__m_per_a.schools = 0.0;
         }
-        if(n_bev__k__.public==0.0){
+        if n_bev__k__.public==0.0{
             traveld_dist_car__M__m_per_a.public = 0.0;
         }
         self.results.traveld_dist_car__M__m_per_a
