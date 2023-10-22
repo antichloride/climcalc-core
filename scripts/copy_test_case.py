@@ -11,16 +11,16 @@ if __name__ == "__main__":
     measures = pd.read_excel(sys.argv[1], sheet_name="Ergebnisse")
 
     #buildings
-    write_test_case_buildings(inputs, measures)
-    write_excel_comparison_buildings(results)
+    # write_test_case_buildings(inputs, measures)
+    # write_excel_comparison_buildings(results)
 
     #energy
     # write_test_case_energy(inputs, measures)
     # write_excel_comparison_energy(results)
 
     #mobility
-    # write_test_case_mobility(inputs, measures)
-    # write_excel_comparison_mobility(results)
+    write_test_case_mobility(inputs, measures)
+    write_excel_comparison_mobility(results)
 
 
 

@@ -25,12 +25,18 @@ def set_input_variables(inputs, lines):
 
     os = -2
 
+    # EW bzw. MA bzw. SuS (in 1.000)
+    lines = find_and_replace_arguments(lines, "n_inhabitants__k__", str((convert_values(inputs.iloc[5+os, 1:5]))))
+    # Fahrleistung/Pkw (in 1.000 km)
+    lines = find_and_replace_arguments(lines, "traveld_dist_per_person__m__m_per_a", str((float(inputs.iloc[23+os, 9]))))
+    # Besetzungsquote Pkw privat
+    lines = find_and_replace_arguments(lines, "mean_persons_per_car", str((float(inputs.iloc[27+os, 1]))))
+    # %Pkw
+    lines = find_and_replace_arguments(lines, "modal_split_car", str((float(inputs.iloc[27+os, 9]))))
     # Anzahl Pkw (in 1.000)
     lines = find_and_replace_arguments(lines, "n_cars__k__", convert_values(inputs.iloc[24+os, 1:4]))
     #   davon Anzahl Pkw BEV (in 1.000)
     lines = find_and_replace_arguments(lines, "n_bev__k__", convert_values(inputs.iloc[25+os, 1:4]))
-    # Fahrleistung/Pkw (in 1.000 km)
-    lines = find_and_replace_arguments(lines, "traveld_dist_car__M__m_per_a", convert_values(inputs.iloc[26+os, 1:4]))
     # Anzahl Laternen (in 1.000)
     lines = find_and_replace_arguments(lines, "n_sl__k__", str((float(inputs.iloc[30+os, 3]))))
     # Stromverbrauch je Laterne (in kWh/a)
@@ -124,7 +130,7 @@ def write_assert_statements(results, lines, years=[2022,2023,2024,2025]):
     for variable, i, param_type, n_sectors in [
         ["n_cars__k__", 186, "inputs", 3],
         ["n_bev__k__", 190, "inputs", 3],
-        ["traveld_dist_car__M__m_per_a", 194, "inputs", 3],
+        ["traveld_dist_car__M__m_per_a", 194, "results", 3],
         ["cars_grant__M__eur_per_a", 199, "results", 3],
         ["bev_elec_nrg_dmd__G__W_h_per_a", 207, "results", 3],
         ["cars_fuel_dmd__M__L_per_a", 211, "results", 3],
