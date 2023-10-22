@@ -180,7 +180,7 @@ pub mod economy{
             pub const energetic_restoration: f64 = 0.3;
             pub const fast_charging_stations: f64 = 0.65;
             pub const solar_roof: f64 = 0.5;
-            pub const solar_landscape: f64 = 0.65;
+            pub const solar_landscape: f64 = 0.5;
         }
     }
     pub mod invest_work{
@@ -203,18 +203,18 @@ pub mod economy{
     }
     pub mod fte_per_million_turnover{
         pub mod material{
-            pub const heating_heatpump: f64 = 10.0;
-            pub const energetic_restoration: f64 = 10.0;
-            pub const fast_charging_stations: f64 = 10.0;
-            pub const solar_roof: f64 = 10.0;
-            pub const solar_landscape: f64 = 10.0;
+            pub const heating_heatpump: f64 = 1.0/204000.0*1000000.0;
+            pub const energetic_restoration: f64 = 1.0/204000.0*1000000.0;
+            pub const fast_charging_stations: f64 = 1.0/204000.0*1000000.0;
+            pub const solar_roof: f64 = 1.0/204000.0*1000000.0;
+            pub const solar_landscape: f64 = 1.0/204000.0*1000000.0;
         }
         pub mod work{
-            pub const heating_heatpump: f64 = 20.0;
-            pub const energetic_restoration: f64 = 20.0;
-            pub const fast_charging_stations: f64 = 20.0;
-            pub const solar_roof: f64 = 20.0;
-            pub const solar_landscape: f64 = 20.0;
+            pub const heating_heatpump: f64 = 386700.0/50.1/1000.0;
+            pub const energetic_restoration: f64 = 386700.0/50.1/1000.0;
+            pub const fast_charging_stations: f64 = 386700.0/50.1/1000.0;
+            pub const solar_roof: f64 = 386700.0/50.1/1000.0;
+            pub const solar_landscape: f64 = 386700.0/50.1/1000.0;
         }
     }
     pub mod maintenance_community_costs{

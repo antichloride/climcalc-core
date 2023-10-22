@@ -3,6 +3,7 @@ import sys
 from copy_test_case_from_excel.buildings import write_test_case_buildings, write_excel_comparison_buildings
 from copy_test_case_from_excel.energy import write_test_case_energy, write_excel_comparison_energy
 from copy_test_case_from_excel.mobility import write_test_case_mobility, write_excel_comparison_mobility
+from copy_test_case_from_excel.economy import write_excel_comparison_economy
 
 
 if __name__ == "__main__":
@@ -22,5 +23,7 @@ if __name__ == "__main__":
     write_test_case_mobility(inputs, measures)
     write_excel_comparison_mobility(results)
 
+    #economy
+    write_excel_comparison_economy(results)
 
 
