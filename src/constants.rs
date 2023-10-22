@@ -166,6 +166,7 @@ pub mod energy{
 pub mod economy{
 
     pub const revenue_margin: f64 = 0.05;
+    pub const revenue_local_part: f64 = 0.073;
 
     pub mod material{
         pub mod invest_local{
@@ -233,12 +234,19 @@ pub mod economy{
     }
 
     pub mod tax{
-        pub const business_tax: f64 = 0.008;
-        pub const income_per_fte: f64 = 50.0;
-        pub const income_tax_per_fte: f64 = 7.5;
-        pub const income_tax_local_per_fte: f64 = 1.1;
+        pub const business_tax: f64 = 0.073*0.035*4.35;
+        pub const income_per_fte: f64 = 1777.0/44.8;
+        pub const income_tax_per_fte: f64 = 343.0/44.8;
+        pub const income_tax_local_per_fte: f64 = 343.0/44.8*0.15;
         pub const turnover_tax: f64 = 0.19;
-        pub const turnover_tax_local_part: f64 = 0.004;
-        pub const corporate_tax: f64 = 0.15;
+        pub const turnover_tax_local_part: f64 = 0.19*0.02;
+        pub const corporate_tax: f64 = 0.0;
+    }
+
+    pub mod energy_taxes{
+        pub const oil: f64 = 0.13*0.84;
+        pub const gas: f64 = 0.0318;
+        pub const fuel: f64 = 0.721;
+        pub const electric: f64 = 0.0205;
     }
 }

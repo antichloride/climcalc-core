@@ -69,7 +69,12 @@ impl Calculator{
             self.calculate_first_stage(year);
             self.calculate_second_stage(year);
             self.calculate_emissions(year);
-            self.economy.calculate(year, &self.buildings, &self.energy);
+            self.economy.calculate(
+                year,
+                &self.buildings,
+                &self.energy,
+                &self.mobility,
+            );
             self.stakeholders.calculate(
                 year,
                 &self.buildings,

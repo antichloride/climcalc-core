@@ -140,7 +140,7 @@ fn test_economy_calculate() {
 		max_relative=1e-3,
 	);
 
-	// Umsatz Heizung Handwerk lokal (in Mio. €/a)
+	// Umsatz Wärmebedarf Handwerk lokal (in Mio. €/a)
 	assert_relative_eq!(
 		economy.turnover_heat_demand_crafting_local.get_year(2023),
 		0.0,
@@ -157,7 +157,7 @@ fn test_economy_calculate() {
 		max_relative=1e-3,
 	);
 
-	// Umsatz Heizung Handwerk national (in Mio. €/a)
+	// Umsatz Wärmebedarf Handwerk national (in Mio. €/a)
 	assert_relative_eq!(
 		economy.turnover_heat_demand_crafting_national.get_year(2023),
 		0.0,
@@ -174,7 +174,7 @@ fn test_economy_calculate() {
 		max_relative=1e-3,
 	);
 
-	// Umsatz Heizung Herstellung national (in Mio. €/a)
+	// Umsatz Wärmebedarf Herstellung national (in Mio. €/a)
 	assert_relative_eq!(
 		economy.turnover_heat_demand_production_national.get_year(2023),
 		0.0,
@@ -499,39 +499,56 @@ fn test_economy_calculate() {
 
 	// Umsatz lokal mit lokalem Anteil Material (in Mio. €)
 	assert_relative_eq!(
-		economy.turnover_national.get_year(2023),
+		economy.turnover_local.get_year(2023),
 		0.0,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
-		economy.turnover_national.get_year(2024),
+		economy.turnover_local.get_year(2024),
 		19.578428085301073,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
-		economy.turnover_national.get_year(2025),
+		economy.turnover_local.get_year(2025),
 		19.570409807990075,
 		max_relative=1e-3,
 	);
 
 	// Gewinn lokal mit lokalem Anteil Material (in Mio. €)
 	assert_relative_eq!(
-		economy.turnover_tax_local.get_year(2023),
+		economy.revenue_local.get_year(2023),
 		0.0,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
-		economy.turnover_tax_local.get_year(2024),
+		economy.revenue_local.get_year(2024),
 		1.4292252502269782,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
-		economy.turnover_tax_local.get_year(2025),
+		economy.revenue_local.get_year(2025),
 		1.4286399159832754,
 		max_relative=1e-3,
 	);
 
 	// Umsatz national
+	assert_relative_eq!(
+		economy.turnover_national.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		economy.turnover_national.get_year(2024),
+		67.12570881374869,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		economy.turnover_national.get_year(2025),
+		67.07094690898651,
+		max_relative=1e-3,
+	);
+
+	// Umsatzsteuer national
 	assert_relative_eq!(
 		economy.turnover_tax_national.get_year(2023),
 		0.0,
@@ -539,16 +556,33 @@ fn test_economy_calculate() {
 	);
 	assert_relative_eq!(
 		economy.turnover_tax_national.get_year(2024),
-		67.12570881374869,
+		0.5012558489955218,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
 		economy.turnover_tax_national.get_year(2025),
-		67.07094690898651,
+		0.501577956991935,
 		max_relative=1e-3,
 	);
 
-	// Umsatzsteuer national
+	// Umsatzsteuer lokal
+	assert_relative_eq!(
+		economy.turnover_tax_local.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		economy.turnover_tax_local.get_year(2024),
+		0.014135625077587375,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		economy.turnover_tax_local.get_year(2025),
+		0.014129835881368834,
+		max_relative=1e-3,
+	);
+
+	// Gewerbesteuer lokal
 	assert_relative_eq!(
 		economy.business_tax_local.get_year(2023),
 		0.0,
@@ -556,16 +590,16 @@ fn test_economy_calculate() {
 	);
 	assert_relative_eq!(
 		economy.business_tax_local.get_year(2024),
-		0.5012558489955218,
+		0.21759954434705744,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
 		economy.business_tax_local.get_year(2025),
-		0.501577956991935,
+		0.21751042720845368,
 		max_relative=1e-3,
 	);
 
-	// Umsatzsteuer lokal
+	// Gewerbesteuer national
 	assert_relative_eq!(
 		economy.business_tax_national.get_year(2023),
 		0.0,
@@ -573,16 +607,16 @@ fn test_economy_calculate() {
 	);
 	assert_relative_eq!(
 		economy.business_tax_national.get_year(2024),
-		0.014135625077587375,
+		0.7460519091832063,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
 		economy.business_tax_national.get_year(2025),
-		0.014129835881368834,
+		0.7454432716832033,
 		max_relative=1e-3,
 	);
 
-	// Gewerbesteuer lokal
+	// Körperschaftssteuer national
 	assert_relative_eq!(
 		economy.corporate_tax_national.get_year(2023),
 		0.0,
@@ -590,12 +624,29 @@ fn test_economy_calculate() {
 	);
 	assert_relative_eq!(
 		economy.corporate_tax_national.get_year(2024),
-		0.21759954434705744,
+		0.0,
 		max_relative=1e-3,
 	);
 	assert_relative_eq!(
 		economy.corporate_tax_national.get_year(2025),
-		0.21751042720845368,
+		0.0,
+		max_relative=1e-3,
+	);
+
+	// Energiesteuer national (in Mio. €)
+	assert_relative_eq!(
+		economy.energy_tax_national.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		economy.energy_tax_national.get_year(2024),
+		-11.727419747189568,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		economy.energy_tax_national.get_year(2025),
+		-23.409515473654498,
 		max_relative=1e-3,
 	);
 

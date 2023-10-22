@@ -9,6 +9,7 @@ use crate::constants::energy as constants_energy;
 //use crate::sectors::SectorsResult;
 use crate::energy::Energy;
 use crate::buildings::Buildings;
+use crate::mobility::Mobility;
 
 macro_rules! implement_economy{
     ($($field:ident),*) => {
@@ -81,12 +82,14 @@ implement_economy!{
     income_tax_local,
     income_tax_national,
     turnover_local,
+    revenue_local,
     turnover_national,
     turnover_tax_local,
     turnover_tax_national,
     business_tax_local,
     business_tax_national,
-    corporate_tax_national
+    corporate_tax_national,
+    energy_tax_national
 }
 
 
@@ -121,6 +124,7 @@ impl Economy{
         year: u32,
         buildings: &Buildings,
         energy: &Energy,
+        mobility: &Mobility,
     ){
 
         // heat
@@ -297,36 +301,38 @@ impl Economy{
 
         // taxes
         let income_local = n_jobs_crafting_local
-            * constants::tax::income_per_fte;
+            * constants::tax::income_per_fte * 1e-3;
         self.income_local.set_year_value(year, income_local);
 
-        let income_national = n_jobs_crafting_national + n_jobs_production_national
-            * constants::tax::income_per_fte;
+        let income_national = n_jobs_crafting_national
+            * constants::tax::income_tax_per_fte * 1e-3;
         self.income_national.set_year_value(year, income_national);
 
-        let income_tax_local = income_local
-            * constants::tax::income_tax_local_per_fte;
+        let income_tax_local = n_jobs_crafting_local
+            * constants::tax::income_tax_local_per_fte * 1e-3;
         self.income_tax_local.set_year_value(year, income_tax_local);
 
-        let income_tax_national = income_national
-            * constants::tax::income_tax_per_fte;
+        let income_tax_national = n_jobs_crafting_national
+            * constants::tax::turnover_tax * 1e-3;
         self.income_tax_national.set_year_value(year, income_tax_national);
 
         let turnover_local =
-            turnover_heating_crafting_local
-            + invest_heating_material
+            &turnover_heating_crafting_local
+            + &invest_heating_material
             * constants::invest_work::loacal_value_add::heating_heatpump
-            + turnover_heat_demand_crafting_local
-            + invest_heat_demand_material
+            + &turnover_heat_demand_crafting_local
+            + &invest_heat_demand_material
             * constants::invest_work::loacal_value_add::energetic_restoration
-            + turnover_solar_roof_crafting_local
-            + invest_solar_roof_material
+            + &turnover_solar_roof_crafting_local
+            + &invest_solar_roof_material
             * constants::invest_work::loacal_value_add::solar_roof
-            + turnover_solar_landscape_crafting_local
-            + invest_solar_landscape_material
+            + &turnover_solar_landscape_crafting_local
+            + &invest_solar_landscape_material
             * constants::invest_work::loacal_value_add::solar_landscape;
-        self.turnover_local
-            .set_year_value(year, turnover_local);
+        self.turnover_local.set_year_value(year, turnover_local);
+
+        let revenue_local = turnover_local * constants::revenue_local_part;
+        self.revenue_local.set_year_value(year, revenue_local);
 
         let turnover_national = invest_heat_sources__M__eur_per_a
             + invest_energetic_renovation__M__eur_per_a
@@ -338,7 +344,7 @@ impl Economy{
             * constants::tax::turnover_tax;
         self.turnover_tax_local.set_year_value(year, turnover_tax_local);
 
-        let turnover_tax_national = turnover_national
+        let turnover_tax_national = income_national
             * constants::tax::turnover_tax;
         self.turnover_tax_national.set_year_value(year, turnover_tax_national);
 
@@ -354,7 +360,62 @@ impl Economy{
             * constants::tax::corporate_tax;
         self.corporate_tax_national.set_year_value(year, corporate_tax_national);
 
-        //TODO: Add energy tax when Hartmut gave feedback
+
+        if year != self.start_year{
+
+            let cnsmp_oil__M__L_per_a =
+                buildings.results.cnsmp_oil__M__L_per_a.get_year(year).sum();
+            let cnsmp_oil__M__L_per_a_fist_year =
+                buildings.results.cnsmp_oil__M__L_per_a
+                .get_year(self.start_year).sum();
+
+            let cnsmp_gas__G__W_h_per_a =
+                buildings.results.cnsmp_gas__G__W_h_per_a
+                .get_year(year).sum();
+            let cnsmp_gas__G__W_h_per_a_first_year =
+                buildings.results.cnsmp_gas__G__W_h_per_a
+                .get_year(self.start_year).sum();
+
+            let cars_fuel_dmd__M__L_per_a =
+                mobility.results.cars_fuel_dmd__M__L_per_a
+                .get_year(year).sum();
+            let cars_fuel_dmd__M__L_per_a_first_year =
+                mobility.results.cars_fuel_dmd__M__L_per_a
+                .get_year(self.start_year).sum();
+
+            let prchsd_renewable_nrg__G__W_h_per_a =
+                energy.results.prchsd_renewable_nrg__M__eur_per_a
+                .get_year(year).sum();
+            let prchsd_renewable_nrg__G__W_h_per_a_first_year =
+                energy.results.prchsd_renewable_nrg__M__eur_per_a
+                .get_year(self.start_year).sum();
+
+            let prchsd_nrg_mix__G__W_h_per_a =
+                energy.results.prchsd_nrg_mix__G__W_h_per_a
+                .get_year(year).private;
+            let prchsd_nrg_mix__G__W_h_per_a_first_year =
+                energy.results.prchsd_nrg_mix__G__W_h_per_a
+                .get_year(self.start_year).private;
+
+            let energy_tax_national =
+                (&cnsmp_oil__M__L_per_a
+                    - &cnsmp_oil__M__L_per_a_fist_year)
+                * constants::energy_taxes::gas
+                + (&cnsmp_gas__G__W_h_per_a
+                    - &cnsmp_gas__G__W_h_per_a_first_year)
+                * constants::energy_taxes::fuel
+                + (&cars_fuel_dmd__M__L_per_a
+                    - &cars_fuel_dmd__M__L_per_a_first_year)
+                * constants::energy_taxes::electric
+                + (&prchsd_renewable_nrg__G__W_h_per_a
+                    - &prchsd_renewable_nrg__G__W_h_per_a_first_year)
+                * constants::energy_taxes::electric
+                + (&prchsd_nrg_mix__G__W_h_per_a
+                    - &prchsd_nrg_mix__G__W_h_per_a_first_year)
+                * constants::energy_taxes::electric;
+            self.energy_tax_national.set_year_value(year, energy_tax_national);
+
+        }
 
     }
 }
