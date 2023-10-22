@@ -7,6 +7,7 @@ def write_excel_comparison_economy(results):
         lines = f.readlines()
 
     lines = write_assert_statements(results, lines)
+    lines = write_assert_statements_stakeholders(results, lines)
 
     with open("src/economy/tests/compare_with_excel.rs", "w") as f:
         for line in lines:
@@ -70,5 +71,43 @@ def write_assert_statements(results, lines, years=[2023,2024,2025]):
         assert_lines.append("\n")
 
     lines = insert_in_section(lines, assert_lines, "[start:assert_measures]", "[end:assert_measures]")
+
+    return lines
+
+
+def write_assert_statements_stakeholders(results, lines, years=[2023,2024,2025]):
+
+    assert_lines = ["\n"]
+
+    os = -2
+    for variable, i in [
+        ["private_invest", 426+os],
+        ["private_effect_of_measures", 427+os],
+        ["private_cash_flow_netto", 428+os],
+        ["industry_invest", 430+os],
+        ["industry_effect_of_measures", 431+os],
+        ["industry_profit_from_measures", 432+os],
+        ["industry_cash_flow_netto", 433+os],
+        ["community_invest", 435+os],
+        ["community_effect_of_measures", 436+os],
+        ["community_tax_income_from_measures", 437+os],
+        ["community_cash_flow_netto", 438+os],
+        ["federal_additional_expenses", 440+os],
+        ["federal_additional_tax_income", 441+os],
+        ["federal_cash_flow_netto", 442+os],
+    ]:
+
+        name = str(results.iloc[i,1]).replace('\n',' ')
+        assert_lines.append(f"\t// {name}\n")
+        for j, year in enumerate(years):
+            value = str(float(results.iloc[i,j+3]))
+            assert_lines.append(f"\tassert_relative_eq!(\n")
+            assert_lines.append(f"\t\tstakeholders.{variable}.get_year({year}),\n")
+            assert_lines.append(f"\t\t{value},\n")
+            assert_lines.append(f"\t\tmax_relative=1e-3,\n")
+            assert_lines.append("\t);\n")
+        assert_lines.append("\n")
+
+    lines = insert_in_section(lines, assert_lines, "[start:assert_measures_stakeholders]", "[end:assert_measures_stakeholders]")
 
     return lines

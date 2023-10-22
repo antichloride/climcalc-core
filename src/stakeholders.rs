@@ -15,7 +15,7 @@ macro_rules! implement_stakeholders{
         pub struct Steakholders{
             start_year: u32,
             $(
-                $field: Results,
+                pub $field: Results,
              )*
         }
 
@@ -106,48 +106,55 @@ impl Steakholders{
         if year > self.start_year{
 
             let costs_heating_oil_diff =
-                &buildings.costs_oil__M__eur_per_a().get_year(year)
-                - &buildings.costs_oil__M__eur_per_a().get_year(year-1);
+                &buildings.costs_oil__M__eur_per_a().get_year(self.start_year)
+                - &buildings.costs_oil__M__eur_per_a().get_year(year);
             let costs_heating_gas_diff =
-                &buildings.costs_gas__M__eur_per_a().get_year(year)
-                - &buildings.costs_gas__M__eur_per_a().get_year(year-1);
+                &buildings.costs_gas__M__eur_per_a().get_year(self.start_year)
+                - &buildings.costs_gas__M__eur_per_a().get_year(year);
             let bev_electric_power_costs_diff =
-                &mobility.bev_nrg_costs__M__eur_per_a().get_year(year)
-                - &mobility.bev_nrg_costs__M__eur_per_a().get_year(year-1);
+                &mobility.bev_nrg_costs__M__eur_per_a().get_year(self.start_year)
+                - &mobility.bev_nrg_costs__M__eur_per_a().get_year(year);
             let car_fuel_costs_diff =
-                &mobility.cars_fuel_costs__M__eur_per_a().get_year(year)
-                - &mobility.cars_fuel_costs__M__eur_per_a().get_year(year-1);
+                &mobility.cars_fuel_costs__M__eur_per_a().get_year(self.start_year)
+                - &mobility.cars_fuel_costs__M__eur_per_a().get_year(year);
             let solar_roof_om_diff =
-                &energy.sol_rf_om__M__eur_per_a().get_year(year)
-                - &energy.sol_rf_om__M__eur_per_a().get_year(year-1);
+                &energy.sol_rf_om__M__eur_per_a().get_year(self.start_year)
+                - &energy.sol_rf_om__M__eur_per_a().get_year(year);
             let solar_landscape_om_diff =
-                &energy.sol_os_om__M__eur_per_a().get_year(year)
-                - &energy.sol_os_om__M__eur_per_a().get_year(year-1);
+                &energy.sol_os_om__M__eur_per_a().get_year(self.start_year)
+                - &energy.sol_os_om__M__eur_per_a().get_year(year);
             let solar_roof_revenue_diff =
-                &energy.sol_rf_revenue__M__eur_per_a().get_year(year)
-                - &energy.sol_rf_revenue__M__eur_per_a().get_year(year-1);
+                &energy.sol_rf_revenue__M__eur_per_a().get_year(self.start_year)
+                - &energy.sol_rf_revenue__M__eur_per_a().get_year(year);
             let solar_landscape_revenue_diff =
-                &energy.sol_os_revenue__M__eur_per_a().get_year(year)
-                - &energy.sol_os_revenue__M__eur_per_a().get_year(year-1);
+                &energy.sol_os_revenue__M__eur_per_a().get_year(self.start_year)
+                - &energy.sol_os_revenue__M__eur_per_a().get_year(year);
             let wind_revenue_diff =
-                &energy.wind_revenue__M__eur_per_a().get_year(year)
-                - &energy.wind_revenue__M__eur_per_a().get_year(year-1);
+                &energy.wind_revenue__M__eur_per_a().get_year(self.start_year)
+                - &energy.wind_revenue__M__eur_per_a().get_year(year);
             let direct_aquisition_renable_energies_costs_diff =
-                &energy.prchsd_renewable_nrg__M__eur_per_a().get_year(year)
-                - &energy.prchsd_renewable_nrg__M__eur_per_a().get_year(year-1);
+                &energy.prchsd_renewable_nrg__M__eur_per_a().get_year(self.start_year)
+                - &energy.prchsd_renewable_nrg__M__eur_per_a().get_year(year);
             let purchased_energy_mix_costs_diff =
-                &energy.prchsd_nrg_mix_costs__M__eur_per_a().get_year(year)
-                - &energy.prchsd_nrg_mix_costs__M__eur_per_a().get_year(year-1);
+                &energy.prchsd_nrg_mix_costs__M__eur_per_a().get_year(self.start_year)
+                - &energy.prchsd_nrg_mix_costs__M__eur_per_a().get_year(year);
 
-            let effect_of_measures = costs_heating_oil_diff
-                + costs_heating_gas_diff + bev_electric_power_costs_diff
+            let mut effect_of_measures = costs_heating_oil_diff
+                + costs_heating_gas_diff
+                //+ bev_electric_power_costs_diff
                 + car_fuel_costs_diff
-                + solar_roof_om_diff + solar_landscape_om_diff
+                + solar_roof_om_diff
+                //+ solar_landscape_om_diff
                 - &solar_roof_revenue_diff
-                - &solar_landscape_revenue_diff
-                + wind_revenue_diff
+                //- &solar_landscape_revenue_diff
+                //+ wind_revenue_diff
                 + direct_aquisition_renable_energies_costs_diff
                 + purchased_energy_mix_costs_diff;
+
+            effect_of_measures.industry = effect_of_measures.industry
+                + solar_landscape_om_diff.industry
+                - solar_landscape_revenue_diff.industry;
+            println!("{0}, {1}, {2}", &effect_of_measures.industry, &solar_landscape_om_diff.industry, &solar_landscape_om_diff.industry);
 
             self.private_effect_of_measures
                 .set_year_value(year, effect_of_measures.private);

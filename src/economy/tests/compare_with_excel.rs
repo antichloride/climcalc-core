@@ -18,6 +18,7 @@ fn test_economy_calculate() {
     calculator.calculate_over_years();
 
     let economy = calculator.economy;
+    let stakeholders = calculator.stakeholders;
 
     // [start:assert_measures]
 
@@ -651,4 +652,247 @@ fn test_economy_calculate() {
 	);
 
     // [end:assert_measures]
+
+
+    // [start:assert_measures_stakeholders]
+
+	// Investition
+	assert_relative_eq!(
+		stakeholders.private_invest.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.private_invest.get_year(2024),
+		45.68359945818361,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.private_invest.get_year(2025),
+		45.62883755342152,
+		max_relative=1e-3,
+	);
+
+	// Effekte eigener Maßnahmen
+	assert_relative_eq!(
+		stakeholders.private_effect_of_measures.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.private_effect_of_measures.get_year(2024),
+		12.738349676554986,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.private_effect_of_measures.get_year(2025),
+		25.456277786750817,
+		max_relative=1e-3,
+	);
+
+	// Cash Flow Netto
+	assert_relative_eq!(
+		stakeholders.private_cash_flow_netto.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.private_cash_flow_netto.get_year(2024),
+		58.4219491347386,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.private_cash_flow_netto.get_year(2025),
+		71.08511534017234,
+		max_relative=1e-3,
+	);
+
+	// Investition
+	assert_relative_eq!(
+		stakeholders.industry_invest.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_invest.get_year(2024),
+		1.6299019607843126,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_invest.get_year(2025),
+		1.629901960784315,
+		max_relative=1e-3,
+	);
+
+	// Effekte eigener Maßnahmen
+	assert_relative_eq!(
+		stakeholders.industry_effect_of_measures.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_effect_of_measures.get_year(2024),
+		0.1204227941176469,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_effect_of_measures.get_year(2025),
+		0.24084558823529412,
+		max_relative=1e-3,
+	);
+
+	// Gewinne aus Maßnahmen anderer
+	assert_relative_eq!(
+		stakeholders.industry_profit_from_measures.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_profit_from_measures.get_year(2024),
+		1.4292252502269782,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_profit_from_measures.get_year(2025),
+		1.4286399159832754,
+		max_relative=1e-3,
+	);
+
+	// Cash Flow Netto
+	assert_relative_eq!(
+		stakeholders.industry_cash_flow_netto.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_cash_flow_netto.get_year(2024),
+		3.179550005128938,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.industry_cash_flow_netto.get_year(2025),
+		3.2993874650028845,
+		max_relative=1e-3,
+	);
+
+	// Investition
+	assert_relative_eq!(
+		stakeholders.community_invest.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_invest.get_year(2024),
+		1.173529411764706,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_invest.get_year(2025),
+		1.173529411764706,
+		max_relative=1e-3,
+	);
+
+	// Effekte eigener Maßnahmen
+	assert_relative_eq!(
+		stakeholders.community_effect_of_measures.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_effect_of_measures.get_year(2024),
+		0.08670441176470585,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_effect_of_measures.get_year(2025),
+		0.17340882352941175,
+		max_relative=1e-3,
+	);
+
+	// Einnahmen aus Maßnahmen anderer
+	assert_relative_eq!(
+		stakeholders.community_tax_income_from_measures.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_tax_income_from_measures.get_year(2024),
+		0.3362434836373871,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_tax_income_from_measures.get_year(2025),
+		0.33615610397353457,
+		max_relative=1e-3,
+	);
+
+	// Cash Flow Netto
+	assert_relative_eq!(
+		stakeholders.community_cash_flow_netto.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_cash_flow_netto.get_year(2024),
+		1.5964773071667988,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.community_cash_flow_netto.get_year(2025),
+		1.6830943392676523,
+		max_relative=1e-3,
+	);
+
+	// Mehr-Ausgaben
+	assert_relative_eq!(
+		stakeholders.federal_additional_expenses.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.federal_additional_expenses.get_year(2024),
+		-108.63867798301607,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.federal_additional_expenses.get_year(2025),
+		-108.638677983016,
+		max_relative=1e-3,
+	);
+
+	// Mehr-Einnahmen aus Steuern und Abgaben
+	assert_relative_eq!(
+		stakeholders.federal_additional_tax_income.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.federal_additional_tax_income.get_year(2024),
+		-10.414641837305302,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.federal_additional_tax_income.get_year(2025),
+		-22.096982022025312,
+		max_relative=1e-3,
+	);
+
+	// Cash Flow Netto
+	assert_relative_eq!(
+		stakeholders.federal_cash_flow_netto.get_year(2023),
+		0.0,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.federal_cash_flow_netto.get_year(2024),
+		-119.05331982032136,
+		max_relative=1e-3,
+	);
+	assert_relative_eq!(
+		stakeholders.federal_cash_flow_netto.get_year(2025),
+		-130.7356600050413,
+		max_relative=1e-3,
+	);
+
+    // [end:assert_measures_stakeholders]
 }
