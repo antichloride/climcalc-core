@@ -39,154 +39,154 @@ fn test_mobility_calculate() {
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.31895233950000823,0.31895233950000823,0.31895233950000823,0.31895233950000823);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2024,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3198989593172235,0.3198989593172235,0.3198989593172235,0.3198989593172235);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2025,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3202185909643858,0.3202185909643858,0.3202185909643858,0.3202185909643858);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2026,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.32053868077589576,0.32053868077589576,0.32053868077589576,0.32053868077589576);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2027,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3208592297375685,0.3208592297375685,0.3208592297375685,0.3208592297375685);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2028,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3211802388380492,0.3211802388380492,0.3211802388380492,0.3211802388380492);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2029,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.32150170906882347,0.32150170906882347,0.32150170906882347,0.32150170906882347);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2030,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.32182685657380034,0.32182685657380034,0.32182685657380034,0.32182685657380034);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2031,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.32215200407877714,0.32215200407877714,0.32215200407877714,0.32215200407877714);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2032,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.32247715158375395,0.32247715158375395,0.32247715158375395,0.32247715158375395);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2033,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.32280229908873087,0.32280229908873087,0.32280229908873087,0.32280229908873087);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2034,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2035,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2036,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2037,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2038,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2039,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2040,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2041,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2042,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2043,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2044,
 		&raw_vals,
 		);
 
 	raw_vals=SectorsRawValues::new();
-	raw_vals.set(0.3178131160242466,0.3178131160242466,0.3178131160242466,0.3178131160242466);
+	raw_vals.set(0.3231274465937077,0.3231274465937077,0.3231274465937077,0.3231274465937077);
 	nrg_own_mix_price__m__eur_per_W_h.set_year_values(
 		2045,
 		&raw_vals,
@@ -237,11 +237,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.inputs.n_bev__k__.get_year_values(2024),
-		[0.000719691454326923, 7.315663633233172e-05, 0.0, 3.9138800437797477e-07],
+		[10.000719691454327, 7.315663633233172e-05, 0.0, 3.9138800437797477e-07],
 	);
 	assert(
 	mobility.inputs.n_bev__k__.get_year_values(2025),
-		[0.000719691454326923, 7.315663633233172e-05, 0.0, 3.9138800437797477e-07],
+		[20.00071969145433, 7.315663633233172e-05, 0.0, 3.9138800437797477e-07],
 	);
 
 	// Fahrleistung/Pkw (in 1.000 km)
@@ -273,11 +273,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_grant__M__eur_per_a.get_year_values(2024),
-		[0.0, 0.0, 0.0, 0.0],
+		[90.0, 0.0, 0.0, 0.0],
 	);
 	assert(
 	mobility.results.cars_grant__M__eur_per_a.get_year_values(2025),
-		[0.0, 0.0, 0.0, 0.0],
+		[90.00000000000001, 0.0, 0.0, 0.0],
 	);
 
 	// Verbrauch Strom (in GWh/a)
@@ -291,11 +291,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.bev_elec_nrg_dmd__G__W_h_per_a.get_year_values(2024),
-		[0.0021476583283425656, 0.0012768289795447468, 0.0, 3.8016619808284724e-06],
+		[29.843523645641127, 0.0012768289795447468, 0.0, 3.8016619808284724e-06],
 	);
 	assert(
 	mobility.results.bev_elec_nrg_dmd__G__W_h_per_a.get_year_values(2025),
-		[0.0021476583283425656, 0.0012768289795447468, 0.0, 3.8016619808284724e-06],
+		[59.684899632953915, 0.0012768289795447468, 0.0, 3.8016619808284724e-06],
 	);
 
 	// Verbrauch Benzin/Diesel (in Mio. l/a)
@@ -309,11 +309,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_fuel_dmd__M__L_per_a.get_year_values(2024),
-		[94.55729032321851, 50.854048343395995, 0.0, 1.7688710203842892],
+		[83.68854635339851, 50.854048343395995, 0.0, 1.7688710203842892],
 	);
 	assert(
 	mobility.results.cars_fuel_dmd__M__L_per_a.get_year_values(2025),
-		[94.55729032321851, 50.854048343395995, 0.0, 1.7688710203842892],
+		[72.81980238357852, 50.854048343395995, 0.0, 1.7688710203842892],
 	);
 
 	// Kosten Strom (in Mio. €/a)
@@ -327,11 +327,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.bev_elec_nrg_price__G__W_h_per_a.get_year_values(2024),
-		[0.0006825539854859753, 0.000405792996619175, 0.0, 1.2082180401980066e-06],
+		[9.518661685701053, 0.00040724759016720516, 0.0, 1.2125489827734767e-06],
 	);
 	assert(
 	mobility.results.bev_elec_nrg_price__G__W_h_per_a.get_year_values(2025),
-		[0.0006825539854859753, 0.000405792996619175, 0.0, 1.2082180401980066e-06],
+		[19.093137279534893, 0.00040845626178243695, 0.0, 1.2161477113428828e-06],
 	);
 
 	// Kosten Benzin/Diesel (in Mio. €/a)
@@ -345,11 +345,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_fuel_costs__M__eur_per_a.get_year_values(2024),
-		[176.58611790777184, 94.97013869748538, 0.0, 3.303373706051741],
+		[156.28869506915711, 94.97013869748538, 0.0, 3.303373706051741],
 	);
 	assert(
 	mobility.results.cars_fuel_costs__M__eur_per_a.get_year_values(2025),
-		[176.58611790777184, 94.97013869748538, 0.0, 3.303373706051741],
+		[135.9912722305424, 94.97013869748538, 0.0, 3.303373706051741],
 	);
 
 	// CO2-Emissionen Benzin (in 1.000 to )
@@ -363,11 +363,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2024),
-		[264.76041290501183, 142.39133536150877, 0.0, 4.952838857076009],
+		[234.3279297895158, 142.39133536150877, 0.0, 4.952838857076009],
 	);
 	assert(
 	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2025),
-		[264.76041290501183, 142.39133536150877, 0.0, 4.952838857076009],
+		[203.89544667401984, 142.39133536150877, 0.0, 4.952838857076009],
 	);
 
 	// Straßenbeleuchtung
@@ -449,12 +449,12 @@ fn test_mobility_calculate() {
 	);
 	assert_relative_eq!(
 		mobility.results.sl_nrg_costs__M__eur_per_a.get_year(2024),
-		3.31564645082988,
+		3.327531618822201,
 		max_relative=0.1,
 	);
 	assert_relative_eq!(
 		mobility.results.sl_nrg_costs__M__eur_per_a.get_year(2025),
-		3.31564645082988,
+		3.337407412107572,
 		max_relative=0.1,
 	);
 
@@ -493,12 +493,12 @@ fn test_mobility_calculate() {
 	);
 	assert_relative_eq!(
 		mobility.results.sl_total_costs__M__eur_per_a.get_year(2024),
-		6.199628614291418,
+		6.211513782283739,
 		max_relative=0.1,
 	);
 	assert_relative_eq!(
 		mobility.results.sl_total_costs__M__eur_per_a.get_year(2025),
-		6.199628614291418,
+		6.22138957556911,
 		max_relative=0.1,
 	);
 

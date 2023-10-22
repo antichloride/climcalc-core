@@ -21,7 +21,7 @@ pub fn create_energy(start_year: u32, end_year: u32) -> Energy{
     // [start:measures]
 
 	//Private
-	//energy.inputs.sol_rf_installed__M__Wp.private.add_measure("sol_rf_installed__M__Wp", 2024, 2035, 20.0);
+	energy.inputs.sol_rf_installed__M__Wp.private.add_measure("sol_rf_installed__M__Wp", 2024, 2035, 20.0);
 
 	//Industry
 	//energy.inputs.sol_rf_installed__M__Wp.industry.add_measure("sol_rf_installed__M__Wp", 2024, 2025, -19.999999999999993);

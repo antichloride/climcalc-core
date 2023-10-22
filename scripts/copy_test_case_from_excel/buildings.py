@@ -85,41 +85,41 @@ def set_input_variables(inputs, lines):
 def set_measures(measures, lines):
 
     def measure_line(measures, row, varname, sector):
-        return f'\t{"//" if measures.iloc[row-3, 13] == 0 else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-2, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
+        return f'\t{"//" if str(measures.iloc[row-2, 13]) != "1" else ""}buildings.inputs.{varname}.{sector}.add_measure("{varname}", {measures.iloc[row-2, 11]}, {measures.iloc[row-2, 12]}, {measures.iloc[row-2, 9] - measures.iloc[row-2, 10]});\n'
 
     measures_input = []
     # Set Measures
     measures_input.append("\n")
     measures_input.append("\t//Private\n")
-    measures_input.append(measure_line(measures, 14, "heat_dmd__k__W_h_per_m2_a", "private"))
-    measures_input.append(measure_line(measures, 15, "A_heat_oil__k__m2", "private"))
-    measures_input.append(measure_line(measures, 16, "A_heat_oil_condensing__k__m2", "private"))
-    measures_input.append(measure_line(measures, 17, "A_heat_gas__k__m2", "private"))
-    measures_input.append(measure_line(measures, 18, "A_heat_heat_pump__k__m2", "private"))
+    measures_input.append(measure_line(measures, 13, "heat_dmd__k__W_h_per_m2_a", "private"))
+    measures_input.append(measure_line(measures, 14, "A_heat_oil__k__m2", "private"))
+    measures_input.append(measure_line(measures, 15, "A_heat_oil_condensing__k__m2", "private"))
+    measures_input.append(measure_line(measures, 16, "A_heat_gas__k__m2", "private"))
+    measures_input.append(measure_line(measures, 17, "A_heat_heat_pump__k__m2", "private"))
     measures_input.append("\n")
 
     measures_input.append("\t//Industry\n")
-    measures_input.append(measure_line(measures, 24, "heat_dmd__k__W_h_per_m2_a", "industry"))
-    measures_input.append(measure_line(measures, 25, "A_heat_oil__k__m2", "industry"))
-    measures_input.append(measure_line(measures, 26, "A_heat_oil_condensing__k__m2", "industry"))
-    measures_input.append(measure_line(measures, 27, "A_heat_gas__k__m2", "industry"))
-    measures_input.append(measure_line(measures, 28, "A_heat_heat_pump__k__m2", "industry"))
+    measures_input.append(measure_line(measures, 23, "heat_dmd__k__W_h_per_m2_a", "industry"))
+    measures_input.append(measure_line(measures, 24, "A_heat_oil__k__m2", "industry"))
+    measures_input.append(measure_line(measures, 25, "A_heat_oil_condensing__k__m2", "industry"))
+    measures_input.append(measure_line(measures, 26, "A_heat_gas__k__m2", "industry"))
+    measures_input.append(measure_line(measures, 27, "A_heat_heat_pump__k__m2", "industry"))
     measures_input.append("\n")
 
     measures_input.append("\t//Schools\n")
-    measures_input.append(measure_line(measures, 36, "heat_dmd__k__W_h_per_m2_a", "schools"))
-    measures_input.append(measure_line(measures, 37, "A_heat_oil__k__m2", "schools"))
-    measures_input.append(measure_line(measures, 38, "A_heat_oil_condensing__k__m2", "schools"))
-    measures_input.append(measure_line(measures, 39, "A_heat_gas__k__m2", "schools"))
-    measures_input.append(measure_line(measures, 40, "A_heat_heat_pump__k__m2", "schools"))
+    measures_input.append(measure_line(measures, 35, "heat_dmd__k__W_h_per_m2_a", "schools"))
+    measures_input.append(measure_line(measures, 36, "A_heat_oil__k__m2", "schools"))
+    measures_input.append(measure_line(measures, 37, "A_heat_oil_condensing__k__m2", "schools"))
+    measures_input.append(measure_line(measures, 38, "A_heat_gas__k__m2", "schools"))
+    measures_input.append(measure_line(measures, 39, "A_heat_heat_pump__k__m2", "schools"))
     measures_input.append("\n")
 
     measures_input.append("\t//Public\n")
-    measures_input.append(measure_line(measures, 42, "heat_dmd__k__W_h_per_m2_a", "public"))
-    measures_input.append(measure_line(measures, 43, "A_heat_oil__k__m2", "public"))
-    measures_input.append(measure_line(measures, 44, "A_heat_oil_condensing__k__m2", "public"))
-    measures_input.append(measure_line(measures, 45, "A_heat_gas__k__m2", "public"))
-    measures_input.append(measure_line(measures, 46, "A_heat_heat_pump__k__m2", "public"))
+    measures_input.append(measure_line(measures, 41, "heat_dmd__k__W_h_per_m2_a", "public"))
+    measures_input.append(measure_line(measures, 42, "A_heat_oil__k__m2", "public"))
+    measures_input.append(measure_line(measures, 43, "A_heat_oil_condensing__k__m2", "public"))
+    measures_input.append(measure_line(measures, 44, "A_heat_gas__k__m2", "public"))
+    measures_input.append(measure_line(measures, 45, "A_heat_heat_pump__k__m2", "public"))
     measures_input.append("\n")
 
     lines = insert_in_section(lines, measures_input, "[start:measures]", "[end:measures]")
