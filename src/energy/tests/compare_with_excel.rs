@@ -4,10 +4,10 @@ use crate::sectors::SectorsRawValues;
 use crate::result::Results;
 
 fn assert(a: [f64; 4], b: [f64; 4]){
-    assert_relative_eq!(a[0], b[0], max_relative=0.03);
-    assert_relative_eq!(a[1], b[1], max_relative=0.03);
-    assert_relative_eq!(a[2], b[2], max_relative=0.03);
-    assert_relative_eq!(a[3], b[3], max_relative=0.03);
+    assert_relative_eq!(a[0], b[0], max_relative=1e-6);
+    assert_relative_eq!(a[1], b[1], max_relative=1e-6);
+    assert_relative_eq!(a[2], b[2], max_relative=1e-6);
+    assert_relative_eq!(a[3], b[3], max_relative=1e-6);
 }
 
 #[test]

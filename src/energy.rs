@@ -345,7 +345,6 @@ impl Energy{
             &elec_nrg_dmd__G__W_h_per_a
             - &sol_rf_self_cnsmp__G__W_h_per_a
             - &prchsd_renewable_nrg__G__W_h_per_a;
-        println!("{0}, {1}, {2}", &elec_nrg_dmd__G__W_h_per_a.public, &sol_rf_self_cnsmp__G__W_h_per_a.public, &prchsd_renewable_nrg__G__W_h_per_a.public);
         self.results.prchsd_nrg_mix__G__W_h_per_a
             .set_year_values(year, &prchsd_nrg_mix__G__W_h_per_a);
 

@@ -114,8 +114,8 @@ pub mod energy{
         grant__m__eur_per_Wp: 0.0,
         operation_costs: 0.02,
         lifecycle: 30.0,
-        Wp_to_W_h_per_a: 829.0,
-        buyback_price__m__eur_per_W_h: 0.08,
+        Wp_to_W_h_per_a: 0.75*1105.0,
+        buyback_price__m__eur_per_W_h: (0.086+0.075)/2.0,
         power_per_area__k__Wp_per_m2: 0.2,
         costs: 0.07,
         invest_and_om_costs__m__eur_per_W_h: 0.08366013,
@@ -130,7 +130,7 @@ pub mod energy{
         buyback_price__m__eur_per_W_h: 0.0565,
         power_per_area__k__Wp_per_m2: 0.08333333333,
         costs: 0.05,
-        invest_and_om_costs__m__eur_per_W_h: 0.0320956,
+        invest_and_om_costs__m__eur_per_W_h: 0.0320965309200603,
     };
 
     pub const wind_onshore: RenewableEnergy = RenewableEnergy{
@@ -146,12 +146,12 @@ pub mod energy{
     };
 
     pub mod evu_power_mix{
-        pub const coal: f64 = 0.296;
-        pub const gas: f64 = 0.104;
-        pub const atom: f64 = 0.133;
-        pub const pv: f64 = 0.099;
-        pub const wind: f64 = 0.232;
-        pub const other: f64 = 13.6;
+        pub const coal: f64 = (46.0+99.0)/489.6;
+        pub const gas: f64 = 51.0/489.6;
+        pub const atom: f64 = 65.0/489.6;
+        pub const pv: f64 = 48.5/489.6;
+        pub const wind: f64 = (89.5+24.0)/489.6;
+        pub const other: f64 = 4.0/489.6;
     }
 
     pub mod evu_emissions{
