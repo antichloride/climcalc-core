@@ -77,7 +77,7 @@ pub mod mobility{
         pub mod bev{
             pub const price: f64 = 35.0;
             pub const grant_per_car__k__eur: f64 = 9.0;
-            pub const nrg_cnsmp__1em2__W_h_per_m: f64 = 16.0;
+            pub const nrg_cnsmp__1em2__W_h_per_m: f64 = 15.65;
             pub const om_costs: f64 = 0.05;
             pub const fuel_costs: f64 = 0.05;
             pub const taxes_and_checks: f64 = 1.0;
@@ -87,8 +87,7 @@ pub mod mobility{
         pub mod combustor{
             pub const price: f64 = 30.0;
             pub const grant_per_car__k__eur: f64 = 0.0;
-            pub const nrg_cnsmp__1em2__W_h_per_m: f64 = 52.1;
-            pub const fuel_costs: f64 = 0.07;
+            pub const nrg_cnsmp__1em2__W_h_per_m: f64 = 5.7*(40000000.0*0.833/3600.0/1000.0+43500000.0*0.748/3600.0/1000.0)/2.0;            pub const fuel_costs: f64 = 0.07;
             pub const om_costs: f64 = 0.05;
             pub const taxes_and_checks: f64 = 1.0;
             pub const lifecycle: f64 = 10.0;
