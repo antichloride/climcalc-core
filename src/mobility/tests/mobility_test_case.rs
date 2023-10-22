@@ -21,7 +21,7 @@ pub fn create_mobility(start_year: u32, end_year: u32) -> Mobility{
     // [start:measures]
 
 	//Private
-	mobility.inputs.n_cars__k__.private.add_measure("n_cars__k__", 2024, 2025, 20.0);
+	//mobility.inputs.n_cars__k__.private.add_measure("n_cars__k__", 2024, 2025, 20.0);
 	mobility.inputs.n_bev__k__.private.add_measure("n_bev__k__", 2024, 2025, -20.0);
 
 	//Industry
