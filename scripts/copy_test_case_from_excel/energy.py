@@ -57,20 +57,20 @@ def set_measures(measures, lines):
     # Set Measures
     measures_input.append("\n")
     measures_input.append("\t//Private\n")
-    measures_input.append(measure_line(measures, 21, "sol_rf_installed__M__Wp", "private"))
+    measures_input.append(measure_line(measures, 20, "sol_rf_installed__M__Wp", "private"))
     measures_input.append("\n")
 
     measures_input.append("\t//Industry\n")
-    measures_input.append(measure_line(measures, 31, "sol_rf_installed__M__Wp", "industry"))
-    measures_input.append(measure_line(measures, 32, "sol_os_installed_A__ha", "industry"))
+    measures_input.append(measure_line(measures, 30, "sol_rf_installed__M__Wp", "industry"))
+    measures_input.append(measure_line(measures, 31, "sol_os_installed_A__ha", "industry"))
     measures_input.append("\n")
 
     measures_input.append("\t//Schools\n")
     measures_input.append("\n")
 
     measures_input.append("\t//Public\n")
-    measures_input.append(measure_line(measures, 49, "sol_rf_installed__M__Wp", "public"))
-    measures_input.append(measure_line(measures, 50, "sol_os_installed_A__ha", "public"))
+    measures_input.append(measure_line(measures, 48, "sol_rf_installed__M__Wp", "public"))
+    measures_input.append(measure_line(measures, 49, "sol_os_installed_A__ha", "public"))
     measures_input.append("\n")
 
     lines = insert_in_section(lines, measures_input, "[start:measures]", "[end:measures]")

@@ -15,12 +15,12 @@ if __name__ == "__main__":
     # write_excel_comparison_buildings(results)
 
     #energy
-    # write_test_case_energy(inputs, measures)
-    # write_excel_comparison_energy(results)
+    write_test_case_energy(inputs, measures)
+    write_excel_comparison_energy(results)
 
     #mobility
-    write_test_case_mobility(inputs, measures)
-    write_excel_comparison_mobility(results)
+    # write_test_case_mobility(inputs, measures)
+    # write_excel_comparison_mobility(results)
 
 
 
