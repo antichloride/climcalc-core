@@ -237,11 +237,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.inputs.n_bev__k__.get_year_values(2024),
-		[10.000719691454327, 7.315663633233172e-05, 0.0, 3.9138800437797477e-07],
+		[10.000719691454327, 10.000073156636333, 0.0, 10.000000391388005],
 	);
 	assert(
 	mobility.inputs.n_bev__k__.get_year_values(2025),
-		[20.00071969145433, 7.315663633233172e-05, 0.0, 3.9138800437797477e-07],
+		[20.00071969145433, 20.000073156636333, 0.0, 20.000000391388003],
 	);
 
 	// Fahrleistung/Pkw (in 1.000 km)
@@ -273,11 +273,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_grant__M__eur_per_a.get_year_values(2024),
-		[90.0, 0.0, 0.0, 0.0],
+		[90.0, 90.0, 0.0, 90.0],
 	);
 	assert(
 	mobility.results.cars_grant__M__eur_per_a.get_year_values(2025),
-		[90.00000000000001, 0.0, 0.0, 0.0],
+		[90.00000000000001, 90.0, 0.0, 89.99999999999999],
 	);
 
 	// Verbrauch Strom (in GWh/a)
@@ -291,11 +291,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.bev_elec_nrg_dmd__G__W_h_per_a.get_year_values(2024),
-		[29.843523645641127, 0.0012768289795447468, 0.0, 3.8016619808284724e-06],
+		[29.843523645641127, 174.53485895602574, 0.0, 97.13282183144241],
 	);
 	assert(
 	mobility.results.bev_elec_nrg_dmd__G__W_h_per_a.get_year_values(2025),
-		[59.684899632953915, 0.0012768289795447468, 0.0, 3.8016619808284724e-06],
+		[59.684899632953915, 349.06844108307195, 0.0, 194.2656398612228],
 	);
 
 	// Verbrauch Benzin/Diesel (in Mio. l/a)
@@ -309,11 +309,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_fuel_dmd__M__L_per_a.get_year_values(2024),
-		[83.68854635339851, 50.854048343395995, 0.0, 1.7688710203842892],
+		[83.68854635339851, -12.71409338977739, 0.0, -33.60857707991913],
 	);
 	assert(
 	mobility.results.cars_fuel_dmd__M__L_per_a.get_year_values(2025),
-		[72.81980238357852, 50.854048343395995, 0.0, 1.7688710203842892],
+		[72.81980238357852, -76.28223512295077, 0.0, -68.98602518022254],
 	);
 
 	// Kosten Strom (in Mio. €/a)
@@ -327,11 +327,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.bev_elec_nrg_price__G__W_h_per_a.get_year_values(2024),
-		[9.518661685701053, 0.00040724759016720516, 0.0, 1.2125489827734767e-06],
+		[9.518661685701053, 55.668301588328376, 0.0, 30.980740765376034],
 	);
 	assert(
 	mobility.results.bev_elec_nrg_price__G__W_h_per_a.get_year_values(2025),
-		[19.093137279534893, 0.00040845626178243695, 0.0, 1.2161477113428828e-06],
+		[19.093137279534893, 111.66663103296027, 0.0, 62.14537602269971],
 	);
 
 	// Kosten Benzin/Diesel (in Mio. €/a)
@@ -345,11 +345,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_fuel_costs__M__eur_per_a.get_year_values(2024),
-		[156.28869506915711, 94.97013869748538, 0.0, 3.303373706051741],
+		[156.28869506915711, -23.74362026178283, 0.0, -62.76415213105729],
 	);
 	assert(
 	mobility.results.cars_fuel_costs__M__eur_per_a.get_year_values(2025),
-		[135.9912722305424, 94.97013869748538, 0.0, 3.303373706051741],
+		[135.9912722305424, -142.45737922105104, 0.0, -128.8316779681663],
 	);
 
 	// CO2-Emissionen Benzin (in 1.000 to )
@@ -363,11 +363,11 @@ fn test_mobility_calculate() {
 	);
 	assert(
 	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2024),
-		[234.3279297895158, 142.39133536150877, 0.0, 4.952838857076009],
+		[234.3279297895158, -35.59946149137669, 0.0, -94.10401582377355],
 	);
 	assert(
 	mobility.results.cars_ems__k__to_coe_per_a.get_year_values(2025),
-		[203.89544667401984, 142.39133536150877, 0.0, 4.952838857076009],
+		[203.89544667401984, -213.59025834426214, 0.0, -193.1608705046231],
 	);
 
 	// Straßenbeleuchtung
