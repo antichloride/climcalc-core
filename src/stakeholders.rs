@@ -153,7 +153,8 @@ impl Steakholders{
 
             effect_of_measures.industry = effect_of_measures.industry
                 + solar_landscape_om_diff.industry
-                - solar_landscape_revenue_diff.industry;
+                - solar_landscape_revenue_diff.industry
+                - wind_revenue_diff.industry;
             println!("{0}, {1}, {2}", &effect_of_measures.industry, &solar_landscape_om_diff.industry, &solar_landscape_om_diff.industry);
 
             self.private_effect_of_measures
