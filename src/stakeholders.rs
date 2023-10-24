@@ -177,7 +177,7 @@ impl Steakholders{
             self.industry_profit_from_measures
                 .set_year_value(year, community_tax_income_from_measures);
 
-            let cash_flow_netto = invest_toal + effect_of_measures;
+            let cash_flow_netto = effect_of_measures - invest_toal;
 
             self.private_cash_flow_netto
                 .set_year_value(year, cash_flow_netto.private);
