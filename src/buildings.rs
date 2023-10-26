@@ -80,14 +80,14 @@ impl Buildings{
 fn compute_A_heat_other__k__m2(inputs: &InputsBuildings, year: u32) -> SectorsRawValues{
     let floor_A_building__m2 = inputs.floor_A_building__m2.get_year(year);
     let n_buildings = inputs.n_buildings.get_year(year);
-    let A_heart_oil__k__m2 = inputs.A_heat_oil__k__m2.get_year(year);
+    let A_heat_oil__k__m2 = inputs.A_heat_oil__k__m2.get_year(year);
     let A_heat_oil_condensing__k__m2 = inputs.A_heat_oil_condensing__k__m2.get_year(year);
     let A_heat_gas__k__m2 = inputs.A_heat_gas__k__m2.get_year(year);
     let A_heat_district_heating__k__m2 = inputs.A_heat_district_heating__k__m2.get_year(year);
     let A_heat_heat_pump__k__m2 = inputs.A_heat_heat_pump__k__m2.get_year(year);
     return  ( floor_A_building__m2 * n_buildings * 1e-3 )
         - (
-            A_heart_oil__k__m2 + A_heat_oil_condensing__k__m2
+            A_heat_oil__k__m2 + A_heat_oil_condensing__k__m2
             + A_heat_gas__k__m2 + A_heat_heat_pump__k__m2
             + A_heat_district_heating__k__m2
         ).copy();
@@ -474,7 +474,7 @@ impl Buildings{
 
 
 
-macro_rules! implement_inputs_builidngs{
+macro_rules! implement_inputs_buildings{
     ($($field:ident),*) => {
 
         struct InputsBuildings{
@@ -574,7 +574,7 @@ macro_rules! implement_inputs_builidngs{
     }
 }
 
-implement_inputs_builidngs!{
+implement_inputs_buildings!{
     n_buildings,
     floor_A_building__m2,
     heat_dmd__k__W_h_per_m2_a,
