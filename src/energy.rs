@@ -164,7 +164,7 @@ impl Energy{
         let sol_os_self_cnsmp_part = self.inputs
             .sol_os_self_cnsmp_part.get_year(year);
 
-        let sol_os_installed__M__Wp = 1e1
+        let sol_os_installed__M__Wp = 1e-1
             * &sol_os_installed_A__ha
             * constants::solar_landscape.power_per_area__k__Wp_per_m2;
         self.results.sol_os_installed__M__Wp
