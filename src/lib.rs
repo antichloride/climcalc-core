@@ -143,6 +143,16 @@ impl Calculator{
         }
     }
 
+    pub fn get_input_values(&mut self, id: &str) -> Vec<f64>{
+        let input = self.get_input_by_id(id);
+        match input{
+            Some(input) => {
+                return input.get_values().clone();
+            },
+            None => Vec::from([0.0,0.0,3.1415, 42.0]),
+        }
+    }
+
     /// This function serves to populate the input parameters.
     ///
     /// Note that "set input" means the start year value of an input parameter.

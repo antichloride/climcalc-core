@@ -44,6 +44,10 @@ impl Input{
         return self.values[0];
     }
 
+    pub fn get_values(& self) -> &Vec<f64>{
+        return & self.values;
+    }
+
     pub fn add_measure(&mut self, id: &str, start_year: u32, end_year: u32, delta: f64){
         self.measures.push(Measure{
             id: (self.id.to_owned()+"/"+id).to_string(),
