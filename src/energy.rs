@@ -304,6 +304,8 @@ impl Energy{
 
         let prchsd_renewable_nrg__G__W_h_per_a = self.inputs.
             prchsd_renewable_nrg__G__W_h_per_a.get_year(year);
+        self.results.prchsd_renewable_nrg__G__W_h_per_a
+            .set_year_values(year, &prchsd_renewable_nrg__G__W_h_per_a);
         let renewable_nrg_price__m__eur_per_W_h = self.inputs.
             renewable_nrg_price__m__eur_per_W_h.get_year(year);
 
@@ -519,6 +521,7 @@ macro_rules! implement_results_energy{
 }
 
 implement_results_energy!{
+    prchsd_renewable_nrg__G__W_h_per_a,
     sol_rf_potential__M__Wp,
     sol_rf_nrg__G__W_h_per_a,
     sol_rf_self_cnsmp__G__W_h_per_a,
