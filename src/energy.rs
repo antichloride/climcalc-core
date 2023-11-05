@@ -53,11 +53,17 @@ impl Energy{
     pub fn sol_os_invest__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.sol_os_invest__M__eur_per_a;
     }
+    pub fn wind_invest__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.wind_invest__M__eur_per_a;
+    }
     pub fn sol_rf_grant__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.sol_rf_grant__M__eur_per_a;
     }
     pub fn sol_os_grant__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.sol_os_grant__M__eur_per_a;
+    }
+    pub fn wind_grant__M__eur_per_a(&self) -> &SectorsResult{
+        return &self.results.wind_grant__M__eur_per_a;
     }
     pub fn sol_rf_om__M__eur_per_a(&self) -> &SectorsResult{
         return &self.results.sol_rf_om__M__eur_per_a;

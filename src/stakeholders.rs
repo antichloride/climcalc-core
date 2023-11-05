@@ -94,8 +94,10 @@ impl Steakholders{
         let invest_energy =
             &energy.sol_rf_invest__M__eur_per_a().get_year(year)
             + &energy.sol_os_invest__M__eur_per_a().get_year(year)
+            + energy.wind_invest__M__eur_per_a().get_year(year)
             - &energy.sol_rf_grant__M__eur_per_a().get_year(year)
-            - &energy.sol_os_grant__M__eur_per_a().get_year(year);
+            - &energy.sol_os_grant__M__eur_per_a().get_year(year)
+            - energy.wind_grant__M__eur_per_a().get_year(year);
 
         let invest_toal = invest_buildings + invest_energy;
 
