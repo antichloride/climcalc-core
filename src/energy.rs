@@ -394,14 +394,34 @@ impl Energy{
         let prchsd_nrg_mix__G__W_h_per_a = self.results
             .prchsd_nrg_mix__G__W_h_per_a.get_year(year);
 
+        let sol_rf_nrg__G__W_h_per_a = self.results
+            .sol_rf_nrg__G__W_h_per_a.get_year(year);
+        let sol_rf_self_cnsmp__G__W_h_per_a = self.results
+            .sol_rf_self_cnsmp__G__W_h_per_a.get_year(year);
+
+        let sol_os_nrg__G__W_h_per_a = self.results
+            .sol_os_nrg__G__W_h_per_a.get_year(year);
+        let sol_os_self_cnsmp__G__W_h_per_a = self.results
+            .sol_os_self_cnsmp__G__W_h_per_a.get_year(year);
+
+        let wind_nrg__G__W_h_per_a = self.results
+            .wind_nrg__G__W_h_per_a.get_year(year);
+
         let nrg_mix_ems__k__to_coe_per_a =
             constants::evu_power_mix::coal
             * constants::evu_emissions::coal
             + constants::evu_power_mix::gas
             * constants::evu_emissions::gas;
 
-        let prchsd_nrg_mix_ems__k__to_coe_per_a = &prchsd_nrg_mix__G__W_h_per_a
-            * nrg_mix_ems__k__to_coe_per_a * 1e-3;
+        let prchsd_nrg_mix_ems__k__to_coe_per_a =
+            (
+                &prchsd_nrg_mix__G__W_h_per_a
+                - wind_nrg__G__W_h_per_a
+                - sol_rf_nrg__G__W_h_per_a
+                + sol_rf_self_cnsmp__G__W_h_per_a
+                - sol_os_nrg__G__W_h_per_a
+                + sol_os_self_cnsmp__G__W_h_per_a
+            )* nrg_mix_ems__k__to_coe_per_a * 1e-3;
 
         self.results.prchsd_nrg_mix_ems__k__to_coe_per_a
             .set_year_values(year, &prchsd_nrg_mix_ems__k__to_coe_per_a);
