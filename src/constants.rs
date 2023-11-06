@@ -128,7 +128,7 @@ pub mod energy{
         lifecycle: 30.0,
         Wp_to_W_h_per_a: 1105.0,
         buyback_price__m__eur_per_W_h: 0.0565,
-        power_per_area__k__Wp_per_m2: 0.08333333333,
+        power_per_area__k__Wp_per_m2: 0.008333333333,
         costs: 0.05,
         invest_and_om_costs__m__eur_per_W_h: 0.0320965309200603,
     };
@@ -140,7 +140,7 @@ pub mod energy{
         lifecycle: 20.0,
         Wp_to_W_h_per_a: 1800.0,
         buyback_price__m__eur_per_W_h: 0.06,
-        power_per_area__k__Wp_per_m2: 0.024,
+        power_per_area__k__Wp_per_m2: 0.0240963855422,
         costs: 0.08,
         invest_and_om_costs__m__eur_per_W_h: 0.05,
     };

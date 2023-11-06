@@ -170,7 +170,7 @@ impl Energy{
         let sol_os_self_cnsmp_part = self.inputs
             .sol_os_self_cnsmp_part.get_year(year);
 
-        let sol_os_installed__M__Wp = 1e-1
+        let sol_os_installed__M__Wp = 1e1
             * &sol_os_installed_A__ha
             * constants::solar_landscape.power_per_area__k__Wp_per_m2;
         self.results.sol_os_installed__M__Wp
@@ -252,7 +252,7 @@ impl Energy{
         let wind_installed_A__ha = self.inputs
             .wind_installed_A__ha.get_year(year);
 
-        let wind_installed__M__WP = 1e-1 * &wind_installed_A__ha
+        let wind_installed__M__WP = 1e1 * &wind_installed_A__ha
             * constants::wind_onshore.power_per_area__k__Wp_per_m2;
         self.results.wind_installed__M__WP
             .set_year_values(year, &wind_installed__M__WP);
