@@ -99,11 +99,11 @@ impl Steakholders{
             - &energy.sol_os_grant__M__eur_per_a().get_year(year)
             - energy.wind_grant__M__eur_per_a().get_year(year);
 
-        let invest_toal = invest_buildings + invest_energy;
+        let invest_total = invest_buildings + invest_energy;
 
-        self.private_invest.set_year_value(year, invest_toal.private);
-        self.industry_invest.set_year_value(year, invest_toal.industry);
-        self.community_invest.set_year_value(year, invest_toal.public + invest_toal.schools);
+        self.private_invest.set_year_value(year, invest_total.private);
+        self.industry_invest.set_year_value(year, invest_total.industry);
+        self.community_invest.set_year_value(year, invest_total.public + invest_total.schools);
 
         if year > self.start_year{
 
@@ -179,20 +179,21 @@ impl Steakholders{
             self.industry_profit_from_measures
                 .set_year_value(year, community_tax_income_from_measures);
 
-            let cash_flow_netto = effect_of_measures - invest_toal;
+            let cash_flow_netto = effect_of_measures - invest_total;
 
             self.private_cash_flow_netto
-                .set_year_value(year, cash_flow_netto.private);
+                .set_year_value(year, self.private_cash_flow_netto.get_year(year-1) + cash_flow_netto.private);
+
             let industry_cash_flow_netto = cash_flow_netto.industry
                 + industry_profit_from_measures;
             self.industry_cash_flow_netto
-                .set_year_value(year, industry_cash_flow_netto);
+                .set_year_value(year, self.industry_cash_flow_netto.get_year(year-1) +  industry_cash_flow_netto);
             let community_cash_flow_netto =
                 cash_flow_netto.public
                 +cash_flow_netto.schools
                 +community_tax_income_from_measures;
             self.community_cash_flow_netto
-                .set_year_value(year, community_cash_flow_netto);
+                .set_year_value(year, self.community_cash_flow_netto.get_year(year-1) + community_cash_flow_netto);
 
         }
 
