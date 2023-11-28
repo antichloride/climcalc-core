@@ -153,6 +153,11 @@ impl Steakholders{
                 + direct_aquisition_renable_energies_costs_diff
                 + purchased_energy_mix_costs_diff;
 
+            effect_of_measures.private = effect_of_measures.private
+                + &buildings.results.cnsmp_elec_heat_pump__G__W_h_per_a.get_year(year).private
+                * &energy.inputs.renewable_nrg_price__m__eur_per_W_h.get_year(year).private
+                * constants::energy::evu_discount_heat_pump;
+
             effect_of_measures.industry = effect_of_measures.industry
                 + solar_landscape_om_diff.industry
                 - solar_landscape_revenue_diff.industry

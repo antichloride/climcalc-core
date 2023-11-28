@@ -435,7 +435,7 @@ macro_rules! implement_inputs_energy{
 
         pub struct InputsEnergy{
             $(
-                $field: SectorsInputs,
+                pub $field: SectorsInputs,
              )*
         }
 
